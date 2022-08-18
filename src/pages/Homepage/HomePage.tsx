@@ -7,17 +7,6 @@ import {
 } from "@atlaskit/atlassian-navigation";
 import React from "react";
 
-const OneCarProductHome = () => (
-  <CustomProductHome
-    href="#"
-    iconAlt="1Car"
-    iconUrl={"logo192.png"}
-    logoAlt="1Car"
-    logoUrl={"logo192.png"}
-    logoMaxWidth={300}
-  />
-);
-
 const OneCarSignIn = () => <SignIn href="#" tooltip="Sign in" />;
 
 export default function HomePage() {
@@ -52,15 +41,17 @@ export default function HomePage() {
               <input placeholder="To"></input>
             </div>
             <div className="basis-1/6 flex place-content-center">
-              <button className="">Search</button>
+              <button className=" px-8">Search</button>
             </div>
           </div>
         </div>
         <div className="grid grid-cols-6 border-t-2 border-black">
-          <button className="rounded bg-yellow-200 m-4">Brand</button>
-          <button className="rounded bg-yellow-200 m-4">Type</button>
-          <button className="rounded bg-yellow-200 m-4">Class</button>
-          <button className="rounded bg-yellow-200 m-4">Fuel type</button>
+          <button className="rounded bg-yellow-200 m-4 min-w-fit">Brand</button>
+          <button className="rounded bg-yellow-200 m-4 min-w-fit">Type</button>
+          <button className="rounded bg-yellow-200 m-4 min-w-fit">Class</button>
+          <button className="rounded bg-yellow-200 m-4 min-w-fit">
+            Fuel type
+          </button>
           <div className="col-span-2 m-4">
             <button className="rounded bg-yellow-200 float-right w-32 h-12">
               Sort by

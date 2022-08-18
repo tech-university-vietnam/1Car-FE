@@ -1,9 +1,17 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import React, { useRef } from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import App from './App';
+import userEvent from '@testing-library/user-event';
+import SignInModal from './components/SignInModal';
 
 test('renders learn react link', () => {
+
+
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  const button = screen.getByRole("button", { name: /hello/i })
+  expect(button).toBeEnabled();
+  // userEvent.click(button);
+
+
 });

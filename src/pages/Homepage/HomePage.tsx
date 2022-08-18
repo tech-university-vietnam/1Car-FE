@@ -1,13 +1,4 @@
-import {
-  AtlassianNavigation,
-  CustomProductHome,
-  PrimaryButton,
-  PrimaryDropdownButton,
-  SignIn,
-} from "@atlaskit/atlassian-navigation";
 import React from "react";
-
-const OneCarSignIn = () => <SignIn href="#" tooltip="Sign in" />;
 
 export default function HomePage() {
   return (

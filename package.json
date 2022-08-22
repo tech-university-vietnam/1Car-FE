@@ -65,7 +65,7 @@
         "branches": 30,
         "functions": 30,
         "lines": 30,
-        "statements": -10
+        "statements": 10
       }
     }
   }

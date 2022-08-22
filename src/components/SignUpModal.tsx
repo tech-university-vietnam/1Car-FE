@@ -6,13 +6,13 @@ import {
   Form,
   Input,
   Modal,
-} from "antd";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+} from 'antd';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import {
   FacebookFilled,
   GoogleOutlined,
   LoadingOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
 export default forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false);
@@ -41,11 +41,11 @@ export function SignUpForm() {
   const onFormChange = async () => {
     try {
       await form.validateFields([
-        "email",
-        "password",
-        "name",
-        "accept",
-        "dateOfBirth",
+        'email',
+        'password',
+        'name',
+        'accept',
+        'dateOfBirth',
       ]);
       setDisable(false);
     } catch (err: any) {
@@ -69,32 +69,32 @@ export function SignUpForm() {
     <Form
       form={form}
       validateTrigger="onBlur"
-      autoComplete={"off"}
+      autoComplete={'off'}
       onChange={onFormChange}
     >
       <Form.Item
         name="name"
-        rules={[{ required: true, message: "Please enter your name" }]}
+        rules={[{ required: true, message: 'Please enter your name' }]}
       >
         <Input
           size="large"
           placeholder="Name"
           className="w-full rounded border border-gray-200 p-3"
-          autoComplete={"off"}
+          autoComplete={'off'}
         />
       </Form.Item>
       <Form.Item
         name="email"
         rules={[
-          { required: true, type: "email", message: "Please enter your email" },
+          { required: true, type: 'email', message: 'Please enter your email' },
         ]}
       >
         <Input
           size="large"
           placeholder="Email"
           className="w-full rounded border border-gray-200 p-3"
-          type={"email"}
-          autoComplete={"off"}
+          type={'email'}
+          autoComplete={'off'}
         />
       </Form.Item>
       <Form.Item
@@ -102,7 +102,7 @@ export function SignUpForm() {
         rules={[
           {
             required: true,
-            message: "Please enter your date of birth",
+            message: 'Please enter your date of birth',
           },
         ]}
       >
@@ -114,14 +114,14 @@ export function SignUpForm() {
       </Form.Item>
       <Form.Item
         name="password"
-        rules={[{ required: true, message: "Please enter your password" }]}
+        rules={[{ required: true, message: 'Please enter your password' }]}
       >
         <Input
           size="large"
           placeholder="Password"
           className="w-full rounded border border-gray-200 p-3"
-          type={"password"}
-          autoComplete={"off"}
+          type={'password'}
+          autoComplete={'off'}
         />
       </Form.Item>
       <Form.Item name="accept" valuePropName="checked">
@@ -136,9 +136,9 @@ export function SignUpForm() {
           disabled={disable || loading}
           onClick={onSubmit}
           className="w-full rounded p-2 text-base text-white disabled:opacity-50"
-          style={{ background: "#66BFBF", borderColor: "#66BFBF" }}
+          style={{ background: '#66BFBF', borderColor: '#66BFBF' }}
         >
-          {loading ? <LoadingOutlined /> : "Sign Up"}
+          {loading ? <LoadingOutlined /> : 'Sign Up'}
         </button>
       </Form.Item>
       <Divider>

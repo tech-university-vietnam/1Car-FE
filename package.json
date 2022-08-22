@@ -28,7 +28,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:coverage": "react-scripts test --coverage --watchAll=false --coverageReporters='text-summary'"
   },
   "browserslist": {
     "production": [
@@ -57,5 +58,15 @@
       "npx prettier --write",
       "npx eslint --fix"
     ]
+  },
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "branches": 30,
+        "functions": 30,
+        "lines": 30,
+        "statements": -10
+      }
+    }
   }
 }

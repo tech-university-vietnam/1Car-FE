@@ -6,7 +6,7 @@ import Cookies from "universal-cookie";
 export const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
-  return <AntButton onClickFunction={loginWithRedirect} label="login"/>
+  return <AntButton onClickFunction={loginWithRedirect} label="Sign in"/>
 }
 
 export const LogoutButton = () => {
@@ -27,23 +27,17 @@ export const UserProfileButton = () => {
       const domain = process.env.REACT_APP_AUTH0_DOMAIN;
 
       try {
-        const accessToken = await getAccessTokenSilently({
-          audience: `https://${domain}/api/v2/`,
-          scope: "read:current_user",
-        });
-
-        cookies.set('access_token', accessToken, {path: "/"});
-
-        const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user?.sub}`;
-
-        const metadataResponse = await fetch(userDetailsByIdUrl, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const { user_metadata } = await metadataResponse.json();
-        setUserMetaData(user_metadata);
+        const accessToken = cookies.get('access_token');
+        if (accessToken) { 
+          const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user?.sub}`;
+          const metadataResponse = await fetch(userDetailsByIdUrl, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          const { user_metadata } = await metadataResponse.json();
+          setUserMetaData(user_metadata);
+        }
 
       } catch (e: any) {
         console.log(e.message)

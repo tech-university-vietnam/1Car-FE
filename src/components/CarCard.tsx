@@ -7,6 +7,19 @@ import {
 import React from 'react';
 
 export default function CarCard() {
+  const CardBodyAttribute = ({
+    title,
+    value,
+  }: {
+    title: string;
+    value: string;
+  }) => (
+    <div className="basis-1">
+      <p className="mb-1 text-xs font-light">{title}</p>
+      <p className="mb-0 text-base font-bold">{value}</p>
+    </div>
+  );
+
   return (
     <div
       className="rounded-md p-4 shadow-md"
@@ -33,20 +46,11 @@ export default function CarCard() {
         </div>
       </div>
       <div className="flex items-center justify-around rounded-md bg-slate-50 p-4 px-8 text-center shadow">
-        <div className="basis-1">
-          <p className="mb-1 font-light">Deposit</p>
-          <p className="mb-0 text-base font-bold">1000$</p>
-        </div>
+        <CardBodyAttribute title="Deposit" value="1000$" />
         <Divider type="vertical" />
-        <div className="basis-1">
-          <p className="mb-1 font-light">Limit</p>
-          <p className="mb-0 text-base font-bold">500Kms</p>
-        </div>
+        <CardBodyAttribute title="Limit" value="500Kms" />
         <Divider type="vertical" />
-        <div className="basis-1">
-          <p className="mb-1 text-xs font-light">Credit</p>
-          <p className="mb-0 text-base font-bold">Required</p>
-        </div>
+        <CardBodyAttribute title="Credit" value="Required" />
       </div>
       <div className="mt-4 flex items-center">
         <div className="flex-1">

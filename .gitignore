@@ -25,3 +25,5 @@ yarn.lock
 
 .vscode
 .eslintrc.json
+
+.env

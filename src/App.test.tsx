@@ -5,13 +5,9 @@ import userEvent from '@testing-library/user-event';
 import SignInModal from './components/SignInModal';
 
 test('renders learn react link', () => {
-
-
   render(<App />);
 
-  const button = screen.getByRole("button", { name: /hello/i })
-  expect(button).toBeEnabled();
+  // const button = screen.getByRole("button", { name: /hello/i })
+  // expect(button).toBeEnabled();
   // userEvent.click(button);
-
-
 });

@@ -1,10 +1,17 @@
-import { Button, Card, Carousel, Col, Divider, Rate, Row } from "antd";
-import { Typography } from "antd";
-import React from "react";
-import Header from "../../components/Header";
-import InfoCard from "../../components/InfoCard";
+import { Button, Carousel, Col, Divider, Rate, Row, Skeleton } from 'antd';
+import { Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
+import Header from '../../components/Header';
+import InfoCard from '../../components/InfoCard';
 
 export default function CarDetailPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 2000);
+
+    return () => {};
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -18,7 +25,7 @@ export default function CarDetailPage() {
               >
                 <Carousel
                   autoplay
-                  style={{ height: "100%" }}
+                  style={{ height: '100%' }}
                   adaptiveHeight={false}
                 >
                   {Array.from(Array(3).keys()).map((value, index) => (
@@ -39,7 +46,7 @@ export default function CarDetailPage() {
               </div>
               <Row>
                 <Col md={16} className="p-4">
-                  <InfoCard>
+                  <InfoCard loading={isLoading}>
                     <Typography className="mb-4 text-3xl">Spark</Typography>
                     <Rate disabled defaultValue={2} />
                     <Typography className="mt-8 text-2xl">
@@ -47,9 +54,10 @@ export default function CarDetailPage() {
                     </Typography>
                   </InfoCard>
                 </Col>
-                <Col className="p-4">
-                  <InfoCard className="h-64 w-64">
+                <Col md={8} className="p-4">
+                  <InfoCard className="">
                     <Typography className="text-3xl">Owner info</Typography>
+                    <Skeleton loading={isLoading} avatar active></Skeleton>
                   </InfoCard>
                 </Col>
               </Row>
@@ -59,10 +67,14 @@ export default function CarDetailPage() {
 
         <Col span={6}>
           <InfoCard className="shadow-xl">
-            <Typography className="text-3xl">Pick up location</Typography>
-            <Typography className="text-3xl">Pick up date</Typography>
-            <Typography className="text-3xl">Price per day</Typography>
-            <Typography className="text-3xl">Number of days</Typography>
+            <div className="flex place-content-center text-3xl">Payment</div>
+            <Divider />
+            <Skeleton loading={isLoading} active>
+              <Typography className="text-3xl">Pick up location</Typography>
+              <Typography className="text-3xl">Pick up date</Typography>
+              <Typography className="text-3xl">Price per day</Typography>
+              <Typography className="text-3xl">Number of days</Typography>
+            </Skeleton>
             <Divider />
             <div>
               <Button className="mt-4 w-full" shape="round" type="primary">

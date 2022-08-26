@@ -31,12 +31,12 @@ export const UserProfileButton = () => {
   const { user, isAuthenticated } = useAuth0();
   const [userMetaData, setUserMetaData] = useState(null);
 
-  const cookies = new Cookies();
   useEffect(() => {
     const getUserMetaData = async () => {
       const domain = process.env.REACT_APP_AUTH0_DOMAIN;
 
       try {
+        const cookies = new Cookies();
         const accessToken = cookies.get('access_token');
         if (accessToken) {
           const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user?.sub}`;
@@ -55,9 +55,11 @@ export const UserProfileButton = () => {
     getUserMetaData();
   }, [user?.sub]);
 
-  return (
-    <div>
-      <p>Hi, {user?.name}</p>
-    </div>
-  );
+  if (isAuthenticated) {
+    return (
+      <div>
+        <p>Hi, {user?.name}</p>
+      </div>
+    );
+  }
 };

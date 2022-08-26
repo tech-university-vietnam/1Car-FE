@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import './App.css';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 import AppRouters from './Routes';
 import ErrorBoundary from './components/ErrorBoundary';
-import Cookies from "universal-cookie";
-import { useAuth0 } from "@auth0/auth0-react";
+import Cookies from 'universal-cookie';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function App() {
   const domain = process.env.REACT_APP_AUTH0_DOMAIN;
@@ -16,16 +16,15 @@ function App() {
         if (isAuthenticated) {
           const accessToken = await getAccessTokenSilently({
             audience: `https://${domain}/api/v2/`,
-            scope: "read:current_user",
+            scope: 'read:current_user',
           });
           const cookies = new Cookies();
-          cookies.set('access_token', accessToken, { path: "/" });
+          cookies.set('access_token', accessToken, { path: '/' });
         }
-
       } catch (e: any) {
-        console.log(e.message)
+        console.log(e.message);
       }
-    }
+    };
     getAccessToken();
   }, [getAccessTokenSilently, domain, isAuthenticated]);
 

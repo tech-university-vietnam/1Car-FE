@@ -8,7 +8,7 @@
     "prettier"
   ],
   "rules": {
-    "quotes": ["error", "single"],
-    "semi": ["error", "always"]
+    "quotes": ["warn", "single"],
+    "semi": ["warn", "always"]
   }
 }

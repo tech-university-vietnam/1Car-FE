@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Row, Skeleton } from 'antd';
+import { Button, Col, Divider, Row, Skeleton, Space } from 'antd';
 import { Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header';
@@ -15,16 +15,15 @@ export default function CarDetailPage() {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className='min-h-screen'>
       <Header />
-      <Row gutter={16} className="p-8">
+      <Row gutter={8} className='p-8'>
         <Col md={18}>
           <CarDetails isLoading={isLoading} />
         </Col>
-
-        <Col span={6}>
+        <Col md={6} style={{ width: '100%' }}>
           <PaymentDetails isLoading={isLoading} />
-          <InfoCard className="shadow-xl">Recommended Cars</InfoCard>
+          <InfoCard style={{ marginTop: '8px' }}>Recommended Cars</InfoCard>
         </Col>
       </Row>
     </div>

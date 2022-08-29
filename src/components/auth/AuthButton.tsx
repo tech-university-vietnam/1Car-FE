@@ -24,12 +24,7 @@ export const LogoutButton = () => {
     document.cookie =
       'cookiename=access_token; expires = Thu, 01 Jan 1970 00:00:00 GMT';
   };
-  return (
-    <AntButton
-      onClickFunction={() => logout({ returnTo: window.location.origin })}
-      label="Logout"
-    />
-  );
+  return <AntButton onClickFunction={() => logOutFunction()} label="Logout" />;
 };
 
 export const UserProfileButton = () => {

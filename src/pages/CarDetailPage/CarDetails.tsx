@@ -13,7 +13,6 @@ import {
   Avatar,
   Button,
   Space,
-  Card,
 } from 'antd';
 import React from 'react';
 import InfoCard from '../../components/InfoCard';
@@ -21,7 +20,7 @@ import InfoCard from '../../components/InfoCard';
 export default function CarDetails(props: any) {
   return (
     <InfoCard>
-      <Carousel autoplay style={{ height: '100%' }} adaptiveHeight={false}>
+      <Carousel autoplay dotPosition='right'>
         {Array.from(Array(3).keys()).map((value, index) => (
           <div
             key={index}
@@ -40,7 +39,7 @@ export default function CarDetails(props: any) {
       <Row>
         <Col md={16} className='p-4'>
           <InfoCard loading={props.isLoading}>
-            <Typography className='mb-4 text-3xl'>Spark</Typography>
+            <Typography className='mb-4 text-3xl'>Spark </Typography>
             <Rate disabled defaultValue={2} />
             <Typography className='mt-8 text-2xl'>Description</Typography>
           </InfoCard>

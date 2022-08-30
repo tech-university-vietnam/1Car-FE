@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    background-color: #f7f6f484 !important;
+body {
+  background-color: #f7f6f484 !important;
+}
+
+.info-card {
+  border-radius: 20px;
+  overflow: 'auto';
 }

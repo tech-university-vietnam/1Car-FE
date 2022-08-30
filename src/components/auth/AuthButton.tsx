@@ -11,7 +11,7 @@ export const LoginButton = () => {
       onClickFunction={() =>
         loginWithRedirect({ prompt: 'consent', scope: 'read:current_user' })
       }
-      label="Sign in"
+      label='Sign in'
     />
   );
 };
@@ -24,7 +24,7 @@ export const LogoutButton = () => {
     document.cookie =
       'cookiename=access_token; expires = Thu, 01 Jan 1970 00:00:00 GMT';
   };
-  return <AntButton onClickFunction={() => logOutFunction()} label="Logout" />;
+  return <AntButton onClickFunction={() => logOutFunction()} label='Logout' />;
 };
 
 export const UserProfileButton = () => {

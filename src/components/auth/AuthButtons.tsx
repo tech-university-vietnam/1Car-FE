@@ -11,7 +11,7 @@ export const LoginButton = () => {
       onClickFunction={() =>
         loginWithRedirect({ prompt: 'consent', scope: 'read:current_user' })
       }
-      label="Sign in"
+      label='Sign in'
     />
   );
 };
@@ -22,7 +22,7 @@ export const LogoutButton = () => {
   return (
     <AntButton
       onClickFunction={() => logout({ returnTo: window.location.origin })}
-      label="Logout"
+      label='Logout'
     />
   );
 };

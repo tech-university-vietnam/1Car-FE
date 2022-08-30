@@ -2,9 +2,16 @@ import { Button, Drawer } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MenuFoldOutlined } from '@ant-design/icons';
+import {
+  LoginButton,
+  LogoutButton,
+  UserProfileButton,
+} from './auth/AuthButtons';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function Header() {
   const [showDrawer, setShowDrawer] = useState(false);
+  const { isAuthenticated } = useAuth0();
 
   const WideMenuItem = ({ text, path }: { text: string; path: string }) => (
     <li className="mr-4 w-24 text-xs md:text-base">
@@ -31,10 +38,14 @@ export default function Header() {
         <WideMenuItem path="/more" text="More" />
       </ul>
       <div className="ml-auto hidden items-center md:flex">
-        <Button className="mr-2">Sign In</Button>
-        <Button type="primary" className="bg-red-500 p-2">
-          Sign Up
-        </Button>
+        {isAuthenticated ? (
+          <div>
+            <UserProfileButton />
+            <LogoutButton />
+          </div>
+        ) : (
+          <LoginButton />
+        )}
       </div>
       <div className="ml-auto flex items-center md:hidden">
         <Button onClick={() => setShowDrawer(true)}>

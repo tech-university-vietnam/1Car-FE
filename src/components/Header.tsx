@@ -8,6 +8,7 @@ import {
   UserProfileButton,
 } from './auth/AuthButtons';
 import { useAuth0 } from '@auth0/auth0-react';
+import Cookies from 'universal-cookie';
 
 export default function Header() {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -46,8 +47,8 @@ export default function Header() {
     const { logout, loginWithRedirect } = useAuth0();
     const logOutFunction = () => {
       logout({ returnTo: window.location.origin });
-      document.cookie =
-        'cookiename=access_token; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+      const cookies = new Cookies();
+      cookies.remove('access_token', { path: '/' });
     };
     return (
       <li className="w-full border-b pb-3">

@@ -21,7 +21,10 @@ export default function AppRouters() {
           const res = await authApi.get('/user/me');
           localStorage.setItem('userEmail', res.data?.data?.email);
         } catch (error: any) {
-          if (error.message === ExceptionMessage.USER_NEED_UPDATE_INFO) {
+          if (
+            error?.response?.data?.message ===
+            ExceptionMessage.USER_NEED_UPDATE_INFO
+          ) {
             modalRef?.current.open();
           }
         }

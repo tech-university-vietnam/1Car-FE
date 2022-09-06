@@ -6,32 +6,24 @@ import HomePage from './pages/Homepage/HomePage';
 import UserPage from './pages/UserPage/UserPage';
 import authApi from './api/axiosConfig';
 import { useAuth0 } from '@auth0/auth0-react';
+import { ExceptionMessage } from './api/exceptionMessage';
 
 export default function AppRouters() {
-  const userInfo = localStorage.getItem('userInfo');
+  const userInfo = localStorage.getItem('userEmail');
   const modalRef: React.RefObject<any> = React.createRef();
   const { user } = useAuth0();
 
   useEffect(() => {
     if (!userInfo) {
-      // Check if it is first time login user
+      // Check if this user has full data or not
       const checkIsFirstTimeLogin = async () => {
         try {
-          const res: { isFirstTime: boolean } = await authApi.get(
-            '/user/is-first-time'
-          );
-          if (res.isFirstTime) {
-            // Open modal to ask user to fill in updated user info
-            console.log(user);
-            const createUserPromise = await authApi.post('/user', {
-              username: user?.name,
-              email: user?.email,
-            });
-            console.log(user);
-            modalRef.current?.open();
-          }
+          const res = await authApi.get('/user/me');
+          localStorage.setItem('userEmail', res.data?.data?.email);
         } catch (error: any) {
-          console.log(error.message);
+          if (error.message === ExceptionMessage.USER_NEED_UPDATE_INFO) {
+            modalRef?.current.open();
+          }
         }
       };
       checkIsFirstTimeLogin();

@@ -1,22 +1,20 @@
 import React, { useEffect } from 'react';
 import Header from '../../components/Header';
 import { UserData } from './models/UserData';
-import { Descriptions, Spin, Table, Tag } from 'antd';
+import { Descriptions, Spin, Table } from 'antd';
 import EditButton from '../../components/EditButton';
 import authApi from '../../api/axiosConfig';
 import { useAuth0 } from '@auth0/auth0-react';
-import useWindowDimensions from '../../hooks/useWindowDimensions.hooks';
 import UpdateUserModal from '../../components/UpdateUserModal';
 import { useNavigate } from 'react-router-dom';
 import { BookingData, mockBookingData } from './models/BookingData';
-import { ColumnsType, ColumnType } from 'antd/lib/table';
+import { ColumnsType } from 'antd/lib/table';
 
 export default function UserPage() {
   const [userData, setUserData] = React.useState(new UserData(null));
   const [bookingData, setBookingData] = React.useState<BookingData[]>([]);
   const [loading, setLoading] = React.useState(true);
   const { user } = useAuth0();
-  const { height, width } = useWindowDimensions();
   const modalRef: React.RefObject<any> = React.createRef();
 
   const onEdit = () => {
@@ -24,14 +22,20 @@ export default function UserPage() {
   };
 
   const navigate = useNavigate();
-  if (!user) {
-    navigate('/');
-  }
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const userData: UserData = await authApi.get('/user/me');
-      setUserData(userData);
+      try {
+        const res = await authApi.get('/user/me');
+        setUserData(res.data.data);
+      } catch (error: any) {
+        console.log(error.message);
+      }
     };
     const getBookingData = async () => {
       //const bookingData: any = await authApi.get('/booking');
@@ -43,6 +47,7 @@ export default function UserPage() {
     setLoading(false);
   }, []);
 
+  // Prepare booking column for table
   const bookingColumns: ColumnsType<BookingData> = [
     {
       title: 'Booking ID',

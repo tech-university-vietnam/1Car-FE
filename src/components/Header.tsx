@@ -1,4 +1,4 @@
-import { Button, Collapse, Divider, Drawer } from 'antd';
+import { Button, Collapse, Drawer } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MenuFoldOutlined, RightOutlined } from '@ant-design/icons';
@@ -8,7 +8,6 @@ import {
   UserProfileButton,
 } from './auth/AuthButtons';
 import { useAuth0 } from '@auth0/auth0-react';
-import { StringGradients } from 'antd/lib/progress/progress';
 
 export default function Header() {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -30,11 +29,14 @@ export default function Header() {
     </li>
   );
 
-  const SubSmallMenuItem = ({ text, path }: { text: string; path: string }) => (
-    <li className="mr-4 mb-4 w-full border-b pb-4 pl-2 text-xs md:text-base">
-      <Link to={path} className="text-base text-black">
+  const SubSmallMenuItem = (props: any) => (
+    <li
+      onClick={() => props.onClickFunction}
+      className="mr-4 mb-4 w-full border-b pb-4 pl-2 text-xs md:text-base"
+    >
+      <Link to={props.path} className="text-base text-black">
         <RightOutlined className="pr-2 text-xs" />
-        <span className="mr-2">{text}</span>
+        <span className="mr-2">{props.text}</span>
       </Link>
     </li>
   );
@@ -59,15 +61,12 @@ export default function Header() {
             <div>
               {isAuthenticated ? (
                 <ul>
-                  <li className="text-base text-black">
-                    <SubSmallMenuItem path="user" text="My profile" />
-                  </li>
-                  <li
-                    className="text-base text-black"
-                    onClick={() => logOutFunction()}
-                  >
-                    <SubSmallMenuItem path="#" text="Logout" />
-                  </li>
+                  <SubSmallMenuItem path="user" text="My profile" />
+                  <SubSmallMenuItem
+                    path="#"
+                    text="Logout"
+                    onClickFunction={logOutFunction}
+                  />
                 </ul>
               ) : (
                 <div

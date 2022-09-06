@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import AntButton from '../AntButton';
 import Cookies from 'universal-cookie';
-import authApi from '../../api/axiosConfig';
 
 export const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
@@ -53,22 +52,6 @@ export const UserProfileButton = () => {
     };
     getUserMetaData();
   }, [user?.sub]);
-
-  useEffect(() => {
-    // Check if there is user info in storage
-    const userInfo = localStorage.getItem('userInfo');
-    if (!userInfo) {
-      const getUserInfo = async () => {
-        try {
-          const userData = await authApi.get('/user/me');
-          localStorage.setItem('userInfo', userData.data);
-        } catch (error: any) {
-          console.log(error.message);
-        }
-      };
-      getUserInfo();
-    }
-  }, []);
 
   return <div>{isAuthenticated ? <p>Hi, {user?.name}</p> : <></>}</div>;
 };

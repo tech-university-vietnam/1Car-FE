@@ -41,7 +41,7 @@ export default function AppRouters() {
         <Route path='/user' element={<UserPage />} />
         <Route path='/admin' element={<AdminPage />} />
         <Route path='*' element={<HomePage />} />
-        <Route path='details' element={<CarDetailPage />} />
+        <Route path='/details/:id' element={<CarDetailPage />} />
       </Routes>
     </>
   );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import AntButton from '../AntButton';
 import Cookies from 'universal-cookie';
+import { Link } from 'react-router-dom';
 
 export const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
@@ -53,5 +54,9 @@ export const UserProfileButton = () => {
     getUserMetaData();
   }, [user?.sub]);
 
-  return <div>{isAuthenticated ? <p>Hi, {user?.name}</p> : <></>}</div>;
+  return (
+    <Link to="/user" className="text-black">
+      {isAuthenticated ? <p>Hi, {user?.name}</p> : <></>}
+    </Link>
+  );
 };

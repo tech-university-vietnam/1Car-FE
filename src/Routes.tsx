@@ -10,8 +10,8 @@ export default function AppRouters() {
     <Routes>
       <Route path='/user' element={<UserPage />} />
       <Route path='/admin' element={<AdminPage />} />
+      <Route path='/details/:id' element={<CarDetailPage />} />
       <Route path='*' element={<HomePage />} />
-      <Route path='details' element={<CarDetailPage />} />
     </Routes>
   );
 }

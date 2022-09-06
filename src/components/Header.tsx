@@ -1,13 +1,14 @@
 import { Button, Collapse, Divider, Drawer } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MenuFoldOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, RightOutlined } from '@ant-design/icons';
 import {
   LoginButton,
   LogoutButton,
   UserProfileButton,
 } from './auth/AuthButtons';
 import { useAuth0 } from '@auth0/auth0-react';
+import { StringGradients } from 'antd/lib/progress/progress';
 
 export default function Header() {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -29,6 +30,15 @@ export default function Header() {
     </li>
   );
 
+  const SubSmallMenuItem = ({ text, path }: { text: string; path: string }) => (
+    <li className="mr-4 mb-4 w-full border-b pb-4 pl-2 text-xs md:text-base">
+      <Link to={path} className="text-base text-black">
+        <RightOutlined className="pr-2 text-xs" />
+        <span className="mr-2">{text}</span>
+      </Link>
+    </li>
+  );
+
   const CollapseMenuItem = () => {
     const { Panel } = Collapse;
     const { logout, loginWithRedirect } = useAuth0();
@@ -38,20 +48,25 @@ export default function Header() {
         'cookiename=access_token; expires = Thu, 01 Jan 1970 00:00:00 GMT';
     };
     return (
-      <li className="mr-4 mb-4 w-full border-b pb-4 pl-2 text-xs md:text-base">
+      <li className="w-full border-b pb-3">
         <Collapse ghost>
-          <Panel header="User" key="1">
-            <Link to="/user" className="text-base text-black"></Link>
+          <Panel
+            header={<div className="text-base text-black">User</div>}
+            key="1"
+            showArrow={false}
+            className="w-full"
+          >
             <div>
               {isAuthenticated ? (
                 <ul>
-                  <li className="text-base text-black">My Profile</li>
-                  <Divider />
+                  <li className="text-base text-black">
+                    <SubSmallMenuItem path="user" text="My profile" />
+                  </li>
                   <li
                     className="text-base text-black"
                     onClick={() => logOutFunction()}
                   >
-                    Logout
+                    <SubSmallMenuItem path="#" text="Logout" />
                   </li>
                 </ul>
               ) : (

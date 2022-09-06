@@ -1,15 +1,19 @@
 import React, { useEffect } from 'react';
 import Header from '../../components/Header';
-import { UserData } from '../../models/UserData';
-import { Avatar, Spin } from 'antd';
+import { UserData } from './models/UserData';
+import { Descriptions, Spin, Table, Tag } from 'antd';
 import EditButton from '../../components/EditButton';
 import authApi from '../../api/axiosConfig';
 import { useAuth0 } from '@auth0/auth0-react';
 import useWindowDimensions from '../../hooks/useWindowDimensions.hooks';
 import UpdateUserModal from '../../components/UpdateUserModal';
+import { useNavigate } from 'react-router-dom';
+import { BookingData, mockBookingData } from './models/BookingData';
+import { ColumnsType, ColumnType } from 'antd/lib/table';
 
 export default function UserPage() {
   const [userData, setUserData] = React.useState(new UserData(null));
+  const [bookingData, setBookingData] = React.useState<BookingData[]>([]);
   const [loading, setLoading] = React.useState(true);
   const { user } = useAuth0();
   const { height, width } = useWindowDimensions();
@@ -19,15 +23,48 @@ export default function UserPage() {
     modalRef.current?.open();
   };
 
+  const navigate = useNavigate();
+  if (!user) {
+    navigate('/');
+  }
+
   useEffect(() => {
     const getUserInfo = async () => {
       const userData: UserData = await authApi.get('/user/me');
       setUserData(userData);
     };
+    const getBookingData = async () => {
+      //const bookingData: any = await authApi.get('/booking');
+      setBookingData(mockBookingData);
+    };
     setLoading(true);
     getUserInfo();
+    getBookingData();
     setLoading(false);
   }, []);
+
+  const bookingColumns: ColumnsType<BookingData> = [
+    {
+      title: 'Booking ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Booking Date',
+      dataIndex: 'bookingDate',
+      key: 'bookingDate',
+    },
+    {
+      title: 'Booking Status',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: 'Car Information',
+      dataIndex: 'carInfo',
+      key: 'carInfo',
+    },
+  ];
 
   return (
     <div className="min-h-screen">
@@ -36,36 +73,31 @@ export default function UserPage() {
       ) : (
         <div>
           <Header />
-          <div className="h-screen bg-teal-100 sm:mx-auto sm:my-10 sm:h-1/2 sm:w-full sm:py-10 lg:w-3/4">
-            <h1 className="pt-3 text-center font-bold">Your information</h1>
-            <div className="mx-auto my-8 flex h-3/4 self-center rounded-md bg-teal-500 sm:w-full sm:px-10 sm:py-10 lg:w-3/4">
-              <div className="flex-none self-center">
-                <Avatar className="mx-auto" src={user?.picture} size={50}>
-                  {userData.name}
-                </Avatar>
-              </div>
-              <div className="lg:px-15 mx-auto flex-initial self-center px-3 sm:px-10">
-                <p>
-                  <em>Name:</em> {userData.name}
-                </p>
-                <p>
-                  <em>Email:</em> {user?.email}
-                </p>
-                <p>
-                  <em>Phone number:</em> {userData.phoneNumber}
-                </p>
-                <p>
-                  <em>Date of birth:</em> {userData.dateOfBirth}
-                </p>
-              </div>
-              <div className="flex-1 self-center pr-2 sm:mx-auto">
-                <EditButton
-                  label={width > 700 ? 'Edit your information' : ''}
-                  onClickFunction={onEdit}
-                />
-              </div>
-              <UpdateUserModal ref={modalRef} isEdit={true} user={userData} />
-            </div>
+          <div className="mx-5 h-screen bg-neutral-100 px-5 pt-5 sm:mx-5 sm:my-10 sm:h-1/2 sm:w-full sm:py-10 lg:w-3/4">
+            <Descriptions title="Your information">
+              <Descriptions.Item label="Name">
+                {userData.name}
+              </Descriptions.Item>
+              <Descriptions.Item label="Email">{user?.email}</Descriptions.Item>
+              <Descriptions.Item label="Phone">
+                {userData.phoneNumber}
+              </Descriptions.Item>
+              <Descriptions.Item label="Date Of Birth">
+                {userData.dateOfBirth}
+              </Descriptions.Item>
+              <Descriptions.Item>
+                {
+                  <EditButton
+                    label="Edit your information"
+                    onClickFunction={onEdit}
+                  />
+                }
+              </Descriptions.Item>
+            </Descriptions>
+          </div>
+          <UpdateUserModal ref={modalRef} isEdit={true} user={userData} />
+          <div className="mx-5">
+            <Table columns={bookingColumns} dataSource={bookingData} />
           </div>
         </div>
       )}

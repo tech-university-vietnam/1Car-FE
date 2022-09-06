@@ -1,4 +1,4 @@
-import { Button, Drawer } from 'antd';
+import { Button, Collapse, Divider, Drawer } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MenuFoldOutlined } from '@ant-design/icons';
@@ -28,6 +28,46 @@ export default function Header() {
       </Link>
     </li>
   );
+
+  const CollapseMenuItem = () => {
+    const { Panel } = Collapse;
+    const { logout, loginWithRedirect } = useAuth0();
+    const logOutFunction = () => {
+      logout({ returnTo: window.location.origin });
+      document.cookie =
+        'cookiename=access_token; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+    };
+    return (
+      <li className="mr-4 mb-4 w-full border-b pb-4 pl-2 text-xs md:text-base">
+        <Collapse ghost>
+          <Panel header="User" key="1">
+            <Link to="/user" className="text-base text-black"></Link>
+            <div>
+              {isAuthenticated ? (
+                <ul>
+                  <li className="text-base text-black">My Profile</li>
+                  <Divider />
+                  <li
+                    className="text-base text-black"
+                    onClick={() => logOutFunction()}
+                  >
+                    Logout
+                  </li>
+                </ul>
+              ) : (
+                <div
+                  className="text-base text-black"
+                  onClick={() => loginWithRedirect()}
+                >
+                  Login
+                </div>
+              )}
+            </div>
+          </Panel>
+        </Collapse>
+      </li>
+    );
+  };
 
   return (
     <header className="flex w-full items-center py-2 px-8 shadow-sm">
@@ -62,6 +102,7 @@ export default function Header() {
           <SmallMenuItem path="/" text="Home" />
           <SmallMenuItem path="/about" text="About" />
           <SmallMenuItem path="/more" text="More" />
+          <CollapseMenuItem />
         </ul>
       </Drawer>
     </header>

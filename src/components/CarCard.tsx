@@ -71,7 +71,7 @@ export default function CarCard() {
           className='w-full'
           size='large'
           type='primary'
-          onClick={() => navigate('details')}
+          onClick={() => navigate('details?id=PLACEHOLDER')} //TODO: pass id
         >
           Rent now
         </Button>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import AntButton from '../AntButton';
 import Cookies from 'universal-cookie';
-import { Link } from 'react-router-dom';
 
 export const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
@@ -19,10 +18,11 @@ export const LoginButton = () => {
 
 export const LogoutButton = () => {
   const { logout } = useAuth0();
+
   const logOutFunction = () => {
     logout({ returnTo: window.location.origin });
-    const cookies = new Cookies();
-    cookies.remove('access_token', { path: '/' });
+    document.cookie =
+      'cookiename=access_token; expires = Thu, 01 Jan 1970 00:00:00 GMT';
   };
   return <AntButton onClickFunction={() => logOutFunction()} label='Logout' />;
 };
@@ -34,8 +34,9 @@ export const UserProfileButton = () => {
   useEffect(() => {
     const getUserMetaData = async () => {
       const domain = process.env.REACT_APP_AUTH0_DOMAIN;
-      const cookies = new Cookies();
+
       try {
+        const cookies = new Cookies();
         const accessToken = cookies.get('access_token');
         if (accessToken) {
           const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user?.sub}`;
@@ -54,9 +55,11 @@ export const UserProfileButton = () => {
     getUserMetaData();
   }, [user?.sub]);
 
-  return (
-    <Link to='/user' className='text-black'>
-      {isAuthenticated ? <p>Hi, {user?.name}</p> : <></>}
-    </Link>
-  );
+  if (isAuthenticated) {
+    return (
+      <div>
+        <p>Hi, {user?.name}</p>
+      </div>
+    );
+  }
 };

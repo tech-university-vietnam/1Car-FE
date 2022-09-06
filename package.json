@@ -32,7 +32,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "test:coverage": "react-scripts test --coverage --watchAll=false --coverageReporters='text-summary'"
+    "test:coverage": "react-scripts test --coverage --watchAll=false --coverageReporters='text-summary'",
+    "lint": "eslint src"
   },
   "browserslist": {
     "production": [

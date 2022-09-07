@@ -1,4 +1,4 @@
-import { Pagination } from 'antd';
+import { Empty, Pagination } from 'antd';
 import * as _ from 'lodash';
 import { useEffect } from 'react';
 import CarCard from '../../components/CarCard';
@@ -61,16 +61,28 @@ export default function HomePage() {
           <ClearFilter onClear={onClearFilter} />
           <SelectSort />
         </div>
-        <div className='mt-3 px-4'>
-          <h1 className='text-2xl'>123 Cars Found</h1>
-          <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
-            {cars.map((value, index) => (
-              <CarCard key={value.id} car={value} />
-            ))}
-          </div>
-          <div className='mt-8 flex justify-end'>
-            <Pagination defaultCurrent={1} total={50} onChange={onPageChange} />
-          </div>
+        <div className='mt-3 px-4' style={{ minHeight: 500 }}>
+          {cars.length == 0 ? (
+            <div className='mt-24'>
+              <Empty />
+            </div>
+          ) : (
+            <>
+              <h1 className='text-2xl'>123 Cars Found</h1>
+              <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
+                {cars.map((value, index) => (
+                  <CarCard key={value.id} car={value} />
+                ))}
+              </div>
+              <div className='mt-8 flex justify-end'>
+                <Pagination
+                  defaultCurrent={1}
+                  total={50}
+                  onChange={onPageChange}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
       <PageFooter />

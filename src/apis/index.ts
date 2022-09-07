@@ -45,3 +45,7 @@ export async function createCarAttribute(data: any): Promise<any> {
 export async function createCar(data: any): Promise<any> {
   return callApi('/car', 'POST', data);
 }
+
+export async function getCarAttributeType(): Promise<[]> {
+  return callApi('/car/attribute/type');
+}

@@ -77,6 +77,14 @@ export const getCarAttributeAction = createAsyncThunk(
   }
 );
 
+export const getCarAttributeTypeAction = createAsyncThunk(
+  'car/getCarAttributeType',
+  async (payload, thunkApi) => {
+    const types = await api.getCarAttributeType();
+    thunkApi.dispatch(getCarAttributeType(types));
+  }
+);
+
 const carSlice = createSlice({
   name: 'blogData',
   initialState,
@@ -92,11 +100,15 @@ const carSlice = createSlice({
       );
       state.attributeTypes = types;
     },
+    getCarAttributeType: (state, action: PayloadAction<Type[]>) => {
+      state.attributeTypes = action.payload;
+    },
     updateFilter: (state, action: PayloadAction<CarFilter>) => {
       state.filter = action.payload;
     },
   },
 });
 
-export const { getCar, getCarAttribute, updateFilter } = carSlice.actions;
+export const { getCar, getCarAttribute, updateFilter, getCarAttributeType } =
+  carSlice.actions;
 export default carSlice.reducer;

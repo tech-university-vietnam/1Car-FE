@@ -16,7 +16,10 @@ import {
 import React, { useEffect, useState } from 'react';
 import { createCarAttribute } from '../../apis';
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { getCarAttributeAction } from '../../redux/reducer/car';
+import {
+  getCarAttributeAction,
+  getCarAttributeTypeAction,
+} from '../../redux/reducer/car';
 
 const CreateCarAttribute = ({ onClose }: { onClose: () => void }) => {
   const dispatch = useAppDispatch();
@@ -38,7 +41,7 @@ const CreateCarAttribute = ({ onClose }: { onClose: () => void }) => {
   };
 
   useEffect(() => {
-    dispatch(getCarAttributeAction());
+    dispatch(getCarAttributeTypeAction());
   }, []);
 
   return (

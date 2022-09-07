@@ -19,24 +19,24 @@ export const LoginButton = () => {
 export const LogoutButton = () => {
   const { logout } = useAuth0();
 
-  return (
-    <AntButton
-      onClickFunction={() => logout({ returnTo: window.location.origin })}
-      label='Logout'
-    />
-  );
+  const logOutFunction = () => {
+    logout({ returnTo: window.location.origin });
+    document.cookie =
+      'cookiename=access_token; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+  };
+  return <AntButton onClickFunction={() => logOutFunction()} label='Logout' />;
 };
 
 export const UserProfileButton = () => {
   const { user, isAuthenticated } = useAuth0();
   const [userMetaData, setUserMetaData] = useState(null);
 
-  const cookies = new Cookies();
   useEffect(() => {
     const getUserMetaData = async () => {
       const domain = process.env.REACT_APP_AUTH0_DOMAIN;
 
       try {
+        const cookies = new Cookies();
         const accessToken = cookies.get('access_token');
         if (accessToken) {
           const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user?.sub}`;
@@ -55,9 +55,11 @@ export const UserProfileButton = () => {
     getUserMetaData();
   }, [user?.sub]);
 
-  return (
-    <div>
-      <p>Hi, {user?.name}</p>
-    </div>
-  );
+  if (isAuthenticated) {
+    return (
+      <div>
+        <p>Hi, {user?.name}</p>
+      </div>
+    );
+  }
 };

@@ -6,8 +6,9 @@ import {
 } from '@ant-design/icons';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Car } from '../redux/reducer/car';
 
-export default function CarCard() {
+export default function CarCard({ car }: { car: Car }) {
   const CardBodyAttribute = ({
     title,
     value,
@@ -30,7 +31,7 @@ export default function CarCard() {
     >
       <div className='flex h-48 w-full max-w-full overflow-hidden'>
         <img
-          src='/demo-car.png'
+          src={car.images[0] || '/demo-car.png'}
           alt='demo car'
           className='mx-auto max-h-full max-w-full items-center justify-center'
         />
@@ -38,14 +39,15 @@ export default function CarCard() {
       <div className='my-4 flex items-center justify-start'>
         <div className='mr-6 flex items-center text-sm font-semibold opacity-70'>
           <TrademarkCircleOutlined className='mr-2 ' />
-          Audi
+          {car.attributes[0].value}
         </div>
         <div className='mr-6 flex items-center text-sm font-semibold opacity-70'>
           <NodeIndexOutlined className='mr-2 ' />
-          SUV
+          {car.attributes[1]?.value || 'N/A'}
         </div>
         <div className='mr-6 flex items-center text-sm font-semibold opacity-70'>
-          <TeamOutlined className='mr-2 ' />5 seats
+          <TeamOutlined className='mr-2 ' />
+          {car.attributes[2]?.value || 'N/A'}
         </div>
       </div>
       <div className='flex items-center justify-around rounded-md bg-slate-50 p-4 px-8 text-center shadow'>
@@ -58,20 +60,22 @@ export default function CarCard() {
       <div className='mt-4 flex items-center'>
         <div className='flex-1'>
           <p className='mb-2 text-sm font-normal text-gray-500'>
-            123 Success trips
+            100 Success trips
           </p>
           <div className='mb-2'>
-            <Rate disabled defaultValue={2} />
+            <Rate disabled defaultValue={5} />
           </div>
         </div>
-        <div className='flex-1 text-right text-3xl font-bold'>$350.0</div>
+        <div className='flex-1 text-right text-3xl font-bold'>
+          ${car.pricePerDate}
+        </div>
       </div>
       <div className='my-2 mt-6'>
         <Button
           className='w-full'
           size='large'
           type='primary'
-          onClick={() => navigate('details?id=PLACEHOLDER')} //TODO: pass id
+          onClick={() => navigate('/details/' + car.id)}
         >
           Rent now
         </Button>

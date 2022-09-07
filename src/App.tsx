@@ -5,6 +5,8 @@ import AppRouters from './Routes';
 import ErrorBoundary from './components/ErrorBoundary';
 import Cookies from 'universal-cookie';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Provider } from 'react-redux';
+import store from './redux';
 
 function App() {
   const domain = process.env.REACT_APP_AUTH0_DOMAIN;
@@ -31,7 +33,9 @@ function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <AppRouters />
+        <Provider store={store}>
+          <AppRouters />
+        </Provider>
       </BrowserRouter>
     </ErrorBoundary>
   );

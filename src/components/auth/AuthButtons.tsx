@@ -23,6 +23,7 @@ export const LogoutButton = () => {
     logout({ returnTo: window.location.origin });
     const cookies = new Cookies();
     cookies.remove('access_token', { path: '/' });
+    localStorage.removeItem('userEmail');
   };
   return <AntButton onClickFunction={() => logOutFunction()} label='Logout' />;
 };

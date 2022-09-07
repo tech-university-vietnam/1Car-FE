@@ -8,14 +8,17 @@ import UserPage from './pages/UserPage/UserPage';
 import { useAuth0 } from '@auth0/auth0-react';
 import authApi from './apis/authApi';
 import { ExceptionMessage } from './apis/exceptionMessage';
+import Cookies from 'universal-cookie';
 
 export default function AppRouters() {
   const userInfo = localStorage.getItem('userEmail');
+  const cookies = new Cookies();
+  const token = cookies.get('access_token');
   const modalRef: React.RefObject<any> = React.createRef();
   const { user } = useAuth0();
 
   useEffect(() => {
-    if (!userInfo) {
+    if (user && !userInfo && token) {
       // Check if this user has full data or not
       const checkIsFirstTimeLogin = async () => {
         try {

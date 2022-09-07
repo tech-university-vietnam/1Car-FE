@@ -49,6 +49,7 @@ export default function Header() {
       logout({ returnTo: window.location.origin });
       const cookies = new Cookies();
       cookies.remove('access_token', { path: '/' });
+      localStorage.removeItem('userEmail');
     };
     return (
       <li className='w-full border-b pb-3'>

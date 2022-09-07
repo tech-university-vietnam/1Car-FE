@@ -1,7 +1,7 @@
 import { Button, Col, Divider, Row, Skeleton, Space } from 'antd';
 import { Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import Header from '../../components/Header';
 import InfoCard from '../../components/InfoCard';
 import CarDetails from './CarDetails';
@@ -9,8 +9,7 @@ import PaymentDetails from './PaymentDetails';
 
 export default function CarDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('id');
+  const { id } = useParams();
   useEffect(() => {
     setTimeout(() => setIsLoading(false), 2000);
 
@@ -21,7 +20,7 @@ export default function CarDetailPage() {
     <div className='min-h-screen'>
       <Header />
       <>
-        {query ? (
+        {id ? (
           <Row gutter={8} className='p-8'>
             <Col md={18}>
               <CarDetails isLoading={isLoading} />

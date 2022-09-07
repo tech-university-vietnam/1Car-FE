@@ -3,11 +3,12 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import InfoCard from '../../components/InfoCard';
 import { RangePickerProps } from 'antd/lib/date-picker';
+import { useNavigate } from 'react-router-dom';
 
 export default function PaymentDetails(props: any) {
   const [startDate, setStartDate] = useState<string | undefined>('');
   const [endDate, setEndDate] = useState<string | undefined>('');
-
+  const navigate = useNavigate();
   const disabledStartDate: RangePickerProps['disabledDate'] = (
     current: any
   ) => {

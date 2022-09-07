@@ -9,7 +9,8 @@ import PaymentDetails from './PaymentDetails';
 
 export default function CarDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const { id } = useParams();
+  const { id } = useParams(); //TODO add server calls for these
+  const paymentId = 'hello';
   useEffect(() => {
     setTimeout(() => setIsLoading(false), 2000);
 
@@ -26,7 +27,10 @@ export default function CarDetailPage() {
               <CarDetails isLoading={isLoading} />
             </Col>
             <Col md={6} style={{ width: '100%' }}>
-              <PaymentDetails isLoading={isLoading} />
+              <PaymentDetails
+                isLoading={isLoading}
+                to={'../payments/' + paymentId}
+              />
               <InfoCard style={{ marginTop: '8px' }}>Recommended Cars</InfoCard>
             </Col>
           </Row>

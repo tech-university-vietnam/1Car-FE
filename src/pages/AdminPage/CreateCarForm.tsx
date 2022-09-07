@@ -1,28 +1,24 @@
 import { PlusOutlined } from '@ant-design/icons';
 import {
   Button,
-  Cascader,
-  DatePicker,
   Divider,
   Form,
   Input,
   InputNumber,
   message,
   Modal,
-  Radio,
   Select,
   Space,
   Switch,
-  TreeSelect,
 } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { createCar } from '../../apis';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { getCarAttributeAction } from '../../redux/reducer/car';
 import CreateCarAttribute from './CreateCarAttribute';
 
-const CreateCarForm = () => {
+const CreateCarForm = ({ onClose }: { onClose: () => void }) => {
   const dispatch = useAppDispatch();
   const ref = useRef(null);
 
@@ -30,11 +26,14 @@ const CreateCarForm = () => {
   const [visibleCreateModal, setVisibleCreateModal] = useState(false);
   const [selecteImages, setSelectedImages] = useState<any>([]);
   const [locationId, setLocationId] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [form] = Form.useForm();
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
+
       const value = await form.validateFields();
       const formData = new FormData();
 
@@ -43,10 +42,9 @@ const CreateCarForm = () => {
       data['status'] = data['status'] === true ? 'AVAILABLE' : 'UNAVAILABLE';
 
       Object.keys(data).map((key) => {
-        formData.append(key, data[key]);
+        if (data[key]) formData.append(key, data[key]);
       });
       attributes.forEach((item: any) => formData.append('attributes', item));
-      formData.append('locationId', locationId);
 
       for (let i = 0; i < selecteImages.length; i++) {
         formData.append('images', selecteImages[i]);
@@ -56,9 +54,12 @@ const CreateCarForm = () => {
       message.success('Create car successfully!');
       form.resetFields();
       setSelectedImages([]);
+      onClose();
     } catch (err) {
       message.error('Create car failed, please try again!');
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,7 +89,7 @@ const CreateCarForm = () => {
         <Form.Item
           label='Price/day'
           name='pricePerDate'
-          rules={[{ required: true }]}
+          rules={[{ type: 'number', required: true }]}
         >
           <InputNumber
             addonAfter='$'
@@ -96,15 +97,29 @@ const CreateCarForm = () => {
             placeholder='Price for rent/day'
           />
         </Form.Item>
-        <Form.Item label='Number of trips' name='numberOfTrips'>
+        <Form.Item
+          label='Number of trips'
+          name='numberOfTrips'
+          rules={[{ type: 'number', min: 0 }]}
+        >
           <InputNumber style={{ width: 300 }} />
         </Form.Item>
 
-        <Form.Item label='Number of kms' name='numberOfKilometer'>
+        <Form.Item
+          label='Number of kms'
+          name='numberOfKilometer'
+          rules={[{ type: 'number', min: 0 }]}
+        >
           <InputNumber style={{ width: 300 }} addonAfter='KM' />
         </Form.Item>
-        <Form.Item label='Location' name='locationId'>
-          <GooglePlacesAutocomplete apiKey={process.env.REACT_APP_GG_API_KEY} />
+        <Form.Item label='Location' name='locationId' initialValue={''}>
+          <GooglePlacesAutocomplete
+            apiKey={process.env.REACT_APP_GG_API_KEY}
+            selectProps={{
+              value: locationId,
+              onChange: setLocationId,
+            }}
+          />
         </Form.Item>
         <Form.Item
           label='Available'
@@ -114,7 +129,11 @@ const CreateCarForm = () => {
         >
           <Switch defaultChecked={true} />
         </Form.Item>
-        <Form.Item label='Attributes' name='attributes'>
+        <Form.Item
+          label='Attributes'
+          name='attributes'
+          rules={[{ required: true }]}
+        >
           <Select
             mode='tags'
             placeholder="Car's attribute"
@@ -155,13 +174,18 @@ const CreateCarForm = () => {
         </Form.Item>
         <Form.Item
           wrapperCol={{
-            span: 4,
-            offset: 20,
+            span: 5,
+            offset: 19,
           }}
         >
-          <Button onClick={handleSubmit} type='primary'>
-            Submit
-          </Button>
+          <div className='flex items-center justify-between'>
+            <Button onClick={onClose} type='text'>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} type='primary' loading={loading}>
+              Submit
+            </Button>
+          </div>
         </Form.Item>
       </Form>
 

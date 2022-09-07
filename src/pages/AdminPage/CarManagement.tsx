@@ -108,7 +108,7 @@ export default function CarManagement() {
         width='60%'
         onCancel={() => setCreateVisible(false)}
       >
-        <CreateCarForm />
+        <CreateCarForm onClose={() => setCreateVisible(false)} />
       </Modal>
     </div>
   );

@@ -1,14 +1,13 @@
-import { Button, Collapse, Drawer } from 'antd';
+import { Button, Drawer } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MenuFoldOutlined, RightOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined } from '@ant-design/icons';
 import {
   LoginButton,
   LogoutButton,
   UserProfileButton,
 } from './auth/AuthButtons';
 import { useAuth0 } from '@auth0/auth0-react';
-import Cookies from 'universal-cookie';
 
 export default function Header() {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -29,61 +28,6 @@ export default function Header() {
       </Link>
     </li>
   );
-
-  const SubSmallMenuItem = (props: any) => (
-    <li
-      onClick={() => props.onClickFunction}
-      className='mr-4 mb-4 w-full border-b pb-4 pl-2 text-xs md:text-base'
-    >
-      <Link to={props.path} className='text-base text-black'>
-        <RightOutlined className='pr-2 text-xs' />
-        <span className='mr-2'>{props.text}</span>
-      </Link>
-    </li>
-  );
-
-  const CollapseMenuItem = () => {
-    const { Panel } = Collapse;
-    const { logout, loginWithRedirect } = useAuth0();
-    const logOutFunction = () => {
-      logout({ returnTo: window.location.origin });
-      const cookies = new Cookies();
-      cookies.remove('access_token', { path: '/' });
-      localStorage.removeItem('userEmail');
-    };
-    return (
-      <li className='w-full border-b pb-3'>
-        <Collapse ghost>
-          <Panel
-            header={<div className='text-base text-black'>User</div>}
-            key='1'
-            showArrow={false}
-            className='w-full'
-          >
-            <div>
-              {isAuthenticated ? (
-                <ul>
-                  <SubSmallMenuItem path='user' text='My profile' />
-                  <SubSmallMenuItem
-                    path='#'
-                    text='Logout'
-                    onClickFunction={logOutFunction}
-                  />
-                </ul>
-              ) : (
-                <div
-                  className='text-base text-black'
-                  onClick={() => loginWithRedirect()}
-                >
-                  Login
-                </div>
-              )}
-            </div>
-          </Panel>
-        </Collapse>
-      </li>
-    );
-  };
 
   return (
     <header className='flex w-full items-center py-2 px-8 shadow-sm'>
@@ -118,7 +62,6 @@ export default function Header() {
           <SmallMenuItem path='/' text='Home' />
           <SmallMenuItem path='/about' text='About' />
           <SmallMenuItem path='/more' text='More' />
-          <CollapseMenuItem />
         </ul>
       </Drawer>
     </header>

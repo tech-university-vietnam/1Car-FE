@@ -1,10 +1,23 @@
 # Auth0 notice
-Since localhost is considered third party app, we would need to change our host to 0.0.0.0 by setting ```HOST=0.0.0.0``` and ```HTTPS=true``` in your .env file
-Also, change it to your public access address to while making change to the development process with login in.
 
-If you want to access user info, pls refer to the useAuth0 function with the user object. 
+Since localhost can not request access token silently, we need to proxy our way to auht0.
+
+Run ```npm install-g ngrok```
+Then ```ngrok config add-authtoken ${TOKEN}```
+
+Get your token from ```https://dashboard.ngrok.com/get-started/your-authtoken```
+
+Then run ```ngrok http 3000``` to start the proxy process.
+Now when going to https://e355-210-245-96-52.ngrok.io, I was able to route my way back to our frontend app.
+
+![img.png](public/ngrok.png)
+
+Now the final step would be adding your address
+to [auth0 dashboard](https://manage.auth0.com/dashboard/us/dev-elws5e13/applications/sydQIoZtakHrJ9b4dvfzWyCs2ZGWwFzs/settings)
+and you can login now.
 
 # 1Car Frontend resources
+
 Frontend library: [AntDesign](https://ant.design).
 
 Design system: [AntDesign design system](https://ant.design/docs/resources).

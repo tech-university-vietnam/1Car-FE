@@ -1,8 +1,22 @@
 import { Divider, Skeleton, Typography, Button } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import InfoCard from '../../components/InfoCard';
+import { RangePickerProps } from 'antd/lib/date-picker';
+import { useNavigate } from 'react-router-dom';
 
 export default function PaymentDetails(props: any) {
+  const [startDate, setStartDate] = useState<string | undefined>('');
+  const [endDate, setEndDate] = useState<string | undefined>('');
+  const navigate = useNavigate();
+  const disabledStartDate: RangePickerProps['disabledDate'] = (
+    current: any
+  ) => {
+    return current && current < moment().startOf('day');
+  };
+
+  const disabledEndDate: RangePickerProps['disabledDate'] = (current: any) => {
+    return current < moment(startDate || Date.now()).startOf('day');
+  };
   return (
     <InfoCard>
       <div className='flex place-content-center text-3xl'>Payment</div>
@@ -15,7 +29,12 @@ export default function PaymentDetails(props: any) {
       </Skeleton>
       <Divider />
       <div>
-        <Button className='mt-4 w-full' shape='round' type='primary'>
+        <Button
+          className='mt-4 w-full'
+          shape='round'
+          type='primary'
+          onClick={() => navigate(props.to)}
+        >
           Rent now
         </Button>
       </div>

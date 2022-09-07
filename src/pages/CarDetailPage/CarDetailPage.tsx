@@ -2,19 +2,23 @@ import { Button, Col, Divider, Row, Skeleton, Space } from 'antd';
 import { Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { getCar } from '../../apis';
 import Header from '../../components/Header';
 import InfoCard from '../../components/InfoCard';
 import CarDetails from './CarDetails';
 import PaymentDetails from './PaymentDetails';
-
 export default function CarDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const { id } = useParams(); //TODO add server calls for these
+  const { id } = useParams();
+  const [car, setCar] = useState();
   const paymentId = 'hello';
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 2000);
-
-    return () => {};
+    (async () => {
+      const c = await getCar(id);
+      setCar(c);
+      setIsLoading(false);
+      console.log(c);
+    })();
   }, []);
 
   return (
@@ -24,14 +28,14 @@ export default function CarDetailPage() {
         {id ? (
           <Row gutter={8} className='p-8'>
             <Col md={18}>
-              <CarDetails isLoading={isLoading} />
+              <CarDetails isLoading={isLoading} car={car} />
             </Col>
             <Col md={6} style={{ width: '100%' }}>
               <PaymentDetails
                 isLoading={isLoading}
                 to={'../payments/' + paymentId}
+                car={car}
               />
-              <InfoCard style={{ marginTop: '8px' }}>Recommended Cars</InfoCard>
             </Col>
           </Row>
         ) : (

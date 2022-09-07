@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import InfoCard from '../../components/InfoCard';
 import { RangePickerProps } from 'antd/lib/date-picker';
 import { useNavigate } from 'react-router-dom';
+import { calculateDatesBetween } from '../../utils/utils';
 
 export default function PaymentDetails(props: any) {
   const [startDate, setStartDate] = useState<string | undefined>('');
@@ -43,8 +44,17 @@ export default function PaymentDetails(props: any) {
           disabledDate={disabledEndDate}
           onChange={(data) => setEndDate(data?.toLocaleString())}
         ></DatePicker>
-        <Typography className='text-3xl'>Price per day</Typography>
-        <Typography className='text-3xl'>Number of days</Typography>
+        {props.isLoading ? (
+          <></>
+        ) : (
+          <Typography className='text-3xl'>{`Price per day: ${props.car.pricePerDate}`}</Typography>
+        )}
+        <Typography className='text-3xl'>
+          Number of days:{' '}
+          {startDate && endDate
+            ? calculateDatesBetween(startDate, endDate)
+            : '...'}
+        </Typography>
       </Skeleton>
       <Divider />
       <div>

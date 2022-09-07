@@ -1,8 +1,30 @@
 import { Button, Typography } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/Header';
 import InfoCard from '../../components/InfoCard';
+import { postBooking } from '../../apis';
 export default function CarPaymentPage() {
+  const [redirect, setRedirect] = useState();
+  const { carId } = useParams();
+  const navigate = useNavigate();
+  const createBooking = async (carId) => {
+    const requestData = {
+      carId,
+      returnDateTime: '2014-01-28 20:00:00',
+      receivedDateTime: '2014-01-20 20:00:00',
+      pickUpLocationId: '47964507-b206-4afd-b874-e9ba1bf6a944',
+    };
+    const response = await postBooking(requestData);
+    // console.log(response);
+    setRedirect(response);
+  };
+  useEffect(() => {
+    if (redirect) {
+      window.location.href = redirect;
+    }
+  }, [redirect]);
+
   return (
     <>
       <Header />
@@ -18,8 +40,10 @@ export default function CarPaymentPage() {
               <div className='ml-auto'>$100</div>
             </div>
             <div className='ml-auto space-x-4'>
-              <Button>Go back</Button>
-              <Button type='primary'>Next</Button>
+              <Button onClick={() => navigate(-1)}>Go back</Button>
+              <Button onClick={() => createBooking(carId)} type='primary'>
+                Next
+              </Button>
             </div>
           </div>
         </InfoCard>

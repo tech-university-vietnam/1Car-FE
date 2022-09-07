@@ -11,13 +11,11 @@ export default function CarDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const [car, setCar] = useState();
-  const paymentId = 'hello';
   useEffect(() => {
     (async () => {
       const c = await getCar(id);
       setCar(c);
       setIsLoading(false);
-      console.log(c);
     })();
   }, []);
 
@@ -33,7 +31,7 @@ export default function CarDetailPage() {
             <Col md={6} style={{ width: '100%' }}>
               <PaymentDetails
                 isLoading={isLoading}
-                to={'../payments/' + paymentId}
+                to={`../payments/${id}`}
                 car={car}
               />
             </Col>

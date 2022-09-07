@@ -55,18 +55,18 @@ export default function PaymentDetails(props: any) {
             ? calculateDatesBetween(startDate, endDate)
             : '...'}
         </Typography>
+        <Divider />
+        <div>
+          <Button
+            className='mt-4 w-full'
+            shape='round'
+            type='primary'
+            onClick={() => navigate(props.to)}
+          >
+            Rent now
+          </Button>
+        </div>
       </Skeleton>
-      <Divider />
-      <div>
-        <Button
-          className='mt-4 w-full'
-          shape='round'
-          type='primary'
-          onClick={() => navigate(props.to)}
-        >
-          Rent now
-        </Button>
-      </div>
     </InfoCard>
   );
 }

@@ -24,20 +24,24 @@ export default function CarDetails(props: any) {
         <></>
       ) : (
         <Carousel autoplay dotPosition='right'>
-          {props.car.images.map((image: string, index: any) => (
-            <div
-              key={index}
-              className=' flex w-full items-center justify-center overflow-hidden'
-            >
-              <div className='h-[200px]'>
-                <img
-                  src={image}
-                  alt={`${props.car.name} ${index + 1}`}
-                  className='mx-auto h-full w-full items-center justify-center object-contain'
-                />
+          {props.car.images ? (
+            props.car.images.map((image: string, index: any) => (
+              <div
+                key={index}
+                className=' flex w-full items-center justify-center overflow-hidden'
+              >
+                <div className='h-[200px]'>
+                  <img
+                    src={image}
+                    alt={`${props.car.name} ${index + 1}`}
+                    className='mx-auto h-full w-full items-center justify-center object-contain'
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <></>
+          )}
         </Carousel>
       )}
       <Row>

@@ -1,10 +1,7 @@
 import axios, { Method } from 'axios';
 import _ from 'lodash';
-import authApi from './authApi';
 
-const BASE_URL = process.env.REACT_APP_API_URL;
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+const BASE_URL = 'http://localhost:8080';
 
 export async function callApi(
   endpoint: string,
@@ -26,25 +23,6 @@ export async function callApi(
   }
 }
 
-// Use if want to have token in the header
-export async function callAuthApi(
-  endpoint: string,
-  method: Method = 'get',
-  data: any = {}
-) {
-  try {
-    const response = await authApi({
-      url: endpoint,
-      method,
-      data,
-    });
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-
 export async function getCars(filter: Record<string, any> = {}) {
   const query = Object.keys(filter)
     .map((key) => {
@@ -58,8 +36,4 @@ export async function getCars(filter: Record<string, any> = {}) {
 
 export async function getCarAttribute(): Promise<[]> {
   return callApi('/car/attribute');
-}
-
-export async function getUserInfoUsingToken() {
-  return callAuthApi('/user/me');
 }

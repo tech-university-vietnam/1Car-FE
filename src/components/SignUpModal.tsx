@@ -1,12 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  DatePicker,
-  Divider,
-  Form,
-  Input,
-  Modal,
-} from 'antd';
+import { Checkbox, DatePicker, Divider, Form, Input, Modal } from 'antd';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import {
   FacebookFilled,
@@ -27,7 +19,7 @@ export default forwardRef((props, ref) => {
 
   return (
     <Modal visible={visible} onCancel={onClose} footer={null} closable={false}>
-      <h2 className="mb-6 text-center text-2xl">Welcome to 1Car</h2>
+      <h2 className='mb-6 text-center text-2xl'>Welcome to 1Car</h2>
       <SignUpForm />
     </Modal>
   );
@@ -68,37 +60,37 @@ export function SignUpForm() {
   return (
     <Form
       form={form}
-      validateTrigger="onBlur"
+      validateTrigger='onBlur'
       autoComplete={'off'}
       onChange={onFormChange}
     >
       <Form.Item
-        name="name"
+        name='name'
         rules={[{ required: true, message: 'Please enter your name' }]}
       >
         <Input
-          size="large"
-          placeholder="Name"
-          className="w-full rounded border border-gray-200 p-3"
+          size='large'
+          placeholder='Name'
+          className='w-full rounded border border-gray-200 p-3'
           autoComplete={'off'}
         />
       </Form.Item>
       <Form.Item
-        name="email"
+        name='email'
         rules={[
           { required: true, type: 'email', message: 'Please enter your email' },
         ]}
       >
         <Input
-          size="large"
-          placeholder="Email"
-          className="w-full rounded border border-gray-200 p-3"
+          size='large'
+          placeholder='Email'
+          className='w-full rounded border border-gray-200 p-3'
           type={'email'}
           autoComplete={'off'}
         />
       </Form.Item>
       <Form.Item
-        name="dateOfBirth"
+        name='dateOfBirth'
         rules={[
           {
             required: true,
@@ -107,26 +99,26 @@ export function SignUpForm() {
         ]}
       >
         <DatePicker
-          className="w-full p-3"
-          placeholder="Date of birth (yyyy-mm-dd)"
-          size="large"
+          className='w-full p-3'
+          placeholder='Date of birth (yyyy-mm-dd)'
+          size='large'
         />
       </Form.Item>
       <Form.Item
-        name="password"
+        name='password'
         rules={[{ required: true, message: 'Please enter your password' }]}
       >
         <Input
-          size="large"
-          placeholder="Password"
-          className="w-full rounded border border-gray-200 p-3"
+          size='large'
+          placeholder='Password'
+          className='w-full rounded border border-gray-200 p-3'
           type={'password'}
           autoComplete={'off'}
         />
       </Form.Item>
-      <Form.Item name="accept" valuePropName="checked">
+      <Form.Item name='accept' valuePropName='checked'>
         <Checkbox>
-          <span className="opacity-50">
+          <span className='opacity-50'>
             I accept with <a>terms and conditions</a>.
           </span>
         </Checkbox>
@@ -135,21 +127,21 @@ export function SignUpForm() {
         <button
           disabled={disable || loading}
           onClick={onSubmit}
-          className="w-full rounded p-2 text-base text-white disabled:opacity-50"
+          className='w-full rounded p-2 text-base text-white disabled:opacity-50'
           style={{ background: '#66BFBF', borderColor: '#66BFBF' }}
         >
           {loading ? <LoadingOutlined /> : 'Sign Up'}
         </button>
       </Form.Item>
       <Divider>
-        <span className="text-xs text-gray-400">Or</span>
+        <span className='text-xs text-gray-400'>Or</span>
       </Divider>
       <div>
-        <button className="my-3 flex w-full items-center justify-center rounded bg-blue-500 p-2 text-white">
-          <FacebookFilled className="mr-2" /> Login with Facebook
+        <button className='my-3 flex w-full items-center justify-center rounded bg-blue-500 p-2 text-white'>
+          <FacebookFilled className='mr-2' /> Login with Facebook
         </button>
-        <button className="my-3 flex w-full items-center justify-center rounded bg-red-500 p-2 text-white ">
-          <GoogleOutlined className="mr-2" /> Login with Google
+        <button className='my-3 flex w-full items-center justify-center rounded bg-red-500 p-2 text-white '>
+          <GoogleOutlined className='mr-2' /> Login with Google
         </button>
       </div>
     </Form>

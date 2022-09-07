@@ -37,3 +37,11 @@ export async function getCars(filter: Record<string, any> = {}) {
 export async function getCarAttribute(): Promise<[]> {
   return callApi('/car/attribute');
 }
+
+export async function createCarAttribute(data: any): Promise<any> {
+  return callApi('/car/attribute', 'POST', data);
+}
+
+export async function createCar(data: any): Promise<any> {
+  return callApi('/car', 'POST', data);
+}

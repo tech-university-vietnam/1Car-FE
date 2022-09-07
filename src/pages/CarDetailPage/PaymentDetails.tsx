@@ -1,13 +1,13 @@
-import { Divider, Skeleton, Typography, Button } from 'antd';
+import { Divider, Skeleton, Typography, Button, DatePicker } from 'antd';
+import moment from 'moment';
 import React, { useState } from 'react';
 import InfoCard from '../../components/InfoCard';
 import { RangePickerProps } from 'antd/lib/date-picker';
-import { useNavigate } from 'react-router-dom';
 
 export default function PaymentDetails(props: any) {
   const [startDate, setStartDate] = useState<string | undefined>('');
   const [endDate, setEndDate] = useState<string | undefined>('');
-  const navigate = useNavigate();
+
   const disabledStartDate: RangePickerProps['disabledDate'] = (
     current: any
   ) => {
@@ -23,7 +23,25 @@ export default function PaymentDetails(props: any) {
       <Divider />
       <Skeleton loading={props.isLoading} active>
         <Typography className='text-3xl'>Pick up location</Typography>
-        <Typography className='text-3xl'>Pick up date</Typography>
+        <Typography className='text-3xl'>Start date:</Typography>
+        <DatePicker
+          placeholder='From'
+          size='large'
+          style={{ width: '100%' }}
+          disabledDate={disabledStartDate}
+          onChange={(data) => {
+            setEndDate('');
+            setStartDate(data?.toLocaleString());
+          }}
+        ></DatePicker>
+        <Typography className='text-3xl'>End date:</Typography>
+        <DatePicker
+          placeholder='To'
+          size='large'
+          style={{ width: '100%' }}
+          disabledDate={disabledEndDate}
+          onChange={(data) => setEndDate(data?.toLocaleString())}
+        ></DatePicker>
         <Typography className='text-3xl'>Price per day</Typography>
         <Typography className='text-3xl'>Number of days</Typography>
       </Skeleton>

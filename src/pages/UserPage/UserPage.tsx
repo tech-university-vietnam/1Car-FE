@@ -3,12 +3,12 @@ import Header from '../../components/Header';
 import { UserData } from './models/UserData';
 import { Descriptions, Spin, Table } from 'antd';
 import EditButton from '../../components/EditButton';
-import authApi from '../../api/axiosConfig';
 import { useAuth0 } from '@auth0/auth0-react';
 import UpdateUserModal from '../../components/UpdateUserModal';
 import { useNavigate } from 'react-router-dom';
 import { BookingData, mockBookingData } from './models/BookingData';
 import { ColumnsType } from 'antd/lib/table';
+import authApi from '../../apis/authApi';
 
 export default function UserPage() {
   const [userData, setUserData] = React.useState(new UserData(null));
@@ -72,28 +72,28 @@ export default function UserPage() {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className='min-h-screen'>
       {loading ? (
         <Spin />
       ) : (
         <div>
           <Header />
-          <div className="mx-5 h-screen bg-neutral-100 px-5 pt-5 sm:mx-5 sm:my-10 sm:h-1/2 sm:w-full sm:py-10 lg:w-3/4">
-            <Descriptions title="Your information">
-              <Descriptions.Item label="Name">
+          <div className='mx-5 h-screen bg-neutral-100 px-5 pt-5 sm:mx-5 sm:my-10 sm:h-1/2 sm:w-full sm:py-10 lg:w-3/4'>
+            <Descriptions title='Your information'>
+              <Descriptions.Item label='Name'>
                 {userData.name}
               </Descriptions.Item>
-              <Descriptions.Item label="Email">{user?.email}</Descriptions.Item>
-              <Descriptions.Item label="Phone">
+              <Descriptions.Item label='Email'>{user?.email}</Descriptions.Item>
+              <Descriptions.Item label='Phone'>
                 {userData.phoneNumber}
               </Descriptions.Item>
-              <Descriptions.Item label="Date Of Birth">
+              <Descriptions.Item label='Date Of Birth'>
                 {userData.dateOfBirth}
               </Descriptions.Item>
               <Descriptions.Item>
                 {
                   <EditButton
-                    label="Edit your information"
+                    label='Edit your information'
                     onClickFunction={onEdit}
                   />
                 }
@@ -101,7 +101,7 @@ export default function UserPage() {
             </Descriptions>
           </div>
           <UpdateUserModal ref={modalRef} isEdit={true} user={userData} />
-          <div className="mx-5">
+          <div className='mx-5'>
             <Table columns={bookingColumns} dataSource={bookingData} />
           </div>
         </div>

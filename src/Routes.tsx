@@ -5,9 +5,9 @@ import AdminPage from './pages/AdminPage/AdminPage';
 import CarDetailPage from './pages/CarDetailPage/CarDetailPage';
 import HomePage from './pages/Homepage/HomePage';
 import UserPage from './pages/UserPage/UserPage';
-import authApi from './api/axiosConfig';
 import { useAuth0 } from '@auth0/auth0-react';
-import { ExceptionMessage } from './api/exceptionMessage';
+import authApi from './apis/authApi';
+import { ExceptionMessage } from './apis/exceptionMessage';
 
 export default function AppRouters() {
   const userInfo = localStorage.getItem('userEmail');

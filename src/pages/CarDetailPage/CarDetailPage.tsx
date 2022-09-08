@@ -1,10 +1,9 @@
-import { Button, Col, Divider, Row, Skeleton, Space } from 'antd';
+import { Col, Row } from 'antd';
 import { Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { getCar } from '../../apis';
 import Header from '../../components/Header';
-import InfoCard from '../../components/InfoCard';
 import CarDetails from './CarDetails';
 import PaymentDetails from './PaymentDetails';
 export default function CarDetailPage() {

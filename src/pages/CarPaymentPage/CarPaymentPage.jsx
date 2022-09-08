@@ -1,11 +1,10 @@
 import { Button, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Header from '../../components/Header';
 import InfoCard from '../../components/InfoCard';
 import { getCar, postBooking } from '../../apis';
 import { calculateDatesBetween, formatCurrency } from '../../utils/utils';
-import car from '../../redux/reducer/car';
 export default function CarPaymentPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [car, setCar] = useState();

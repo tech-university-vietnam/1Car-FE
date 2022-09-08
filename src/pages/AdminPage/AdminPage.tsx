@@ -15,6 +15,8 @@ import {
   useNavigate,
   useRoutes,
 } from 'react-router-dom';
+import SecurityLayout from '../../components/Layout/SecurityLayout';
+import { UserRole } from '../../redux/reducer/user';
 import BookingManagement from './BookingManagement';
 import CarManagement from './CarManagement';
 import Dashboard from './Dashboard';
@@ -92,4 +94,10 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default function DashboardWithSecurity() {
+  return (
+    <SecurityLayout role={[UserRole.ADMIN]} fallback='/'>
+      <AdminPage />
+    </SecurityLayout>
+  );
+}

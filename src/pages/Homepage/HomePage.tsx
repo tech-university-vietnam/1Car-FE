@@ -1,6 +1,8 @@
 import { Empty, Pagination } from 'antd';
 import * as _ from 'lodash';
 import { useEffect } from 'react';
+import Cookies from 'universal-cookie';
+import { getUserInfoUsingToken } from '../../apis';
 import CarCard from '../../components/CarCard';
 import PageFooter from '../../components/Footer';
 import Header from '../../components/Header';
@@ -35,6 +37,21 @@ export default function HomePage() {
   const onClearFilter = () => {
     dispatch(updateFilter({ ...filter, attribute: [] }));
   };
+
+  const getMe = async () => {
+    try {
+      const cookies = new Cookies();
+      const accessToken = cookies.get('access_token');
+      if (accessToken) {
+        const res = await getUserInfoUsingToken();
+        localStorage.setItem('user', JSON.stringify(res.data));
+      }
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    getMe();
+  }, []);
 
   useEffect(() => {
     dispatch(getCarAttributeAction());

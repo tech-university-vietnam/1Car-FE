@@ -77,6 +77,10 @@ export async function getCarAttribute(): Promise<[]> {
   return callApi('/car/attribute');
 }
 
+export async function getBooking(bookingId: string) {
+  return await callApi(`/booking/${bookingId}`);
+}
+
 export async function getUserInfoUsingToken() {
   return callAuthApi('/user/me');
 }

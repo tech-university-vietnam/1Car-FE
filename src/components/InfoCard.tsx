@@ -4,7 +4,7 @@ import React from 'react';
 export default function InfoCard(props: {
   style?: React.CSSProperties;
   loading?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) {
   return (
     <Card

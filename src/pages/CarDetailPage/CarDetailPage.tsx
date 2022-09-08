@@ -13,7 +13,7 @@ export default function CarDetailPage() {
   const [car, setCar] = useState();
   useEffect(() => {
     (async () => {
-      const c = await getCar(id);
+      const c = await getCar(id ? id : '');
       setCar(c);
       setIsLoading(false);
     })();
@@ -23,7 +23,7 @@ export default function CarDetailPage() {
     <div className='min-h-screen'>
       <Header />
       <>
-        {id ? (
+        {car ? (
           <Row gutter={8} className='p-8'>
             <Col md={18}>
               <CarDetails isLoading={isLoading} car={car} />

@@ -35,8 +35,12 @@ export async function getCars(filter: Record<string, any> = {}) {
   return callApi('/car' + (query.length > 0 ? '?' + query : ''));
 }
 
-export async function getCar(id: string | undefined) {
+export async function getCar(id: string) {
   return callApi(`/car/${id}`);
+}
+
+export async function getCarDetails(id: string) {
+  return callApi(`/car/${id}/attributes`);
 }
 
 export async function getCarAttribute(): Promise<[]> {

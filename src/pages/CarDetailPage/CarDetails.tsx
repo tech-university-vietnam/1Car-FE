@@ -14,10 +14,19 @@ import {
   Button,
   Space,
 } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getCarDetails } from '../../apis';
 import InfoCard from '../../components/InfoCard';
 
 export default function CarDetails(props: any) {
+  const [details, setDetails] = useState<[string, unknown][]>();
+  useEffect(() => {
+    (async () => {
+      const d = await getCarDetails(props.car.id);
+      setDetails(Object.entries(d));
+      console.log(d);
+    })();
+  }, []);
   return (
     <InfoCard>
       {props.isLoading ? (
@@ -54,8 +63,16 @@ export default function CarDetails(props: any) {
                 <Typography className='mb-4 text-3xl'>
                   {props.car.name}
                 </Typography>
-                <Rate disabled defaultValue={2} />
-                <Typography className='mt-8 text-2xl'>Description</Typography>
+                <Rate disabled defaultValue={5} />
+                <Typography className='mt-8 text-3xl'>Description</Typography>
+                {details?.map(([key, value], index) => {
+                  return (
+                    <Typography
+                      key={index}
+                      className='text-2xl'
+                    >{`${key}: ${value}`}</Typography>
+                  );
+                })}
               </>
             )}
           </InfoCard>

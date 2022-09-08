@@ -1,14 +1,16 @@
 import { Divider, Skeleton, Typography, Button, DatePicker } from 'antd';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfoCard from '../../components/InfoCard';
 import { RangePickerProps } from 'antd/lib/date-picker';
 import { useNavigate } from 'react-router-dom';
-import { calculateDatesBetween } from '../../utils/utils';
+import { calculateDatesBetween, formatCurrency } from '../../utils/utils';
 
 export default function PaymentDetails(props: any) {
   const [startDate, setStartDate] = useState<string | undefined>('');
   const [endDate, setEndDate] = useState<string | undefined>('');
+  const [datesBetween, setDatesBetween] = useState(0);
+
   const navigate = useNavigate();
   const disabledStartDate: RangePickerProps['disabledDate'] = (
     current: any
@@ -19,6 +21,12 @@ export default function PaymentDetails(props: any) {
   const disabledEndDate: RangePickerProps['disabledDate'] = (current: any) => {
     return current < moment(startDate || Date.now()).startOf('day');
   };
+  useEffect(() => {
+    if (startDate && endDate) {
+      setDatesBetween(calculateDatesBetween(startDate, endDate));
+    }
+  }, [startDate, endDate]);
+
   return (
     <InfoCard>
       <div className='flex place-content-center text-3xl'>Payment</div>
@@ -47,13 +55,19 @@ export default function PaymentDetails(props: any) {
         {props.isLoading ? (
           <></>
         ) : (
-          <Typography className='text-3xl'>{`Price per day: ${props.car.pricePerDate}`}</Typography>
+          <Typography className='text-3xl'>{`Price per day: ${formatCurrency(
+            props.car.pricePerDate
+          )}`}</Typography>
         )}
         <Typography className='text-3xl'>
-          Number of days:{' '}
-          {startDate && endDate
-            ? calculateDatesBetween(startDate, endDate)
-            : '...'}
+          {`Number of days: ${datesBetween}`}
+        </Typography>
+        <Typography className='text-3xl'>
+          {props.isLoading
+            ? ''
+            : `Total Price: ${formatCurrency(
+                datesBetween * props.car.pricePerDate
+              )}`}
         </Typography>
         <Divider />
         <div>
@@ -61,7 +75,10 @@ export default function PaymentDetails(props: any) {
             className='mt-4 w-full'
             shape='round'
             type='primary'
-            onClick={() => navigate(props.to)}
+            disabled={!(startDate && endDate)}
+            onClick={() =>
+              navigate(`${props.to}?start=${startDate}&end=${endDate}`)
+            }
           >
             Rent now
           </Button>

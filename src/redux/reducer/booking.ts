@@ -38,7 +38,7 @@ export const getBookingDataAction = createAsyncThunk(
 );
 
 const bookingSlice = createSlice({
-  name: 'userData',
+  name: 'bookingData',
   initialState,
   reducers: {
     getBookingData: (state, action: PayloadAction<BookingData[]>) => {

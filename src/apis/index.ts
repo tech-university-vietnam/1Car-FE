@@ -91,5 +91,5 @@ export async function getBookingData() {
   // return callAuthApi('/booking');
 }
 export async function postBooking(data: Object) {
-  return callApi('/payment/checkout', 'POST', data);
+  return callAuthApi('/payment/checkout', 'POST', data);
 }

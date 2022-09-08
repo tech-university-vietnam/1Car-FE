@@ -1,6 +1,6 @@
-import UpdateUserModal from '../components/UpdateUserModal';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import UpdateUserModal from '../components/UpdateUserModal';
 
 describe('Update user modal component', () => {
   beforeEach(() => {
@@ -35,12 +35,6 @@ describe('Update user modal component', () => {
     expect(inputDOB).toHaveValue('');
     expect(checkboxAccept).not.toBeChecked();
     expect(submitButton).toBeDisabled();
-  });
-  test('It should be closable when in edit mode', () => {
-    render(<UpdateUserModal idEdit={true} visible={true} />);
-  });
-  test('It should not be closable when in other mode', () => {
-    render(<UpdateUserModal visible={true} />);
   });
   test('It should enable submit when all input fields are filled', async () => {
     render(<UpdateUserModal visible={true} />);

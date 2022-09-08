@@ -13,6 +13,12 @@ export interface User {
   updatedAt: string;
 }
 
+export interface UserUpdateDTO {
+  name: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+}
+
 export enum UserRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
@@ -37,6 +43,16 @@ export const getUserInformationAction = createAsyncThunk(
   async (payload, thunkApi) => {
     const res = await api.getUserInfoUsingToken();
     thunkApi.dispatch(getUserInfoUsingToken(res.data));
+    return res.data;
+  }
+);
+
+export const updateUserInfoAction = createAsyncThunk(
+  'user/updateInfo',
+  async (payload: UserUpdateDTO, thunkApi) => {
+    const res = await api.updateUserInfo(payload);
+    thunkApi.dispatch(updateUserInfo(payload));
+    return res.data;
   }
 );
 
@@ -47,8 +63,16 @@ const userSlice = createSlice({
     getUserInfoUsingToken: (state, action: PayloadAction<User>) => {
       state.info = action.payload;
     },
+    updateUserInfo: (state, action: PayloadAction<UserUpdateDTO>) => {
+      const dto = action.payload;
+      dto.dateOfBirth = dto.dateOfBirth.toString();
+      state.info = {
+        ...state.info,
+        ...dto,
+      };
+    },
   },
 });
 
-export const { getUserInfoUsingToken } = userSlice.actions;
+export const { getUserInfoUsingToken, updateUserInfo } = userSlice.actions;
 export default userSlice.reducer;

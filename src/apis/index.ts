@@ -1,6 +1,8 @@
 import axios, { Method } from 'axios';
 import _ from 'lodash';
-import authApi from './authApi';
+import { UserUpdateDTO } from '../redux/reducer/user';
+import { mockBookingData } from '../redux/reducer/booking';
+import Cookies from 'universal-cookie';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
@@ -26,17 +28,24 @@ export async function callApi(
   }
 }
 
-// Use if want to have token in the header
+// Use if you want to have token in the header
+const cookies = new Cookies();
+
 export async function callAuthApi(
   endpoint: string,
   method: Method = 'get',
   data: any = {}
 ) {
   try {
-    const response = await authApi({
+    const response = await axios({
       url: endpoint,
       method,
       data,
+      headers: {
+        Authorization: `Bearer ${cookies.get('access_token')}`,
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': process.env.REACT_APP_API_URL,
+      },
     });
     return response.data;
   } catch (err) {
@@ -62,4 +71,14 @@ export async function getCarAttribute(): Promise<[]> {
 
 export async function getUserInfoUsingToken() {
   return callAuthApi('/user/me');
+}
+
+export async function updateUserInfo(updateInfo: UserUpdateDTO) {
+  return callAuthApi('/user', 'patch', updateInfo);
+}
+
+export async function getBookingData() {
+  return mockBookingData;
+  // TODO: Remove mock data after finish developing this endpoint
+  // return callAuthApi('/booking');
 }

@@ -1,51 +1,44 @@
 import React, { useEffect } from 'react';
 import Header from '../../components/Header';
-import { UserData } from './models/UserData';
 import { Descriptions, Spin, Table } from 'antd';
 import EditButton from '../../components/EditButton';
 import { useAuth0 } from '@auth0/auth0-react';
-import UpdateUserModal from '../../components/UpdateUserModal';
 import { useNavigate } from 'react-router-dom';
-import { BookingData, mockBookingData } from './models/BookingData';
 import { ColumnsType } from 'antd/lib/table';
-import authApi from '../../apis/authApi';
+import UpdateUserModal from '../../components/UpdateUserModal';
+import { getUserInformationAction } from '../../redux/reducer/user';
+import { useAppDispatch, useAppSelector } from '../../redux';
+import { BookingData, getBookingDataAction } from '../../redux/reducer/booking';
 
 export default function UserPage() {
-  const [userData, setUserData] = React.useState(new UserData(null));
-  const [bookingData, setBookingData] = React.useState<BookingData[]>([]);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = React.useState(true);
+  const bookingData = useAppSelector((state) => state.booking.bookings);
+  const userData = useAppSelector((state) => state.user.info);
   const { user } = useAuth0();
   const modalRef: React.RefObject<any> = React.createRef();
 
+  // On click edit user info button
   const onEdit = () => {
     modalRef.current?.open();
   };
 
-  const navigate = useNavigate();
   useEffect(() => {
-    if (!user) {
+    // If there is not a user, do not allow access this page
+    if (!(user && userData)) {
       navigate('/');
     }
   }, [user, navigate]);
 
+  // Load essential information
   useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const res = await authApi.get('/user/me');
-        setUserData(res.data.data);
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    };
-    const getBookingData = async () => {
-      //const bookingData: any = await authApi.get('/booking');
-      setBookingData(mockBookingData);
-    };
+    dispatch(getUserInformationAction());
+    dispatch(getBookingDataAction());
     setLoading(true);
-    getUserInfo();
-    getBookingData();
     setLoading(false);
-  }, []);
+  }, [dispatch]);
 
   // Prepare booking column for table
   const bookingColumns: ColumnsType<BookingData> = [
@@ -83,7 +76,9 @@ export default function UserPage() {
               <Descriptions.Item label='Name'>
                 {userData.name}
               </Descriptions.Item>
-              <Descriptions.Item label='Email'>{user?.email}</Descriptions.Item>
+              <Descriptions.Item label='Email'>
+                {user?.email || userData.email}
+              </Descriptions.Item>
               <Descriptions.Item label='Phone'>
                 {userData.phoneNumber}
               </Descriptions.Item>

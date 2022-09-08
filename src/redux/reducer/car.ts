@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as api from '../../apis';
-import * as _ from 'lodash';
 
 export interface Car {
   id: string;
@@ -38,6 +37,11 @@ export interface CarFilter {
   page?: number;
   limit?: number;
   attribute?: string[];
+}
+
+export interface CarAdminFilter {
+  page: number;
+  limit: number;
 }
 
 const initialState: {

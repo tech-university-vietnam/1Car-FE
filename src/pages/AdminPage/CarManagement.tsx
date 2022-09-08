@@ -1,18 +1,32 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Row, Col, Button, Table, Space, Tag, Modal } from 'antd';
+import {
+  Row,
+  Button,
+  Table,
+  Space,
+  Tag,
+  Modal,
+  TablePaginationConfig,
+} from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreateCarForm from './CreateCarForm';
+import { getCarForAdmin } from '../../apis';
+import { Attribute, CarAdminFilter } from '../../redux/reducer/car';
 
-interface DataType {
-  key: string;
+interface CarData {
+  id: string;
   name: string;
+  description?: any;
+  status: string;
+  pricePerDate: number;
+  attributes: Attribute[];
   age: number;
   address: string;
   tags: string[];
 }
 
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<CarData> = [
   {
     title: 'Car Name',
     dataIndex: 'name',
@@ -21,28 +35,25 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: 'Status',
-    dataIndex: 'age',
-    key: 'age',
+    dataIndex: 'status',
+    key: 'status',
   },
   {
     title: 'Price/Hour',
-    dataIndex: 'address',
-    key: 'address',
+    dataIndex: 'pricePerDate',
+    key: 'pricePerDate',
   },
   {
     title: 'Attribute',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
+    key: 'attributes',
+    dataIndex: 'attributes',
+    render: (_, { attributes }) => (
       <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
+        {attributes.map((attribute: Attribute) => {
+          let color = attribute.value.length > 5 ? 'geekblue' : 'green';
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag color={color} key={attribute.id}>
+              {attribute.value.toUpperCase()}
             </Tag>
           );
         })}
@@ -61,32 +72,33 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'Car Name',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Status',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
-
 export default function CarManagement() {
   const [createVisible, setCreateVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [data, setCarData] = useState<any[]>([]);
+  const [total, setTotalRecords] = useState(0);
+  const filter: CarAdminFilter = {
+    page: page,
+    limit: 1,
+  };
+
+  const getCarToDisplay = async (page: number, pageSize: number) => {
+    const res = await getCarForAdmin({
+      page: page,
+      limit: pageSize,
+    });
+    setCarData(res.cars);
+    setTotalRecords(res.totalRecords);
+  };
+  useEffect(() => {
+    getCarToDisplay(filter.page || 1, filter.limit || 10);
+  }, []);
+
+  const onChangePagination = (pagination: TablePaginationConfig) => {
+    setPage(page);
+    getCarToDisplay(pagination.current || 1, pagination.pageSize || 1);
+  };
+
   return (
     <div className='m-12 max-h-full overflow-auto bg-white'>
       <Row className='p-2'>
@@ -99,7 +111,15 @@ export default function CarManagement() {
         </Button>
       </Row>
       <div className='p-2'>
-        <Table columns={columns} dataSource={data} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          onChange={onChangePagination}
+          pagination={{
+            total: total,
+            defaultPageSize: filter.limit,
+          }}
+        />
       </div>
       <Modal
         visible={createVisible}

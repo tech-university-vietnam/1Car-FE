@@ -7,11 +7,13 @@ import UserPage from './pages/UserPage/UserPage';
 
 export default function AppRouters() {
   return (
-    <Routes>
-      <Route path='/user' element={<UserPage />} />
-      <Route path='/admin' element={<AdminPage />} />
-      <Route path='/details/:id' element={<CarDetailPage />} />
-      <Route path='*' element={<HomePage />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path='/user' element={<UserPage />} />
+        <Route path='/admin' element={<AdminPage />} />
+        <Route path='*' element={<HomePage />} />
+        <Route path='/details/:id' element={<CarDetailPage />} />
+      </Routes>
+    </>
   );
 }

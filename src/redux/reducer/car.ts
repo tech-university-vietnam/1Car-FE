@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as api from '../../apis';
-import * as _ from 'lodash';
 
 export interface Car {
   id: string;
@@ -40,6 +39,11 @@ export interface CarFilter {
   attribute?: string[];
 }
 
+export interface CarAdminFilter {
+  page: number;
+  limit: number;
+}
+
 const initialState: {
   cars: Car[];
   filter: CarFilter;
@@ -77,6 +81,14 @@ export const getCarAttributeAction = createAsyncThunk(
   }
 );
 
+export const getCarAttributeTypeAction = createAsyncThunk(
+  'car/getCarAttributeType',
+  async (payload, thunkApi) => {
+    const types = await api.getCarAttributeType();
+    thunkApi.dispatch(getCarAttributeType(types));
+  }
+);
+
 const carSlice = createSlice({
   name: 'blogData',
   initialState,
@@ -86,11 +98,9 @@ const carSlice = createSlice({
     },
     getCarAttribute: (state, action: PayloadAction<Attribute[]>) => {
       state.attributes = action.payload;
-      const types = _.uniqBy(
-        action.payload.map((item) => item.type),
-        'id'
-      );
-      state.attributeTypes = types;
+    },
+    getCarAttributeType: (state, action: PayloadAction<Type[]>) => {
+      state.attributeTypes = action.payload;
     },
     updateFilter: (state, action: PayloadAction<CarFilter>) => {
       state.filter = action.payload;
@@ -98,5 +108,6 @@ const carSlice = createSlice({
   },
 });
 
-export const { getCar, getCarAttribute, updateFilter } = carSlice.actions;
+export const { getCar, getCarAttribute, updateFilter, getCarAttributeType } =
+  carSlice.actions;
 export default carSlice.reducer;

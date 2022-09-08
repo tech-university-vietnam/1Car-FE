@@ -5,7 +5,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  userRole: string;
+  userRole: UserRole;
   phoneNumber?: string | null;
   dateOfBirth?: string | null;
   isDeleted: boolean;

@@ -80,7 +80,7 @@ export async function getCarAttribute(): Promise<[]> {
 }
 
 export async function getBooking(bookingId: string) {
-  return await callApi(`/booking/${bookingId}`);
+  return await callAuthApi(`/booking/${bookingId}`);
 }
 
 export async function createCarAttribute(data: any): Promise<any> {

@@ -94,11 +94,6 @@ const carSlice = createSlice({
     },
     getCarAttribute: (state, action: PayloadAction<Attribute[]>) => {
       state.attributes = action.payload;
-      const types = _.uniqBy(
-        action.payload.map((item) => item.type),
-        'id'
-      );
-      state.attributeTypes = types;
     },
     getCarAttributeType: (state, action: PayloadAction<Type[]>) => {
       state.attributeTypes = action.payload;

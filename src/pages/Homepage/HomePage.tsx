@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../redux';
 import {
   getCarAction,
   getCarAttributeAction,
+  getCarAttributeTypeAction,
   updateFilter,
 } from '../../redux/reducer/car';
 import ClearFilter from './ClearFilter';
@@ -37,6 +38,7 @@ export default function HomePage() {
 
   useEffect(() => {
     dispatch(getCarAttributeAction());
+    dispatch(getCarAttributeTypeAction());
   }, []);
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function HomePage() {
             <SelectFilter
               key={type.id}
               type={type}
-              data={attributeByType[type.id]}
+              data={attributeByType[type.id] || []}
               updateFilter={onUpdateFilter}
               currentFilterAttribute={filter.attribute || []}
             />

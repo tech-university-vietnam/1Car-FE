@@ -39,7 +39,7 @@ const columns: ColumnsType<CarData> = [
     key: 'status',
   },
   {
-    title: 'Price/Hour',
+    title: 'Price/Date',
     dataIndex: 'pricePerDate',
     key: 'pricePerDate',
   },
@@ -49,8 +49,9 @@ const columns: ColumnsType<CarData> = [
     dataIndex: 'attributes',
     render: (_, { attributes }) => (
       <>
-        {attributes.map((attribute: Attribute) => {
-          let color = attribute.value.length > 5 ? 'geekblue' : 'green';
+        {attributes.map((attribute: Attribute, index: number) => {
+          let colors = ['geekblue', 'green', 'volcano'];
+          let color = colors[index % 3];
           return (
             <Tag color={color} key={attribute.id}>
               {attribute.value.toUpperCase()}
@@ -79,7 +80,7 @@ export default function CarManagement() {
   const [total, setTotalRecords] = useState(0);
   const filter: CarAdminFilter = {
     page: page,
-    limit: 1,
+    limit: 10,
   };
 
   const getCarToDisplay = async (page: number, pageSize: number) => {

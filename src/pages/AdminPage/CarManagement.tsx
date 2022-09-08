@@ -1,7 +1,8 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Row, Col, Button, Table, Space, Tag, Modal } from 'antd';
+import { Button, Modal, Row, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useAppDispatch } from '../../redux';
 import CreateCarForm from './CreateCarForm';
 
 interface DataType {
@@ -86,7 +87,9 @@ const data: DataType[] = [
 ];
 
 export default function CarManagement() {
+  const dispatch = useAppDispatch();
   const [createVisible, setCreateVisible] = useState(false);
+
   return (
     <div className='m-12 max-h-full overflow-auto bg-white'>
       <Row className='p-2'>

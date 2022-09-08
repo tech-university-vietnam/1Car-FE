@@ -6,11 +6,12 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
 import UpdateUserModal from '../../components/UpdateUserModal';
-import { getUserInformationAction } from '../../redux/reducer/user';
+import { getUserInformationAction, UserRole } from '../../redux/reducer/user';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { BookingData, getBookingDataAction } from '../../redux/reducer/booking';
+import SecurityLayout from '../../components/Layout/SecurityLayout';
 
-export default function UserPage() {
+function UserPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -24,13 +25,6 @@ export default function UserPage() {
   const onEdit = () => {
     modalRef.current?.open();
   };
-
-  useEffect(() => {
-    // If there is not a user, do not allow access this page
-    if (!(user && userData)) {
-      navigate('/');
-    }
-  }, [user, navigate]);
 
   // Load essential information
   useEffect(() => {
@@ -102,5 +96,13 @@ export default function UserPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function UserPageWithSecurity() {
+  return (
+    <SecurityLayout role={[UserRole.USER]} fallback='/'>
+      <UserPage />
+    </SecurityLayout>
   );
 }

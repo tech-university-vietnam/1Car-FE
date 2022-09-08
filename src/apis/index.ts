@@ -105,3 +105,11 @@ export async function getBookingData() {
 export async function postBooking(data: Object) {
   return callAuthApi('/payment/checkout', 'POST', data);
 }
+
+export async function getAllBookingForAdmin() {
+  return callAuthApi('/booking');
+}
+
+export async function updateBookingForAdmin(id: string, data: any) {
+  return callAuthApi(`/booking/${id}`, 'PATCH', data);
+}

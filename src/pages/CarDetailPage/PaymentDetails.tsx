@@ -29,11 +29,13 @@ export default function PaymentDetails(props: any) {
 
   return (
     <InfoCard>
-      <div className='flex place-content-center text-3xl'>Payment</div>
+      <Typography.Title className='flex place-content-center'>
+        Booking
+      </Typography.Title>
       <Divider />
       <Skeleton loading={props.isLoading} active>
-        <Typography className='text-3xl'>Pick up location</Typography>
-        <Typography className='text-3xl'>Start date:</Typography>
+        <Typography className='text-xl font-bold'>Pick up location</Typography>
+        <Typography className='mt-4 text-xl font-bold'>Start date:</Typography>
         <DatePicker
           placeholder='From'
           size='large'
@@ -44,7 +46,7 @@ export default function PaymentDetails(props: any) {
             setStartDate(data?.toLocaleString());
           }}
         ></DatePicker>
-        <Typography className='text-3xl'>End date:</Typography>
+        <Typography className='mt-4 text-xl font-bold'>End date:</Typography>
         <DatePicker
           placeholder='To'
           size='large'
@@ -55,20 +57,29 @@ export default function PaymentDetails(props: any) {
         {props.isLoading ? (
           <></>
         ) : (
-          <Typography className='text-3xl'>{`Price per day: ${formatCurrency(
-            props.car.pricePerDate
-          )}`}</Typography>
+          <div className='mt-4 flex'>
+            <Typography className=' text-xl '>Price per day</Typography>
+            <Typography className='ml-auto text-xl font-bold'>
+              {formatCurrency(props.car.pricePerDate)}
+            </Typography>
+          </div>
         )}
-        <Typography className='text-3xl'>
-          {`Number of days: ${datesBetween}`}
-        </Typography>
-        <Typography className='text-3xl'>
-          {props.isLoading
-            ? ''
-            : `Total Price: ${formatCurrency(
-                datesBetween * props.car.pricePerDate
-              )}`}
-        </Typography>
+        <div className='mt-4 flex'>
+          <Typography className='text-xl '>x No. days</Typography>
+          <Typography className='ml-auto text-xl font-bold'>
+            {datesBetween}
+          </Typography>
+        </div>
+        {props.isLoading ? (
+          <></>
+        ) : (
+          <div className='mt-4 flex'>
+            <Typography className='text-xl '>= Total price</Typography>
+            <Typography className='ml-auto text-xl font-bold'>
+              {formatCurrency(props.car.pricePerDate * datesBetween)}
+            </Typography>
+          </div>
+        )}
         <Divider />
         <div>
           <Button

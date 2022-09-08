@@ -1,4 +1,4 @@
-import { Button, Typography } from 'antd';
+import { Button, Divider, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -47,12 +47,13 @@ export default function CarPaymentPage() {
             <></>
           ) : (
             <div className='flex flex-col items-center justify-center space-y-8'>
-              <Typography className='text-3xl'>Payment</Typography>
-              <Typography className='font-bold'>Car</Typography>
+              <Typography.Title>Payment</Typography.Title>
+              <Divider />
+              <Typography.Title level={3}>Renting</Typography.Title>
               <Typography>{car.name}</Typography>
-              <Typography className='font-bold'>From</Typography>
+              <Typography.Title level={3}>From</Typography.Title>
               <Typography>{searchParams.get('start')}</Typography>
-              <Typography className='font-bold'>To</Typography>
+              <Typography.Title level={3}>To</Typography.Title>
               <Typography>{searchParams.get('end')}</Typography>
               <div className='flex w-full text-3xl'>
                 <div>Total</div>

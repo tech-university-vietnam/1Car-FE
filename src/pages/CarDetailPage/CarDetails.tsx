@@ -1,20 +1,5 @@
-import {
-  AntDesignOutlined,
-  MessageFilled,
-  PhoneFilled,
-} from '@ant-design/icons';
-import {
-  Carousel,
-  Row,
-  Col,
-  Typography,
-  Rate,
-  Skeleton,
-  Avatar,
-  Button,
-  Space,
-} from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Carousel, Row, Col, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 import { getCarDetails } from '../../apis';
 import InfoCard from '../../components/InfoCard';
 
@@ -39,11 +24,11 @@ export default function CarDetails(props: any) {
                 key={index}
                 className=' flex w-full items-center justify-center overflow-hidden'
               >
-                <div className='h-[200px]'>
+                <div className='h-[400px]'>
                   <img
                     src={image}
                     alt={`${props.car.name} ${index + 1}`}
-                    className='mx-auto h-full w-full items-center justify-center object-contain'
+                    className='mx-auto h-full w-full items-center justify-center bg-slate-200 object-contain'
                   />
                 </div>
               </div>
@@ -54,58 +39,46 @@ export default function CarDetails(props: any) {
         </Carousel>
       )}
       <Row>
-        <Col md={16} className='p-4'>
+        <Col span={24} className='py-4'>
           <InfoCard loading={props.isLoading}>
             {props.isLoading ? (
               <></>
             ) : (
               <>
-                <Typography className='mb-4 text-3xl'>
-                  {props.car.name}
-                </Typography>
-                <Rate disabled defaultValue={5} />
-                <Typography className='mt-8 text-3xl'>Description</Typography>
-                {details?.map(([key, value], index) => {
-                  return (
-                    <Typography
-                      key={index}
-                      className='text-2xl'
-                    >{`${key}: ${value}`}</Typography>
-                  );
-                })}
-              </>
-            )}
-          </InfoCard>
-        </Col>
-        <Col md={8} className='p-4'>
-          <InfoCard>
-            <Space direction='vertical' size='middle'>
-              <Typography className='text-3xl'>Owner</Typography>
-              <Skeleton loading={props.isLoading} avatar active>
-                <Row gutter={16}>
-                  <Col>
-                    <Avatar size={64} icon={<AntDesignOutlined />} />
+                <Row>
+                  <Typography.Title className='mb-4 '>
+                    {props.car.name}
+                  </Typography.Title>
+                </Row>
+                <Row gutter={[0, 24]}>
+                  <Col lg={8}>
+                    <Typography.Title level={3}>
+                      Specifications
+                    </Typography.Title>
                   </Col>
-                  <Col>
-                    <div className='text-3xl'>John Doe</div>
-                  </Col>
-                  <Col>
-                    <Space>
-                      <Button
-                        type='primary'
-                        shape='circle'
-                        icon={<PhoneFilled />}
-                      />
-                      <Button
-                        type='primary'
-                        shape='circle'
-                        icon={<MessageFilled />}
-                      />
-                    </Space>
+                  <Col lg={16}>
+                    <Row>
+                      {details?.map(([key, val], index) => (
+                        <Col span={12}>
+                          <Typography key={index} className='text-lg'>
+                            <span className='font-bold '>{`${key}: `}</span>
+                            {`${val}`}
+                          </Typography>
+                        </Col>
+                      ))}
+                    </Row>
                   </Col>
                 </Row>
-              </Skeleton>
-            </Space>
+                <Row gutter={[0, 24]}>
+                  <Col lg={8}>
+                    <Typography.Title level={3}>Description</Typography.Title>
+                  </Col>
+                  <Col>
+                    <div className='text-lg'>Long description blablabla</div>
+                  </Col>
+                </Row>
+              </>
+            )}
           </InfoCard>
         </Col>
       </Row>

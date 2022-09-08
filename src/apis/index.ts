@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { UserUpdateDTO } from '../redux/reducer/user';
 import { mockBookingData } from '../redux/reducer/booking';
 import Cookies from 'universal-cookie';
+import { CarAdminFilter } from '../redux/reducer/car';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
@@ -54,6 +55,7 @@ export async function callAuthApi(
   }
 }
 
+// Car apis
 export async function getCars(filter: Record<string, any> = {}) {
   const query = Object.keys(filter)
     .map((key) => {
@@ -81,6 +83,24 @@ export async function getBooking(bookingId: string) {
   return await callApi(`/booking/${bookingId}`);
 }
 
+export async function createCarAttribute(data: any): Promise<any> {
+  return callAuthApi('/car/attribute', 'POST', data);
+}
+
+export async function createCar(data: any): Promise<any> {
+  return callAuthApi('/car', 'POST', data);
+}
+
+export async function getCarAttributeType(): Promise<[]> {
+  return callApi('/car/attribute/type');
+}
+
+export async function getCarForAdmin(
+  filter: CarAdminFilter
+): Promise<{ totalRecords: number; totalPage: number; cars: any[] }> {
+  return callAuthApi(`/car/admin/?limit=${filter.limit}&page=${filter.page}`);
+}
+
 export async function getUserInfoUsingToken() {
   return callAuthApi('/user/me');
 }
@@ -89,6 +109,7 @@ export async function updateUserInfo(updateInfo: UserUpdateDTO) {
   return callAuthApi('/user', 'patch', updateInfo);
 }
 
+// Booking apis
 export async function getBookingData() {
   return mockBookingData;
   // TODO: Remove mock data after finish developing this endpoint
@@ -96,4 +117,12 @@ export async function getBookingData() {
 }
 export async function postBooking(data: Object) {
   return callAuthApi('/payment/checkout', 'POST', data);
+}
+
+export async function getAllBookingForAdmin() {
+  return callAuthApi('/booking');
+}
+
+export async function updateBookingForAdmin(id: string, data: any) {
+  return callAuthApi(`/booking/${id}`, 'PATCH', data);
 }

@@ -1,32 +1,35 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as api from '../../apis';
-
+import { Car } from './car';
+import { User } from './user';
 export interface BookingData {
-  id: number;
-  bookingDate: string;
-  carInfo: string;
-  status: string;
+  id: string;
+  userId: string;
+  carId: string;
+  receivedDateTime: string;
+  returnDateTime: string;
+  pickUpLocationId: string;
+  totalPrice: number;
+  description?: any;
+  discountCode?: any;
+  transactionId?: any;
+  bookingStatus: string;
+  pickUpStatus: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  car: Car;
+  user: User;
 }
 
-export const mockBookingData: BookingData[] = [
-  {
-    id: 1,
-    bookingDate: '2020-01-01',
-    carInfo: 'test car info',
-    status: 'test status',
-  },
-  {
-    id: 2,
-    bookingDate: '2020-01-02',
-    carInfo: 'test car info',
-    status: 'test status',
-  },
-];
+export const mockBookingData: BookingData[] = [];
 
 const initialState: {
   bookings: BookingData[];
+  allBooking: BookingData[];
 } = {
   bookings: [],
+  allBooking: [],
 };
 
 export const getBookingDataAction = createAsyncThunk(
@@ -37,6 +40,14 @@ export const getBookingDataAction = createAsyncThunk(
   }
 );
 
+export const getAllBookingForAdminAction = createAsyncThunk(
+  'booking/getBookingForAdmin',
+  async (payload, thunkApi) => {
+    const res = await api.getAllBookingForAdmin();
+    thunkApi.dispatch(getAllBookingForAdmin(res));
+  }
+);
+
 const bookingSlice = createSlice({
   name: 'bookingData',
   initialState,
@@ -44,8 +55,11 @@ const bookingSlice = createSlice({
     getBookingData: (state, action: PayloadAction<BookingData[]>) => {
       state.bookings = action.payload;
     },
+    getAllBookingForAdmin: (state, action: PayloadAction<BookingData[]>) => {
+      state.allBooking = action.payload;
+    },
   },
 });
 
-export const { getBookingData } = bookingSlice.actions;
+export const { getBookingData, getAllBookingForAdmin } = bookingSlice.actions;
 export default bookingSlice.reducer;

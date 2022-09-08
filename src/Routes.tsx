@@ -12,7 +12,7 @@ export default function AppRouters() {
   return (
     <Routes>
       <Route path='/user' element={<UserPage />} />
-      <Route path='/admin' element={<AdminPage />} />
+      <Route path='/admin/*' element={<AdminPage />} />
       <Route path='/details/:id' element={<CarDetailPage />} />
       <Route path='/booking/:id/success' element={<PaymentSuccessPage />} />
       <Route path='/booking/failed' element={<PaymentFailedPage />} />

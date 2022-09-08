@@ -87,7 +87,7 @@ export default function Header() {
 
   return (
     <header className='flex w-full items-center py-2 px-8 shadow-sm'>
-      <img src={'car.png'} alt='Logo' className='h-16 w-16' />
+      <img src={'/car.png'} alt='Logo' className='h-16 w-16' />
       <ul className='ml-8 mb-0 hidden items-center p-0 md:flex'>
         <WideMenuItem path='/' text='Home' />
         <WideMenuItem path='/about' text='About' />

@@ -14,34 +14,67 @@ import {
   Button,
   Space,
 } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getCarDetails } from '../../apis';
 import InfoCard from '../../components/InfoCard';
 
 export default function CarDetails(props: any) {
+  const [details, setDetails] = useState<[string, unknown][]>();
+  useEffect(() => {
+    (async () => {
+      const d = await getCarDetails(props.car.id);
+      setDetails(Object.entries(d));
+      console.log(d);
+    })();
+  }, []);
   return (
     <InfoCard>
-      <Carousel autoplay dotPosition='right'>
-        {Array.from(Array(3).keys()).map((value, index) => (
-          <div
-            key={index}
-            className='flex w-full items-center justify-center overflow-hidden bg-red-500'
-          >
-            <div style={{ height: 500 }}>
-              <img
-                src='/demo-car.png'
-                alt='demo car'
-                className='mx-auto h-full w-full items-center justify-center bg-slate-300 object-contain'
-              />
-            </div>
-          </div>
-        ))}
-      </Carousel>
+      {props.isLoading ? (
+        <></>
+      ) : (
+        <Carousel autoplay dotPosition='right'>
+          {props.car.images ? (
+            props.car.images.map((image: string, index: any) => (
+              <div
+                key={index}
+                className=' flex w-full items-center justify-center overflow-hidden'
+              >
+                <div className='h-[200px]'>
+                  <img
+                    src={image}
+                    alt={`${props.car.name} ${index + 1}`}
+                    className='mx-auto h-full w-full items-center justify-center object-contain'
+                  />
+                </div>
+              </div>
+            ))
+          ) : (
+            <></>
+          )}
+        </Carousel>
+      )}
       <Row>
         <Col md={16} className='p-4'>
           <InfoCard loading={props.isLoading}>
-            <Typography className='mb-4 text-3xl'>Spark </Typography>
-            <Rate disabled defaultValue={2} />
-            <Typography className='mt-8 text-2xl'>Description</Typography>
+            {props.isLoading ? (
+              <></>
+            ) : (
+              <>
+                <Typography className='mb-4 text-3xl'>
+                  {props.car.name}
+                </Typography>
+                <Rate disabled defaultValue={5} />
+                <Typography className='mt-8 text-3xl'>Description</Typography>
+                {details?.map(([key, value], index) => {
+                  return (
+                    <Typography
+                      key={index}
+                      className='text-2xl'
+                    >{`${key}: ${value}`}</Typography>
+                  );
+                })}
+              </>
+            )}
           </InfoCard>
         </Col>
         <Col md={8} className='p-4'>

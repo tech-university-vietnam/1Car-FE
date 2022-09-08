@@ -65,6 +65,14 @@ export async function getCars(filter: Record<string, any> = {}) {
   return callApi('/car' + (query.length > 0 ? '?' + query : ''));
 }
 
+export async function getCar(id: string) {
+  return callApi(`/car/${id}`);
+}
+
+export async function getCarDetails(id: string) {
+  return callApi(`/car/${id}/attributes`);
+}
+
 export async function getCarAttribute(): Promise<[]> {
   return callApi('/car/attribute');
 }
@@ -93,4 +101,7 @@ export async function getBookingData() {
   return mockBookingData;
   // TODO: Remove mock data after finish developing this endpoint
   // return callAuthApi('/booking');
+}
+export async function postBooking(data: Object) {
+  return callAuthApi('/payment/checkout', 'POST', data);
 }

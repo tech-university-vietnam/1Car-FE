@@ -15,7 +15,7 @@ export default function PaymentSuccessPage() {
   const [booking, setBooking] = useState<any>();
   const [isLoading, setIsLoading] = useState(true);
   const [isSuccessfulFetch, setIsSuccessfulFetch] = useState(true);
-  const MAX_FETCH_TIMES = 6;
+  const MAX_FETCH_TIMES = 4;
   useEffect(() => {
     setIsLoading(true);
     const fetchBookingWithDelay = async (fetchedId: string) => {
@@ -41,15 +41,18 @@ export default function PaymentSuccessPage() {
   return (
     <>
       <Header />
-      {!isSuccessfulFetch ? (
-        <FailedPayment />
-      ) : isLoading ? (
-        <div className='mt-40 text-center'>
-          <Spin size='large' />
-        </div>
-      ) : (
-        <SuccessfulPayment />
-      )}
+      <div className='mx-auto my-40 flex w-3/4 items-center justify-center rounded bg-white p-8 shadow-sm'>
+        {!isSuccessfulFetch ? (
+          <FailedPayment />
+        ) : isLoading ? (
+          <div className='my-24 text-center'>
+            <Spin size='large' />
+            <p className='mt-4'>Wait for payment result...</p>
+          </div>
+        ) : (
+          <SuccessfulPayment />
+        )}
+      </div>
     </>
   );
 }

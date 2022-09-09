@@ -2,24 +2,30 @@ import { Carousel, Row, Col, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { getCarDetails } from '../../apis';
 import InfoCard from '../../components/InfoCard';
+import { Car } from '../../redux/reducer/car';
 
-export default function CarDetails(props: any) {
+interface CarDetailsProps {
+  car: Car;
+  isLoading: boolean;
+}
+export default function CarDetails({ car, isLoading }: CarDetailsProps) {
   const [details, setDetails] = useState<[string, unknown][]>();
+  const [description, setDescription] = useState('');
   useEffect(() => {
     (async () => {
-      const d = await getCarDetails(props.car.id);
-      setDetails(Object.entries(d));
-      console.log(d);
+      const { description, ...rest } = await getCarDetails(car.id);
+      setDetails(Object.entries(rest.specs));
+      setDescription(description);
     })();
   }, []);
   return (
     <InfoCard>
-      {props.isLoading ? (
+      {isLoading ? (
         <></>
       ) : (
         <Carousel autoplay dotPosition='right'>
-          {props.car.images ? (
-            props.car.images.map((image: string, index: any) => (
+          {car.images ? (
+            car.images.map((image: string, index: any) => (
               <div
                 key={index}
                 className=' flex w-full items-center justify-center overflow-hidden'
@@ -27,7 +33,7 @@ export default function CarDetails(props: any) {
                 <div className='h-[400px]'>
                   <img
                     src={image}
-                    alt={`${props.car.name} ${index + 1}`}
+                    alt={`${car.name} ${index + 1}`}
                     className='mx-auto h-full w-full items-center justify-center bg-slate-200 object-contain'
                   />
                 </div>
@@ -40,14 +46,14 @@ export default function CarDetails(props: any) {
       )}
       <Row>
         <Col span={24} className='py-4'>
-          <InfoCard loading={props.isLoading}>
-            {props.isLoading ? (
+          <InfoCard loading={isLoading}>
+            {isLoading ? (
               <></>
             ) : (
               <>
                 <Row>
                   <Typography.Title className='mb-4 '>
-                    {props.car.name}
+                    {car.name}
                   </Typography.Title>
                 </Row>
                 <Row gutter={[0, 24]}>
@@ -74,7 +80,9 @@ export default function CarDetails(props: any) {
                     <Typography.Title level={3}>Description</Typography.Title>
                   </Col>
                   <Col>
-                    <div className='text-lg'>Long description blablabla</div>
+                    <div className='text-lg'>
+                      {description ? description : 'No descriptions provided'}
+                    </div>
                   </Col>
                 </Row>
               </>

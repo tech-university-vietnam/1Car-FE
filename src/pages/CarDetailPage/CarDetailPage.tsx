@@ -10,9 +10,11 @@ export default function CarDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const [car, setCar] = useState();
+
+  //look up car by id
   useEffect(() => {
     (async () => {
-      const c = await getCar(id ? id : '');
+      const c = await getCar(id ?? '');
       setCar(c);
       setIsLoading(false);
     })();

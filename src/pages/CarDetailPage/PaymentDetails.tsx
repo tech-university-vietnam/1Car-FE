@@ -5,12 +5,23 @@ import InfoCard from '../../components/InfoCard';
 import { RangePickerProps } from 'antd/lib/date-picker';
 import { useNavigate } from 'react-router-dom';
 import { calculateDatesBetween, formatCurrency } from '../../utils/utils';
+import { Car } from '../../redux/reducer/car';
+import { checkCarAvailability } from '../../apis';
 
-export default function PaymentDetails(props: any) {
+interface PaymentDetailsProp {
+  isLoading: boolean;
+  car: Car;
+  to: string;
+}
+export default function PaymentDetails({
+  isLoading,
+  car,
+  to,
+}: PaymentDetailsProp) {
   const [startDate, setStartDate] = useState<string | undefined>('');
   const [endDate, setEndDate] = useState<string | undefined>('');
   const [datesBetween, setDatesBetween] = useState(0);
-
+  const [carIsAvailable, setCarIsAvailable] = useState(true);
   const navigate = useNavigate();
   const disabledStartDate: RangePickerProps['disabledDate'] = (
     current: any
@@ -24,16 +35,24 @@ export default function PaymentDetails(props: any) {
   useEffect(() => {
     if (startDate && endDate) {
       setDatesBetween(calculateDatesBetween(startDate, endDate));
+      (async () => {
+        const response = await checkCarAvailability(
+          car.id,
+          new Date(startDate).toISOString(),
+          new Date(endDate).toISOString()
+        );
+        setCarIsAvailable(response.isAvailable);
+      })();
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, car.id]);
 
   return (
     <InfoCard>
       <Typography.Title className='flex place-content-center'>
-        Booking
+        Create booking
       </Typography.Title>
       <Divider />
-      <Skeleton loading={props.isLoading} active>
+      <Skeleton loading={isLoading} active>
         <Typography className='text-xl font-bold'>Pick up location</Typography>
         <Typography className='mt-4 text-xl font-bold'>Start date:</Typography>
         <DatePicker
@@ -45,7 +64,8 @@ export default function PaymentDetails(props: any) {
             setEndDate('');
             setStartDate(data?.toLocaleString());
           }}
-        ></DatePicker>
+          status={carIsAvailable ? '' : 'error'}
+        />
         <Typography className='mt-4 text-xl font-bold'>End date:</Typography>
         <DatePicker
           placeholder='To'
@@ -53,14 +73,22 @@ export default function PaymentDetails(props: any) {
           style={{ width: '100%' }}
           disabledDate={disabledEndDate}
           onChange={(data) => setEndDate(data?.toLocaleString())}
-        ></DatePicker>
-        {props.isLoading ? (
+          status={carIsAvailable ? '' : 'error'}
+        />
+        {carIsAvailable ? (
+          <></>
+        ) : (
+          <div className='text-red-200'>
+            The car is not available for those days
+          </div>
+        )}
+        {isLoading ? (
           <></>
         ) : (
           <div className='mt-4 flex'>
             <Typography className=' text-xl '>Price per day</Typography>
             <Typography className='ml-auto text-xl font-bold'>
-              {formatCurrency(props.car.pricePerDate)}
+              {formatCurrency(car.pricePerDate)}
             </Typography>
           </div>
         )}
@@ -70,30 +98,28 @@ export default function PaymentDetails(props: any) {
             {datesBetween}
           </Typography>
         </div>
-        {props.isLoading ? (
+        {isLoading ? (
           <></>
         ) : (
           <div className='mt-4 flex'>
             <Typography className='text-xl '>= Total price</Typography>
             <Typography className='ml-auto text-xl font-bold'>
-              {formatCurrency(props.car.pricePerDate * datesBetween)}
+              {formatCurrency(car.pricePerDate * datesBetween)}
             </Typography>
           </div>
         )}
         <Divider />
-        <div>
-          <Button
-            className='mt-4 w-full'
-            shape='round'
-            type='primary'
-            disabled={!(startDate && endDate)}
-            onClick={() =>
-              navigate(`${props.to}?start=${startDate}&end=${endDate}`)
-            }
-          >
-            Rent now
-          </Button>
-        </div>
+        <Button
+          className='mt-4 w-full'
+          shape='round'
+          type='primary'
+          disabled={!(startDate && endDate && carIsAvailable)}
+          onClick={() => {
+            navigate(`${to}?start=${startDate}&end=${endDate}`);
+          }}
+        >
+          Rent now
+        </Button>
       </Skeleton>
     </InfoCard>
   );

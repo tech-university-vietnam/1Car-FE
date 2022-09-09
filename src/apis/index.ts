@@ -70,7 +70,15 @@ export async function getCars(filter: Record<string, any> = {}) {
 export async function getCar(id: string) {
   return callApi(`/car/${id}`);
 }
-
+export async function checkCarAvailability(
+  id: string,
+  startDate: string,
+  endDate: string
+) {
+  return callApi(
+    `/car/${id}/available?startDate=${startDate}&endDate=${endDate}`
+  );
+}
 export async function getCarDetails(id: string) {
   return callApi(`/car/${id}/attributes`);
 }
@@ -111,9 +119,7 @@ export async function updateUserInfo(updateInfo: UserUpdateDTO) {
 
 // Booking apis
 export async function getBookingData() {
-  return mockBookingData;
-  // TODO: Remove mock data after finish developing this endpoint
-  // return callAuthApi('/booking');
+  return callAuthApi('/booking/me');
 }
 export async function postBooking(data: Object) {
   return callAuthApi('/payment/checkout', 'POST', data);

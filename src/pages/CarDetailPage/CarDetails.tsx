@@ -10,11 +10,12 @@ interface CarDetailsProps {
 }
 export default function CarDetails({ car, isLoading }: CarDetailsProps) {
   const [details, setDetails] = useState<[string, unknown][]>();
+  const [description, setDescription] = useState('');
   useEffect(() => {
     (async () => {
-      const d = await getCarDetails(car.id);
-      setDetails(Object.entries(d));
-      console.log(d);
+      const { description, ...rest } = await getCarDetails(car.id);
+      setDetails(Object.entries(rest.specs));
+      setDescription(description);
     })();
   }, []);
   return (
@@ -79,7 +80,9 @@ export default function CarDetails({ car, isLoading }: CarDetailsProps) {
                     <Typography.Title level={3}>Description</Typography.Title>
                   </Col>
                   <Col>
-                    <div className='text-lg'>Long description blablabla</div>
+                    <div className='text-lg'>
+                      {description ? description : 'No descriptions provided'}
+                    </div>
                   </Col>
                 </Row>
               </>

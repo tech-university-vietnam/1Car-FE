@@ -37,6 +37,8 @@ export interface CarFilter {
   page?: number;
   limit?: number;
   attribute?: string[];
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface CarAdminFilter {

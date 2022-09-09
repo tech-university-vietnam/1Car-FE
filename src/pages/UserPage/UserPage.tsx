@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Header from '../../components/Header';
 import { Descriptions, Spin, Table } from 'antd';
 import EditButton from '../../components/EditButton';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0, User } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
 import UpdateUserModal from '../../components/UpdateUserModal';
@@ -101,7 +101,7 @@ function UserPage() {
 
 export default function UserPageWithSecurity() {
   return (
-    <SecurityLayout role={[UserRole.USER]} fallback='/'>
+    <SecurityLayout role={[UserRole.USER, UserRole.ADMIN]} fallback='/'>
       <UserPage />
     </SecurityLayout>
   );

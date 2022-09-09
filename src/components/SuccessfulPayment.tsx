@@ -13,7 +13,7 @@ const SuccessfulPayment = () => {
       extra={[
         <Link to='/user'>
           <Button type='primary' key='console'>
-            Go Console
+            User dashboard
           </Button>
         </Link>,
         <Link to='/'>

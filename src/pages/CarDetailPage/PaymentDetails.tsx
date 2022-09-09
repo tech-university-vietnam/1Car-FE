@@ -5,8 +5,18 @@ import InfoCard from '../../components/InfoCard';
 import { RangePickerProps } from 'antd/lib/date-picker';
 import { useNavigate } from 'react-router-dom';
 import { calculateDatesBetween, formatCurrency } from '../../utils/utils';
+import { Car } from '../../redux/reducer/car';
 
-export default function PaymentDetails(props: any) {
+interface PaymentDetailsProp {
+  isLoading: boolean;
+  car: Car;
+  to: string;
+}
+export default function PaymentDetails({
+  isLoading,
+  car,
+  to,
+}: PaymentDetailsProp) {
   const [startDate, setStartDate] = useState<string | undefined>('');
   const [endDate, setEndDate] = useState<string | undefined>('');
   const [datesBetween, setDatesBetween] = useState(0);
@@ -30,10 +40,10 @@ export default function PaymentDetails(props: any) {
   return (
     <InfoCard>
       <Typography.Title className='flex place-content-center'>
-        Booking
+        Create booking
       </Typography.Title>
       <Divider />
-      <Skeleton loading={props.isLoading} active>
+      <Skeleton loading={isLoading} active>
         <Typography className='text-xl font-bold'>Pick up location</Typography>
         <Typography className='mt-4 text-xl font-bold'>Start date:</Typography>
         <DatePicker
@@ -54,13 +64,13 @@ export default function PaymentDetails(props: any) {
           disabledDate={disabledEndDate}
           onChange={(data) => setEndDate(data?.toLocaleString())}
         ></DatePicker>
-        {props.isLoading ? (
+        {isLoading ? (
           <></>
         ) : (
           <div className='mt-4 flex'>
             <Typography className=' text-xl '>Price per day</Typography>
             <Typography className='ml-auto text-xl font-bold'>
-              {formatCurrency(props.car.pricePerDate)}
+              {formatCurrency(car.pricePerDate)}
             </Typography>
           </div>
         )}
@@ -70,30 +80,28 @@ export default function PaymentDetails(props: any) {
             {datesBetween}
           </Typography>
         </div>
-        {props.isLoading ? (
+        {isLoading ? (
           <></>
         ) : (
           <div className='mt-4 flex'>
             <Typography className='text-xl '>= Total price</Typography>
             <Typography className='ml-auto text-xl font-bold'>
-              {formatCurrency(props.car.pricePerDate * datesBetween)}
+              {formatCurrency(car.pricePerDate * datesBetween)}
             </Typography>
           </div>
         )}
         <Divider />
-        <div>
-          <Button
-            className='mt-4 w-full'
-            shape='round'
-            type='primary'
-            disabled={!(startDate && endDate)}
-            onClick={() =>
-              navigate(`${props.to}?start=${startDate}&end=${endDate}`)
-            }
-          >
-            Rent now
-          </Button>
-        </div>
+        <Button
+          className='mt-4 w-full'
+          shape='round'
+          type='primary'
+          disabled={!(startDate && endDate)}
+          onClick={() => {
+            navigate(`${to}?start=${startDate}&end=${endDate}`);
+          }}
+        >
+          Rent now
+        </Button>
       </Skeleton>
     </InfoCard>
   );

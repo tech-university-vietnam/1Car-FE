@@ -111,9 +111,7 @@ export async function updateUserInfo(updateInfo: UserUpdateDTO) {
 
 // Booking apis
 export async function getBookingData() {
-  return mockBookingData;
-  // TODO: Remove mock data after finish developing this endpoint
-  // return callAuthApi('/booking');
+  return callAuthApi('/booking/me');
 }
 export async function postBooking(data: Object) {
   return callAuthApi('/payment/checkout', 'POST', data);

@@ -1,9 +1,9 @@
-import { Typography, Divider, Row, Col, Button } from 'antd';
+import { Typography, Divider, Row, Col, Button, DatePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import moment from 'moment';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Car } from '../../redux/reducer/car';
-
 import { formatCurrency, calculateDatesBetween } from '../../utils/utils';
 
 interface bookingProps {
@@ -44,21 +44,33 @@ export default function BookingConfirmation({
           )}
           <Typography.Title level={3}>{car.name}</Typography.Title>
         </Col>
-        <Col>
-          <Row gutter={32}>
-            <Col span={18}>
+        <Col span={16}>
+          <Row gutter={24}>
+            <Col span={12}>
               <Typography.Title level={3}>Receive on</Typography.Title>
-              <Typography>{startDate}</Typography>
+              <DatePicker
+                defaultValue={moment(startDate)}
+                placeholder='From'
+                size='large'
+                style={{ width: '100%' }}
+                disabled={true}
+              />
             </Col>
             <Col>
               <Typography.Title level={3}>At</Typography.Title>
               <Typography>Location</Typography>
             </Col>
           </Row>
-          <Row gutter={32} className='mt-16'>
-            <Col span={18}>
+          <Row gutter={24} className='mt-16'>
+            <Col span={12}>
               <Typography.Title level={3}>Return on</Typography.Title>
-              <Typography>{endDate}</Typography>
+              <DatePicker
+                defaultValue={moment(endDate)}
+                placeholder='To'
+                size='large'
+                style={{ width: '100%' }}
+                disabled={true}
+              />
             </Col>
             <Col>
               <Typography.Title level={3}>At</Typography.Title>

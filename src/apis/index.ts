@@ -70,7 +70,15 @@ export async function getCars(filter: Record<string, any> = {}) {
 export async function getCar(id: string) {
   return callApi(`/car/${id}`);
 }
-
+export async function checkCarAvailability(
+  id: string,
+  startDate: string,
+  endDate: string
+) {
+  return callApi(
+    `/car/${id}/available?startDate=${startDate}&endDate=${endDate}`
+  );
+}
 export async function getCarDetails(id: string) {
   return callApi(`/car/${id}/attributes`);
 }

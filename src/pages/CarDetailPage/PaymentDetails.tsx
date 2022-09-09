@@ -6,6 +6,7 @@ import { RangePickerProps } from 'antd/lib/date-picker';
 import { useNavigate } from 'react-router-dom';
 import { calculateDatesBetween, formatCurrency } from '../../utils/utils';
 import { Car } from '../../redux/reducer/car';
+import { checkCarAvailability } from '../../apis';
 
 interface PaymentDetailsProp {
   isLoading: boolean;
@@ -20,7 +21,7 @@ export default function PaymentDetails({
   const [startDate, setStartDate] = useState<string | undefined>('');
   const [endDate, setEndDate] = useState<string | undefined>('');
   const [datesBetween, setDatesBetween] = useState(0);
-
+  const [carIsAvailable, setCarIsAvailable] = useState(true);
   const navigate = useNavigate();
   const disabledStartDate: RangePickerProps['disabledDate'] = (
     current: any
@@ -34,8 +35,16 @@ export default function PaymentDetails({
   useEffect(() => {
     if (startDate && endDate) {
       setDatesBetween(calculateDatesBetween(startDate, endDate));
+      (async () => {
+        const response = await checkCarAvailability(
+          car.id,
+          new Date(startDate).toISOString(),
+          new Date(endDate).toISOString()
+        );
+        setCarIsAvailable(response.isAvailable);
+      })();
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, car.id]);
 
   return (
     <InfoCard>
@@ -55,7 +64,8 @@ export default function PaymentDetails({
             setEndDate('');
             setStartDate(data?.toLocaleString());
           }}
-        ></DatePicker>
+          status={carIsAvailable ? '' : 'error'}
+        />
         <Typography className='mt-4 text-xl font-bold'>End date:</Typography>
         <DatePicker
           placeholder='To'
@@ -63,7 +73,15 @@ export default function PaymentDetails({
           style={{ width: '100%' }}
           disabledDate={disabledEndDate}
           onChange={(data) => setEndDate(data?.toLocaleString())}
-        ></DatePicker>
+          status={carIsAvailable ? '' : 'error'}
+        />
+        {carIsAvailable ? (
+          <></>
+        ) : (
+          <div className='text-red-200'>
+            The car is not available for those days
+          </div>
+        )}
         {isLoading ? (
           <></>
         ) : (
@@ -95,7 +113,7 @@ export default function PaymentDetails({
           className='mt-4 w-full'
           shape='round'
           type='primary'
-          disabled={!(startDate && endDate)}
+          disabled={!(startDate && endDate && carIsAvailable)}
           onClick={() => {
             navigate(`${to}?start=${startDate}&end=${endDate}`);
           }}

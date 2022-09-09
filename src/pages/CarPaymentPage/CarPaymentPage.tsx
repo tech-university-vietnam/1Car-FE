@@ -1,4 +1,4 @@
-import { Checkbox, Divider, Typography } from 'antd';
+import { Checkbox, DatePicker, Divider, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { getUserInformationAction } from '../../redux/reducer/user';

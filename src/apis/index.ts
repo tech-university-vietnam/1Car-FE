@@ -1,6 +1,6 @@
 import axios, { Method } from 'axios';
 import _ from 'lodash';
-import { UserUpdateDTO } from '../redux/reducer/user';
+import { UserRole, UserUpdateDTO } from '../redux/reducer/user';
 import Cookies from 'universal-cookie';
 import { CarAdminFilter } from '../redux/reducer/car';
 
@@ -112,6 +112,10 @@ export async function updateUserInfo(updateInfo: UserUpdateDTO) {
   return callAuthApi('/user', 'patch', updateInfo);
 }
 
+export async function getUserInfoUsingId(id: string) {
+  return callAuthApi(`/user/${id}`);
+}
+
 // Booking apis
 export async function getBookingData() {
   return callAuthApi('/booking/me');
@@ -138,4 +142,20 @@ export async function getCarForAdmin(
   filter: CarAdminFilter
 ): Promise<{ totalRecords: number; totalPage: number; cars: any[] }> {
   return callAuthApi(`/car/admin/?limit=${filter.limit}&page=${filter.page}`);
+}
+
+export async function changeUserToAdmin(id: string) {
+  return callAuthApi('/user/admin', 'patch', {
+    id: id,
+    userRole: UserRole.ADMIN,
+  });
+}
+
+export async function updateUserInfoUsingAdminAccount(payload: {
+  id: string;
+  name: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+}) {
+  return callAuthApi('user/admin', 'patch', payload);
 }

@@ -8,6 +8,7 @@ import React, {
 import { LoadingOutlined } from '@ant-design/icons';
 import { useAppDispatch } from '../redux';
 import { updateUserInfoAction } from '../redux/reducer/user';
+import { updateUserInfoUsingAdminAccount } from '../apis';
 
 export default forwardRef((props: any, ref) => {
   const [visible, setVisible] = useState(props.visible ? props.visible : false);
@@ -74,7 +75,14 @@ export function UpdateUserInfoForm(props: any) {
     if (!props.isAdmin) {
       dispatch(updateUserInfoAction(fields));
     } else {
-      console.log('isAdmin edit');
+      try {
+        await updateUserInfoUsingAdminAccount({
+          id: props.user.id,
+          ...fields,
+        });
+      } catch (err: any) {
+        console.log(err);
+      }
     }
     setLoading(false);
     props.onSubmit();

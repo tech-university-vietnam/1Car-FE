@@ -1,28 +1,43 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import AntButton from '../AntButton';
 import { Link } from 'react-router-dom';
-import { Dropdown, Menu, Space } from 'antd';
+import { Button, Dropdown, Menu, Space } from 'antd';
 import { useAppSelector } from '../../redux';
 import { UserRole } from '../../redux/reducer/user';
 import { logoutWithAuth0 } from '../../utils/utils';
 import {
   DashboardOutlined,
+  LoginOutlined,
   LogoutOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+import { useWindowSize } from '../../hooks';
 
 export const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
+  const size = useWindowSize();
 
   return (
-    <AntButton onClickFunction={() => loginWithRedirect()} label='Sign in' />
+    <Button
+      onClick={() => loginWithRedirect()}
+      value='large'
+      icon={<LoginOutlined />}
+    >
+      {size.width > 1000 ? 'Login' : <></>}
+    </Button>
   );
 };
 
 export const AuthInfoComponentSubMenu = () => {
   const { logout } = useAuth0();
   const logOutFunction = () => logoutWithAuth0(logout);
+  const [menuItems, setMenuItems] = useState<
+    Array<{
+      label: string | ReactElement;
+      key: string;
+      icon?: ReactElement;
+    }>
+  >([]);
 
   const userData = useAppSelector((state) => state.user.info);
   const subMenuItems: Array<{
@@ -75,7 +90,11 @@ export const AuthInfoComponentSubMenu = () => {
     return subMenuItems;
   };
 
-  return <Menu items={getSubMenuItems()} />;
+  useEffect(() => {
+    setMenuItems(getSubMenuItems());
+  }, [userData]);
+
+  return <Menu items={menuItems} />;
 };
 
 export const AuthInfoComponent = () => {

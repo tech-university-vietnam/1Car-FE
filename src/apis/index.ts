@@ -1,7 +1,6 @@
 import axios, { Method } from 'axios';
 import _ from 'lodash';
 import { UserUpdateDTO } from '../redux/reducer/user';
-import { mockBookingData } from '../redux/reducer/booking';
 import Cookies from 'universal-cookie';
 import { CarAdminFilter } from '../redux/reducer/car';
 

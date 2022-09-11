@@ -1,64 +1,103 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import AntButton from '../AntButton';
-import Cookies from 'universal-cookie';
 import { Link } from 'react-router-dom';
-import { getUserInfoUsingToken } from '../../apis';
+import { Dropdown, Menu, Space } from 'antd';
+import { useAppSelector } from '../../redux';
+import { UserRole } from '../../redux/reducer/user';
+import { logoutWithAuth0 } from '../../utils/utils';
+import {
+  DashboardOutlined,
+  LogoutOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 
 export const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
   return (
-    <AntButton
-      onClickFunction={() =>
-        loginWithRedirect({ prompt: 'consent', scope: 'read:current_user' })
-      }
-      label='Sign in'
-    />
+    <AntButton onClickFunction={() => loginWithRedirect()} label='Sign in' />
   );
 };
 
-export const LogoutButton = () => {
+export const AuthInfoComponentSubMenu = () => {
   const { logout } = useAuth0();
-  const logOutFunction = () => {
-    logout({ returnTo: window.location.origin });
-    const cookies = new Cookies();
-    cookies.remove('access_token', { path: '/' });
-    localStorage.removeItem('userEmail');
+  const logOutFunction = () => logoutWithAuth0(logout);
+
+  const userData = useAppSelector((state) => state.user.info);
+  const subMenuItems: Array<{
+    label: string | ReactElement;
+    key: string;
+    icon?: ReactElement;
+  }> = [
+    {
+      label: (
+        <Link to='/user' className='text-gray text-sm md:text-base'>
+          Profile
+        </Link>
+      ),
+      key: 'user',
+      icon: <UserOutlined />,
+    },
+    {
+      label: (
+        <span
+          onClick={logOutFunction}
+          className='text-gray text-sm md:text-base'
+        >
+          Logout
+        </span>
+      ),
+      key: 'logout',
+      icon: <LogoutOutlined />,
+    },
+  ];
+
+  const getSubMenuItems = (): Array<{
+    label: string | ReactElement;
+    key: string;
+    icon?: ReactElement;
+  }> => {
+    if (userData.userRole === UserRole.ADMIN) {
+      return [
+        ...subMenuItems,
+        {
+          label: (
+            <Link to='/admin' className='text-gray text-sm md:text-base'>
+              Admin dashboard
+            </Link>
+          ),
+          key: 'admin',
+          icon: <DashboardOutlined />,
+        },
+      ];
+    }
+    return subMenuItems;
   };
-  return <AntButton onClickFunction={() => logOutFunction()} label='Logout' />;
+
+  return <Menu items={getSubMenuItems()} />;
 };
 
-export const UserProfileButton = () => {
-  const { user, isAuthenticated } = useAuth0();
-  const [userMetaData, setUserMetaData] = useState(null);
+export const AuthInfoComponent = () => {
+  const { user } = useAuth0();
 
-  useEffect(() => {
-    const getUserMetaData = async () => {
-      const domain = process.env.REACT_APP_AUTH0_DOMAIN;
-      const cookies = new Cookies();
-      try {
-        const accessToken = cookies.get('access_token');
-        if (accessToken) {
-          const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user?.sub}`;
-          const metadataResponse = await fetch(userDetailsByIdUrl, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-          const { user_metadata } = await metadataResponse.json();
-          setUserMetaData(user_metadata);
-        }
-      } catch (e: any) {
-        console.log(e.message);
-      }
-    };
-    getUserMetaData();
-  }, [user?.sub]);
-
+  const overlayStyle: React.CSSProperties = {
+    paddingTop: '.5rem',
+  };
   return (
-    <Link to='/user' className='text-black'>
-      {isAuthenticated ? <p>Hi, {user?.name}</p> : <></>}
-    </Link>
+    <div>
+      <Dropdown
+        overlay={<AuthInfoComponentSubMenu />}
+        overlayStyle={overlayStyle}
+      >
+        <a
+          className='text-base text-black md:text-lg'
+          onClick={(e) => e.preventDefault()}
+          href='#'
+        >
+          <Space>Hi, {user?.name}</Space>
+        </a>
+      </Dropdown>
+    </div>
   );
 };

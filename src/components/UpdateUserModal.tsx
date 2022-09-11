@@ -38,6 +38,7 @@ export default forwardRef((props: any, ref) => {
       <UpdateUserInfoForm
         onSubmit={onClose}
         isEdit={props.isEdit}
+        isAdmin={props.isAdmin}
         {...(props.isEdit ? { user: props.user } : {})}
       />
     </Modal>
@@ -70,7 +71,11 @@ export function UpdateUserInfoForm(props: any) {
     setLoading(true);
     const fields = form.getFieldsValue(['name', 'dateOfBirth', 'phoneNumber']);
     fields.dateOfBirth = fields.dateOfBirth.format('YYYY-MM-DD');
-    dispatch(updateUserInfoAction(fields));
+    if (!props.isAdmin) {
+      dispatch(updateUserInfoAction(fields));
+    } else {
+      console.log('isAdmin edit');
+    }
     setLoading(false);
     props.onSubmit();
   };

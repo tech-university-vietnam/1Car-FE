@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../redux';
 import UpdateUserModal from '../../components/UpdateUserModal';
 import DescriptionsItem from 'antd/es/descriptions/Item';
 import { changeUserToAdmin } from '../../apis';
+import { PlusOutlined } from '@ant-design/icons';
 
 const ViewUserContent = (props: any) => {
   const userData = props.user;
@@ -44,7 +45,11 @@ const ChangeToAdminContent = (props: any) => {
       </h2>
       <p>Are you sure you want to change this user to be an admin?</p>
       <div className='my-3 flex gap-x-5'>
-        <Button type='primary' className='flex-1' onClick={onChangeToAdmin}>
+        <Button
+          className='flex-1'
+          onClick={onChangeToAdmin}
+          style={{ background: '#66BFBF', borderColor: '#66BFBF' }}
+        >
           Yes
         </Button>
         <Button className='flex-1' onClick={props.onClose}>
@@ -127,7 +132,11 @@ export default function UserManagement() {
 
   return (
     <div className='m-12 max-h-full overflow-auto bg-white'>
-      <Row className='p-2'></Row>
+      <div className='flex justify-end p-2'>
+        <Button className='mx-3' icon={<PlusOutlined className='py-0.5' />}>
+          Create User
+        </Button>
+      </div>
       <div className='p-2'>
         <Table columns={columns} dataSource={users} />
       </div>

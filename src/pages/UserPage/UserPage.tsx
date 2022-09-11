@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import Header from '../../components/Header';
 import { Descriptions, Spin, Table } from 'antd';
 import EditButton from '../../components/EditButton';
-import { useAuth0, User } from '@auth0/auth0-react';
-import { useNavigate } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 import { ColumnsType } from 'antd/lib/table';
 import UpdateUserModal from '../../components/UpdateUserModal';
 import { getUserInformationAction, UserRole } from '../../redux/reducer/user';
@@ -13,7 +12,6 @@ import SecurityLayout from '../../components/Layout/SecurityLayout';
 
 function UserPage() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const [loading, setLoading] = React.useState(true);
   const bookingData = useAppSelector((state) => state.booking.bookings);
@@ -43,18 +41,23 @@ function UserPage() {
     },
     {
       title: 'Booking Date',
-      dataIndex: 'bookingDate',
-      key: 'bookingDate',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
     },
     {
       title: 'Booking Status',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'bookingStatus',
+      key: 'bookingStatus',
     },
     {
       title: 'Car Information',
-      dataIndex: 'carInfo',
-      key: 'carInfo',
+      dataIndex: 'carId',
+      key: 'carId',
+    },
+    {
+      title: 'Pickup Status',
+      dataIndex: 'pickUpStatus',
+      key: 'pickUpStatus',
     },
   ];
 

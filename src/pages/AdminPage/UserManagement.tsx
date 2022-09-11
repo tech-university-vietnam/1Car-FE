@@ -1,18 +1,11 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Row, Col, Button, Table, Space, Tag, Modal } from 'antd';
+import { Row, Table, Space } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import React, { useState } from 'react';
-import CreateCarForm from './CreateCarForm';
+import React, { useEffect } from 'react';
+import User, { getAllUsersForAdminAction } from '../../redux/reducer/user';
+import { useAppDispatch, useAppSelector } from '../../redux';
 
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
-}
-
-const columns: ColumnsType<DataType> = [
+// @ts-ignore
+const columns: ColumnsType<User> = [
   {
     title: 'User Name',
     dataIndex: 'name',
@@ -21,55 +14,38 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: 'Email',
-    dataIndex: 'age',
-    key: 'age',
+    dataIndex: 'email',
+    key: 'email',
   },
   {
-    title: 'Phone',
-    dataIndex: 'address',
-    key: 'address',
+    title: 'Role',
+    dataIndex: 'userRole',
+    key: 'userRole',
   },
   {
     title: 'Action',
     key: 'action',
     render: (_, record) => (
       <Space size='middle'>
-        <a>View</a>
+        <a>Update</a>
+        <a>Change to admin</a>
       </Space>
     ),
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'Car Name',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Status',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
-
 export default function UserManagement() {
+  const dispatch = useAppDispatch();
+  const users = useAppSelector((state) => state.user.allUsers);
+
+  useEffect(() => {
+    dispatch(getAllUsersForAdminAction());
+  }, []);
   return (
     <div className='m-12 max-h-full overflow-auto bg-white'>
       <Row className='p-2'></Row>
       <div className='p-2'>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={users} />
       </div>
     </div>
   );

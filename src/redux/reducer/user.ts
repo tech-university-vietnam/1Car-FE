@@ -26,6 +26,7 @@ export enum UserRole {
 
 const initialState: {
   info: User;
+  allUsers: User[];
 } = {
   info: {
     id: 'string id',
@@ -36,6 +37,7 @@ const initialState: {
     createdAt: 'created date',
     updatedAt: 'update date',
   },
+  allUsers: [],
 };
 
 export const getUserInformationAction = createAsyncThunk(
@@ -56,6 +58,14 @@ export const updateUserInfoAction = createAsyncThunk(
   }
 );
 
+export const getAllUsersForAdminAction = createAsyncThunk(
+  'user/getAllUser',
+  async (payload, thunkApi) => {
+    const res = await api.getAllUsersForAdmin();
+    thunkApi.dispatch(setAllUsers(res));
+  }
+);
+
 const userSlice = createSlice({
   name: 'userData',
   initialState,
@@ -71,8 +81,12 @@ const userSlice = createSlice({
         ...dto,
       };
     },
+    setAllUsers: (state, action: PayloadAction<User[]>) => {
+      state.allUsers = action.payload;
+    },
   },
 });
 
-export const { getUserInfoUsingToken, updateUserInfo } = userSlice.actions;
+export const { getUserInfoUsingToken, updateUserInfo, setAllUsers } =
+  userSlice.actions;
 export default userSlice.reducer;

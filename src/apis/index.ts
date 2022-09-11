@@ -102,11 +102,7 @@ export async function getCarAttributeType(): Promise<[]> {
   return callApi('/car/attribute/type');
 }
 
-export async function getCarForAdmin(
-  filter: CarAdminFilter
-): Promise<{ totalRecords: number; totalPage: number; cars: any[] }> {
-  return callAuthApi(`/car/admin/?limit=${filter.limit}&page=${filter.page}`);
-}
+// User apis
 
 export async function getUserInfoUsingToken() {
   return callAuthApi('/user/me');
@@ -124,10 +120,22 @@ export async function postBooking(data: Object) {
   return callAuthApi('/payment/checkout', 'POST', data);
 }
 
-export async function getAllBookingForAdmin() {
-  return callAuthApi('/booking');
+// Admin apis
+
+export async function getAllUsersForAdmin() {
+  return callAuthApi('/user');
 }
 
 export async function updateBookingForAdmin(id: string, data: any) {
   return callAuthApi(`/booking/${id}`, 'PATCH', data);
+}
+
+export async function getAllBookingForAdmin() {
+  return callAuthApi('/booking');
+}
+
+export async function getCarForAdmin(
+  filter: CarAdminFilter
+): Promise<{ totalRecords: number; totalPage: number; cars: any[] }> {
+  return callAuthApi(`/car/admin/?limit=${filter.limit}&page=${filter.page}`);
 }

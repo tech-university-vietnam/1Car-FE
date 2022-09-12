@@ -1,7 +1,6 @@
 import axios, { Method } from 'axios';
 import _ from 'lodash';
-import { UserUpdateDTO } from '../redux/reducer/user';
-import { mockBookingData } from '../redux/reducer/booking';
+import { UserRole, UserUpdateDTO } from '../redux/reducer/user';
 import Cookies from 'universal-cookie';
 import { CarAdminFilter } from '../redux/reducer/car';
 
@@ -103,11 +102,7 @@ export async function getCarAttributeType(): Promise<[]> {
   return callApi('/car/attribute/type');
 }
 
-export async function getCarForAdmin(
-  filter: CarAdminFilter
-): Promise<{ totalRecords: number; totalPage: number; cars: any[] }> {
-  return callAuthApi(`/car/admin/?limit=${filter.limit}&page=${filter.page}`);
-}
+// User apis
 
 export async function getUserInfoUsingToken() {
   return callAuthApi('/user/me');
@@ -115,6 +110,10 @@ export async function getUserInfoUsingToken() {
 
 export async function updateUserInfo(updateInfo: UserUpdateDTO) {
   return callAuthApi('/user', 'patch', updateInfo);
+}
+
+export async function getUserInfoUsingId(id: string) {
+  return callAuthApi(`/user/${id}`);
 }
 
 // Booking apis
@@ -125,10 +124,42 @@ export async function postBooking(data: Object) {
   return callAuthApi('/payment/checkout', 'POST', data);
 }
 
-export async function getAllBookingForAdmin() {
-  return callAuthApi('/booking');
+// Admin apis
+
+export async function getAllUsersForAdmin() {
+  return callAuthApi('/user');
 }
 
 export async function updateBookingForAdmin(id: string, data: any) {
   return callAuthApi(`/booking/${id}`, 'PATCH', data);
+}
+
+export async function getAllBookingForAdmin() {
+  return callAuthApi('/booking');
+}
+
+export async function getCarForAdmin(
+  filter: CarAdminFilter
+): Promise<{ totalRecords: number; totalPage: number; cars: any[] }> {
+  return callAuthApi(`/car/admin/?limit=${filter.limit}&page=${filter.page}`);
+}
+
+export async function changeUserToAdmin(id: string) {
+  return callAuthApi(`/user/${id}/admin`, 'patch', {
+    id: id,
+    userRole: UserRole.ADMIN,
+  });
+}
+
+export async function updateUserInfoUsingAdminAccount(payload: {
+  id: string;
+  name: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+}) {
+  return callAuthApi(`/user/${payload.id}/admin`, 'patch', payload);
+}
+
+export async function deleteUser(payload: { id: string }) {
+  return callAuthApi(`/user/${payload.id}`, 'delete');
 }

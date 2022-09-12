@@ -66,24 +66,6 @@ export default function SearchBar() {
     return current < moment(startDate || Date.now()).startOf('day');
   };
 
-  const handleFilter = () => {
-    geocodeByPlaceId(location.value.place_id)
-      .then((results) => console.log(results))
-      .catch((error) => console.error(error));
-  };
-
-  // useEffect(() => {
-  //   if (startDate && endDate) {
-  //     dispatch(
-  //       updateFilter({
-  //         ...filter,
-  //         startDate: moment(startDate).toISOString(),
-  //         endDate: moment(endDate).toISOString(),
-  //       })
-  //     );
-  //   }
-  // }, [startDate, endDate]);
-
   const handleSearch = () => {
     dispatch(
       getCarAction({
@@ -114,7 +96,9 @@ export default function SearchBar() {
             apiKey={process.env.REACT_APP_GG_API_KEY}
             selectProps={{
               value: location,
-              onChange: setLocation,
+              onChange: (value: any) => {
+                setLocation(value);
+              },
             }}
           />
         </div>

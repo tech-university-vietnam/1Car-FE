@@ -24,26 +24,21 @@ export enum UserRole {
   ADMIN = 'ADMIN',
 }
 
+const initUser = JSON.parse(localStorage.getItem('user') || 'null');
+
 const initialState: {
   info: User;
   allUsers: User[];
 } = {
-  info: {
-    id: '',
-    name: '',
-    email: '',
-    userRole: UserRole.USER,
-    isDeleted: false,
-    createdAt: '',
-    updatedAt: '',
-  },
+  info: initUser,
   allUsers: [],
 };
 
 export const getUserInformationAction = createAsyncThunk(
   'user/getInfo',
-  async (payload, thunkApi) => {
-    const res = await api.getUserInfoUsingToken();
+  async (payload: string | undefined, thunkApi) => {
+    const res = await api.getUserInfoUsingToken(payload);
+    localStorage.setItem('user', JSON.stringify(res?.data));
     thunkApi.dispatch(getUserInfoUsingToken(res.data));
     return res.data;
   }

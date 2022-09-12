@@ -98,7 +98,7 @@ export const AuthInfoComponentSubMenu = () => {
 };
 
 export const AuthInfoComponent = () => {
-  const { user } = useAuth0();
+  const user = useAppSelector((state) => state.user.info);
 
   const overlayStyle: React.CSSProperties = {
     paddingTop: '.5rem',

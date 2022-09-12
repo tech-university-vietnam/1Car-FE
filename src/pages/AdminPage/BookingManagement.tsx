@@ -1,19 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
-import {
-  Row,
-  Col,
-  Button,
-  Table,
-  Space,
-  Tag,
-  Modal,
-  Select,
-  message,
-  DatePicker,
-  Descriptions,
-  Avatar,
-  Divider,
-} from 'antd';
+import { Row, Table, Space, Modal, Select, message, DatePicker } from 'antd';
 import confirm from 'antd/lib/modal/confirm';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
@@ -25,7 +10,7 @@ import {
   getAllBookingForAdminAction,
 } from '../../redux/reducer/booking';
 import BookingDetail from './BookingDetail';
-import CreateCarForm from './CreateCarForm';
+import { Link } from 'react-router-dom';
 
 const PICKUP_STATUS = ['PICKUP', 'PENDING', 'RETURNED'];
 const BOOKING_STATUS = ['PENDING', 'SUCCESS', 'FAILED'];
@@ -44,13 +29,17 @@ export default function BookingManagement() {
       title: 'User Name',
       dataIndex: 'user',
       key: 'user',
-      render: (user) => <a>{user.name}</a>,
+      render: (user) => <span>{user.name}</span>,
     },
     {
       title: 'Car Name',
       dataIndex: 'car',
       key: 'car',
-      render: (car) => <a>{car.name}</a>,
+      render: (car) => (
+        <Link to={'/details/' + car.id}>
+          <a>{car.name}</a>
+        </Link>
+      ),
     },
     {
       title: 'Start Date',
@@ -93,7 +82,7 @@ export default function BookingManagement() {
         }).format(price),
     },
     {
-      title: 'Status',
+      title: 'Payment Status',
       dataIndex: 'bookingStatus',
       key: 'bookingStatus',
       render: (status, { id }) => (

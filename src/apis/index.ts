@@ -102,6 +102,10 @@ export async function getCarAttributeType(): Promise<[]> {
   return callApi('/car/attribute/type');
 }
 
+export async function updateCar(payload: any): Promise<any> {
+  return callAuthApi(`/car/${payload.id}`, 'patch', payload.form);
+}
+
 // User apis
 
 export async function getUserInfoUsingToken() {

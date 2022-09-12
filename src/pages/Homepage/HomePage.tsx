@@ -44,7 +44,6 @@ export default function HomePage() {
       const accessToken = cookies.get('access_token');
       if (accessToken) {
         dispatch(getUserInformationAction());
-        localStorage.setItem('user', JSON.stringify(user));
       }
     } catch (err) {}
   };
@@ -54,6 +53,10 @@ export default function HomePage() {
     dispatch(getCarAttributeTypeAction());
     getMe();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [user]);
 
   useEffect(() => {
     dispatch(getCarAction(filter));

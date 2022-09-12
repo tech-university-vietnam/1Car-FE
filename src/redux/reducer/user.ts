@@ -29,13 +29,13 @@ const initialState: {
   allUsers: User[];
 } = {
   info: {
-    id: 'string id',
-    name: 'string name',
-    email: 'string email',
+    id: '',
+    name: '',
+    email: '',
     userRole: UserRole.USER,
     isDeleted: false,
-    createdAt: 'created date',
-    updatedAt: 'update date',
+    createdAt: '',
+    updatedAt: '',
   },
   allUsers: [],
 };

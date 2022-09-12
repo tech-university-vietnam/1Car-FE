@@ -34,7 +34,7 @@ export default forwardRef((props: any, ref) => {
       <h2 className='mb-6 text-center text-2xl'>
         {props.isEdit
           ? props.isAdmin
-            ? `Update ${props.user.email} information`
+            ? `Update ${props.user?.email} information`
             : 'Update your information'
           : 'We need more information from you'}
       </h2>

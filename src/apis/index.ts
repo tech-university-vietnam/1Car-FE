@@ -145,7 +145,7 @@ export async function getCarForAdmin(
 }
 
 export async function changeUserToAdmin(id: string) {
-  return callAuthApi(`user/${id}/admin`, 'patch', {
+  return callAuthApi(`/user/${id}/admin`, 'patch', {
     id: id,
     userRole: UserRole.ADMIN,
   });
@@ -157,5 +157,9 @@ export async function updateUserInfoUsingAdminAccount(payload: {
   phoneNumber: string;
   dateOfBirth: string;
 }) {
-  return callAuthApi(`user/${payload.id}/admin`, 'patch', payload);
+  return callAuthApi(`/user/${payload.id}/admin`, 'patch', payload);
+}
+
+export async function deleteUser(payload: { id: string }) {
+  return callAuthApi(`/user/${payload.id}`, 'delete');
 }

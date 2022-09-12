@@ -5,8 +5,8 @@ import User, { getAllUsersForAdminAction } from '../../redux/reducer/user';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import UpdateUserModal from '../../components/UpdateUserModal';
 import DescriptionsItem from 'antd/es/descriptions/Item';
-import { changeUserToAdmin } from '../../apis';
-import { PlusOutlined } from '@ant-design/icons';
+import { changeUserToAdmin, deleteUser } from '../../apis';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 
 const ViewUserContent = (props: any) => {
   const userData = props.user;
@@ -34,6 +34,7 @@ const ChangeToAdminContent = (props: any) => {
       if (props.record?.id) {
         await changeUserToAdmin(props?.record?.id);
       }
+      props.onClose();
     } catch (err: any) {
       console.log(err.message);
     }
@@ -48,6 +49,39 @@ const ChangeToAdminContent = (props: any) => {
         <Button
           className='flex-1'
           onClick={onChangeToAdmin}
+          style={{ background: '#66BFBF', borderColor: '#66BFBF' }}
+        >
+          Yes
+        </Button>
+        <Button className='flex-1' onClick={props.onClose}>
+          No
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+const DeleteUserContent = (props: any) => {
+  const onDelete = async () => {
+    try {
+      if (props.record?.id) {
+        await deleteUser({ id: props.record.id });
+      }
+      props.onClose();
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+  return (
+    <div>
+      <h2 className='mb-6 text-center text-2xl'>
+        Confirm deleting {props.record?.email}
+      </h2>
+      <p>Are you sure you want to delete this user?</p>
+      <div className='my-3 flex gap-x-5'>
+        <Button
+          className='flex-1'
+          onClick={onDelete}
           style={{ background: '#66BFBF', borderColor: '#66BFBF' }}
         >
           Yes
@@ -107,7 +141,22 @@ export default function UserManagement() {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <a onClick={() => openModal(record)}>Update</a>
+          <a onClick={() => openModal(record)}>
+            <EditOutlined />
+          </a>
+          <a
+            onClick={() => {
+              setActive(true);
+              setContent(
+                <DeleteUserContent
+                  record={record}
+                  onClose={() => setActive(false)}
+                />
+              );
+            }}
+          >
+            <DeleteOutlined />
+          </a>
           <a
             onClick={() => {
               setActive(true);
@@ -119,7 +168,7 @@ export default function UserManagement() {
               );
             }}
           >
-            Change to admin
+            To admin
           </a>
         </Space>
       ),

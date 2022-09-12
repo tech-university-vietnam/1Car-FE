@@ -34,7 +34,8 @@ const cookies = new Cookies();
 export async function callAuthApi(
   endpoint: string,
   method: Method = 'get',
-  data: any = {}
+  data: any = {},
+  headers: any = {}
 ) {
   try {
     const response = await axios({
@@ -45,6 +46,7 @@ export async function callAuthApi(
         Authorization: `Bearer ${cookies.get('access_token')}`,
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': process.env.REACT_APP_API_URL,
+        ...headers,
       },
     });
     return response.data;
@@ -104,8 +106,13 @@ export async function getCarAttributeType(): Promise<[]> {
 
 // User apis
 
-export async function getUserInfoUsingToken() {
-  return callAuthApi('/user/me');
+export async function getUserInfoUsingToken(token?: string) {
+  return callAuthApi(
+    '/user/me',
+    'GET',
+    {},
+    token ? { Authorization: `Bearer ${token}` } : {}
+  );
 }
 
 export async function updateUserInfo(updateInfo: UserUpdateDTO) {

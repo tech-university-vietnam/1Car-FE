@@ -1,4 +1,4 @@
-import { Checkbox, DatePicker, Form, Input, Modal } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, Modal } from 'antd';
 import React, {
   forwardRef,
   useEffect,
@@ -12,12 +12,14 @@ import { updateUserInfoUsingAdminAccount } from '../apis';
 
 export default forwardRef((props: any, ref) => {
   const [visible, setVisible] = useState(props.visible ? props.visible : false);
+  const [callback, setCallback] = useState(null);
 
   const onClose = () => setVisible(false);
 
   useImperativeHandle(ref, () => ({
-    open: () => {
+    open: (cb: any) => {
       setVisible(true);
+      setCallback(cb);
     },
     close: () => {
       setVisible(false);
@@ -39,6 +41,7 @@ export default forwardRef((props: any, ref) => {
           : 'We need more information from you'}
       </h2>
       <UpdateUserInfoForm
+        onFinish={callback}
         onSubmit={onClose}
         isEdit={props.isEdit}
         isAdmin={props.isAdmin}
@@ -76,6 +79,8 @@ export function UpdateUserInfoForm(props: any) {
     fields.dateOfBirth = fields.dateOfBirth.format('YYYY-MM-DD');
     if (!props.isAdmin) {
       dispatch(updateUserInfoAction(fields));
+      console.log(props);
+      props.onFinish?.();
     } else {
       try {
         await updateUserInfoUsingAdminAccount({
@@ -153,14 +158,15 @@ export function UpdateUserInfoForm(props: any) {
         </Checkbox>
       </Form.Item>
       <Form.Item>
-        <button
+        <Button
+          size='large'
+          type='primary'
           disabled={disable || loading}
           onClick={onSubmit}
           className='w-full rounded p-2 text-base text-white disabled:opacity-50'
-          style={{ background: '#66BFBF', borderColor: '#66BFBF' }}
         >
           {loading ? <LoadingOutlined /> : 'Send your information'}
-        </button>
+        </Button>
       </Form.Item>
     </Form>
   );

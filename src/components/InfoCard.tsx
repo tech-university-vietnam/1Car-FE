@@ -9,11 +9,12 @@ export default function InfoCard(props: {
   return (
     <Card
       style={{
-        borderRadius: '20px',
         overflow: 'auto',
+        marginBottom: 15,
         ...props.style,
       }}
       loading={props.loading}
+      className="rounded-md"
     >
       {props.children}
     </Card>

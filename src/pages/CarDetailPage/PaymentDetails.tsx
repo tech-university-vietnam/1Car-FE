@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { calculateDatesBetween, formatCurrency } from '../../utils/utils';
 import { Car } from '../../redux/reducer/car';
 import { checkCarAvailability } from '../../apis';
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import GoogleMapReact from 'google-map-react';
 
 interface PaymentDetailsProp {
   isLoading: boolean;
@@ -21,6 +23,7 @@ export default function PaymentDetails({
   const [startDate, setStartDate] = useState<string | undefined>('');
   const [endDate, setEndDate] = useState<string | undefined>('');
   const [datesBetween, setDatesBetween] = useState(0);
+  const [location, setLocation] = useState<any>('');
   const [carIsAvailable, setCarIsAvailable] = useState(true);
   const navigate = useNavigate();
   const disabledStartDate: RangePickerProps['disabledDate'] = (
@@ -32,6 +35,7 @@ export default function PaymentDetails({
   const disabledEndDate: RangePickerProps['disabledDate'] = (current: any) => {
     return current < moment(startDate || Date.now()).startOf('day');
   };
+
   useEffect(() => {
     if (startDate && endDate) {
       setDatesBetween(calculateDatesBetween(startDate, endDate));
@@ -47,80 +51,114 @@ export default function PaymentDetails({
   }, [startDate, endDate, car.id]);
 
   return (
-    <InfoCard>
-      <Typography.Title className='flex place-content-center'>
-        Create booking
-      </Typography.Title>
-      <Divider />
-      <Skeleton loading={isLoading} active>
-        <Typography className='text-xl font-bold'>Pick up location</Typography>
-        <Typography className='mt-4 text-xl font-bold'>Start date:</Typography>
-        <DatePicker
-          placeholder='From'
-          size='large'
-          style={{ width: '100%' }}
-          disabledDate={disabledStartDate}
-          onChange={(data) => {
-            setEndDate('');
-            setStartDate(data?.toLocaleString());
-          }}
-          status={carIsAvailable ? '' : 'error'}
-        />
-        <Typography className='mt-4 text-xl font-bold'>End date:</Typography>
-        <DatePicker
-          placeholder='To'
-          size='large'
-          style={{ width: '100%' }}
-          disabledDate={disabledEndDate}
-          onChange={(data) => setEndDate(data?.toLocaleString())}
-          status={carIsAvailable ? '' : 'error'}
-        />
-        {carIsAvailable ? (
-          <></>
-        ) : (
-          <div className='text-red-200'>
-            The car is not available for those days
-          </div>
-        )}
-        {isLoading ? (
-          <></>
-        ) : (
-          <div className='mt-4 flex'>
-            <Typography className=' text-xl '>Price per day</Typography>
-            <Typography className='ml-auto text-xl font-bold'>
-              {formatCurrency(car.pricePerDate)}
-            </Typography>
-          </div>
-        )}
-        <div className='mt-4 flex'>
-          <Typography className='text-xl '>x No. days</Typography>
-          <Typography className='ml-auto text-xl font-bold'>
-            {datesBetween}
-          </Typography>
-        </div>
-        {isLoading ? (
-          <></>
-        ) : (
-          <div className='mt-4 flex'>
-            <Typography className='text-xl '>= Total price</Typography>
-            <Typography className='ml-auto text-xl font-bold'>
-              {formatCurrency(car.pricePerDate * datesBetween)}
-            </Typography>
-          </div>
-        )}
+    <>
+      <InfoCard>
+        <Typography.Title level={3} className='flex place-content-center'>
+          Create booking
+        </Typography.Title>
         <Divider />
-        <Button
-          className='mt-4 w-full'
-          shape='round'
-          type='primary'
-          disabled={!(startDate && endDate && carIsAvailable)}
-          onClick={() => {
-            navigate(`${to}?start=${startDate}&end=${endDate}`);
-          }}
-        >
-          Rent now
-        </Button>
-      </Skeleton>
-    </InfoCard>
+        <Skeleton loading={isLoading} active>
+          <Typography.Title level={5} className='text-xl font-semibold'>
+            Pick up location:
+          </Typography.Title>
+          <GooglePlacesAutocomplete
+            apiKey={process.env.REACT_APP_GG_API_KEY!}
+            selectProps={{
+              value: location,
+              onChange: (value: any) => {
+                setLocation(value);
+              },
+            }}
+          />
+          <Typography.Title level={5} className='mt-4 text-xl font-semibold'>
+            Start date:
+          </Typography.Title>
+          <DatePicker
+            placeholder='From'
+            size='large'
+            style={{ width: '100%' }}
+            disabledDate={disabledStartDate}
+            onChange={(data) => {
+              setEndDate('');
+              setStartDate(data?.toISOString());
+            }}
+            status={carIsAvailable ? '' : 'error'}
+          />
+
+          <Typography.Title level={5} className='mt-4 text-xl font-semibold'>
+            End date:
+          </Typography.Title>
+          <DatePicker
+            placeholder='To'
+            size='large'
+            style={{ width: '100%' }}
+            disabledDate={disabledEndDate}
+            onChange={(data) => setEndDate(data?.toISOString())}
+            status={carIsAvailable ? '' : 'error'}
+          />
+          {carIsAvailable ? (
+            <></>
+          ) : (
+            <div className='text-red-200'>
+              The car is not available for those days
+            </div>
+          )}
+          {isLoading ? (
+            <></>
+          ) : (
+            <div className='mt-2 flex items-center'>
+              <Typography.Title level={5} className=''>
+                Price per day
+              </Typography.Title>
+              <Typography.Title level={5} className='ml-auto font-bold'>
+                {formatCurrency(car.pricePerDate)}
+              </Typography.Title>
+            </div>
+          )}
+          <div className='flex items-center'>
+            <Typography.Title level={5} className=''>
+              Number of days
+            </Typography.Title>
+            <Typography.Title level={5} className='ml-auto font-bold'>
+              {datesBetween}
+            </Typography.Title>
+          </div>
+          {isLoading ? (
+            <></>
+          ) : (
+            <div className='mt-4 flex items-center'>
+              <Typography.Title level={4} className=''>
+                Total price
+              </Typography.Title>
+              <Typography.Title level={4} className='ml-auto font-bold'>
+                {formatCurrency(car.pricePerDate * datesBetween)}
+              </Typography.Title>
+            </div>
+          )}
+          <Divider />
+          <Button
+            className='mt-4 w-full'
+            size='large'
+            type='primary'
+            disabled={!(startDate && endDate && carIsAvailable)}
+            onClick={() => {
+              navigate(
+                `${to}?start=${startDate}&end=${endDate}&location=${
+                  location?.value.place_id || ''
+                }`
+              );
+            }}
+          >
+            Rent now
+          </Button>
+        </Skeleton>
+      </InfoCard>
+      <InfoCard>
+        <Typography.Title level={5} className='ml-auto font-bold'>
+          Recommend cars
+        </Typography.Title>
+        <img src='/bg-search.jpg' alt='image' />
+      </InfoCard>
+    </>
   );
 }

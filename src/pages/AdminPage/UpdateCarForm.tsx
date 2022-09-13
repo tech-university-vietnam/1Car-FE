@@ -16,13 +16,13 @@ import { useEffect, useRef, useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { updateCar } from '../../apis';
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { getCarAttributeAction } from '../../redux/reducer/car';
+import { Car, getCarAttributeAction } from '../../redux/reducer/car';
 import UpdateCarAttribute from './CreateCarAttribute';
 
 const UpdateCarForm = (props: any) => {
   const dispatch = useAppDispatch();
   const ref = useRef(null);
-  const [carData, setCarData] = useState(props.car);
+  const [carData, setCarData] = useState<any>(props.car);
   const attributes = useAppSelector((state) => state.car.attributes);
   const [visibleUpdateModal, setVisibleUpdateModal] = useState(false);
   const [selectedImages, setSelectedImages] = useState<any>([]);
@@ -86,6 +86,23 @@ const UpdateCarForm = (props: any) => {
     setSelectedImages([]);
     dispatch(getCarAttributeAction());
   }, []);
+
+  const setFormValue = (carData: Car) => {
+    return {
+      name: carData.name,
+      pricePerDate: carData.pricePerDate,
+      numberOfTrips: carData.numberOfTrips,
+      numberOfKilometer: carData.numberOfKilometer,
+      status: carData.status === 'AVAILABLE',
+      description: carData.description,
+      attributes: carData.attributes.map((attribute: any) => attribute.id),
+    };
+  };
+
+  useEffect(() => {
+    form.setFieldsValue(setFormValue(props.car));
+    setCarData(props.car);
+  }, [form, props.car]);
 
   return (
     <>
@@ -187,7 +204,7 @@ const UpdateCarForm = (props: any) => {
           <Input.TextArea />
         </Form.Item>
         <Form.Item label='Image' name='images'>
-          {carData.images.map((link: string) => (
+          {props.car.images.map((link: string) => (
             <Image width={50} src={link} />
           ))}
           <input

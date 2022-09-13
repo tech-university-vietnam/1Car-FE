@@ -28,3 +28,7 @@ package.lock
 .eslintrc.json
 
 .env
+.nyc_output/
+
+cypress/videos/
+cypress/screenshots/

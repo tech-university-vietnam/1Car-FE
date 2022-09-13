@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@auth0/auth0-react": "^1.10.2",
+    "@cypress/instrument-cra": "^1.4.0",
     "@googlemaps/react-wrapper": "^1.1.35",
     "@reduxjs/toolkit": "^1.8.4",
     "@testing-library/jest-dom": "^5.16.5",
@@ -32,12 +33,15 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test && cypress run",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "test:coverage": "react-scripts test --coverage --watchAll=false --coverageReporters='text-summary'",
+    "test:jest-cov": "react-scripts test --watchAll=false --coverage --coverageDirectory coverage/jest --coverageThreshold {}",
+    "test:cypress-cov": "cypress run  && npx nyc report --report-dir coverage/cypress --reporter=json",
+    "test:merge-cov": "npx istanbul-merge --out coverage/combined-coverage.json ./coverage/cypress/coverage-final.json ./coverage/jest/coverage-final.json && npx istanbul report --include coverage/combined-coverage.json --dir coverage text",
+    "test:cov": "npm run test:cypress-cov && npm run test:jest-cov && npm run test:merge-cov",
     "lint": "eslint src"
   },
   "browserslist": {
@@ -53,8 +57,10 @@
     ]
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.10.0",
     "@types/google-map-react": "^2.1.7",
     "autoprefixer": "^10.4.8",
+    "cypress": "^10.7.0",
     "eslint-config-prettier": "^8.5.0",
     "google-map-react": "^2.2.0",
     "husky": "^8.0.1",

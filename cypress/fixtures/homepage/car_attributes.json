@@ -1,0 +1,41 @@
+[
+  {
+    "id": "8eb724ee-637a-4b2b-8344-d6572287eb91",
+    "value": "Chuck",
+    "isDeleted": false,
+    "createdAt": "2022-09-07T01:30:32.217Z",
+    "updatedAt": "2022-09-07T01:30:32.217Z",
+    "type": {
+      "id": "5cc5f5bd-1bcb-4127-a2e0-d7ef3a1d0e7d",
+      "type": "owner",
+      "createdAt": "2022-09-07T01:30:20.447Z",
+      "updatedAt": "2022-09-07T01:30:20.447Z"
+    }
+  },
+  {
+    "id": "6b290376-8851-45d8-bfc4-656560e19eb7",
+    "value": "Tesla",
+    "isDeleted": false,
+    "createdAt": "2022-09-07T01:37:47.396Z",
+    "updatedAt": "2022-09-07T01:37:47.396Z",
+    "type": {
+      "id": "97caea3c-c0a8-4d35-a695-86032dad45e9",
+      "type": "brand",
+      "createdAt": "2022-09-07T01:37:27.388Z",
+      "updatedAt": "2022-09-07T01:37:27.388Z"
+    }
+  },
+  {
+    "id": "6b290376-8851-45d8-bfc4-656560e19eb6",
+    "value": "Cheapo",
+    "isDeleted": false,
+    "createdAt": "2022-09-07T01:37:47.396Z",
+    "updatedAt": "2022-09-07T01:37:47.396Z",
+    "type": {
+      "id": "97caea3c-c0a8-4d35-a695-86032dad45e9",
+      "type": "brand",
+      "createdAt": "2022-09-07T01:37:27.388Z",
+      "updatedAt": "2022-09-07T01:37:27.388Z"
+    }
+  }
+]

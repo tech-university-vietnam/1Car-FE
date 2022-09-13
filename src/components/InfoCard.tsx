@@ -14,7 +14,7 @@ export default function InfoCard(props: {
         ...props.style,
       }}
       loading={props.loading}
-      className="rounded-md"
+      className='rounded-md'
     >
       {props.children}
     </Card>

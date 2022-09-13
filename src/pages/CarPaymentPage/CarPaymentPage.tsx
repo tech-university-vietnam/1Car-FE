@@ -42,10 +42,10 @@ export default function CarPaymentPage() {
 
     try {
       if (isSkip == false && !userData.dateOfBirth) {
-        ref?.current.open(() => {
-          createBooking(carId, true);
-        });
+        alert('vo day');
+        ref?.current.open(() => {});
       } else {
+        alert('vo day ne');
         const response = await postBooking(requestData);
         window.location.href = response;
       }
@@ -176,7 +176,10 @@ export default function CarPaymentPage() {
               </InfoCard>
             </Col>
           </Row>
-          <UpdateUserModal ref={ref} />
+          <UpdateUserModal
+            ref={ref}
+            onSuccess={() => createBooking(carId!, true)}
+          />
         </div>
       ) : (
         <></>

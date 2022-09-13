@@ -141,7 +141,12 @@ function UserPage() {
               </Typography.Title>
               <Table columns={bookingColumns} dataSource={bookingData} />
             </div>
-            <UpdateUserModal ref={modalRef} isEdit={true} user={userData} />
+            <UpdateUserModal
+              ref={modalRef}
+              isEdit={true}
+              user={userData}
+              onSuccess={() => {}}
+            />
           </div>
         </div>
       )}

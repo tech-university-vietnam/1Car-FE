@@ -2,12 +2,12 @@
 
 Since localhost can not request access token silently, we need to proxy our way to auht0.
 
-Run ```npm install-g ngrok```
-Then ```ngrok config add-authtoken ${TOKEN}```
+Run `npm install-g ngrok`
+Then `ngrok config add-authtoken ${TOKEN}`
 
-Get your token from ```https://dashboard.ngrok.com/get-started/your-authtoken```
+Get your token from `https://dashboard.ngrok.com/get-started/your-authtoken`
 
-Then run ```ngrok http 3000``` to start the proxy process.
+Then run `ngrok http 3000` to start the proxy process.
 Now when going to https://e355-210-245-96-52.ngrok.io, I was able to route my way back to our frontend app.
 
 ![img.png](public/ngrok.png)
@@ -23,3 +23,11 @@ Frontend library: [AntDesign](https://ant.design).
 Design system: [AntDesign design system](https://ant.design/docs/resources).
 
 CSS Framework: [Tailwind CSS](https://tailwindcss.com/docs/installation).
+
+# Testing
+
+This repo uses Jest for unit testing and Cypress for e2e testing.
+
+To run tests and produce coverage report, run `npm run test:cov`.
+
+If the cypress tests are timing out, try keeping the UI open `npx cypress open` and then run the tests again.

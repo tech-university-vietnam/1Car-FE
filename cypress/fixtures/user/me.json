@@ -1,0 +1,13 @@
+{
+  "data": {
+    "id": "77ab99c1-acb7-474d-a1b7-5c1413799ac9",
+    "name": "chuong",
+    "email": "quyenchuong@gmail.com",
+    "userRole": "USER",
+    "phoneNumber": "31234123",
+    "dateOfBirth": "January",
+    "isDeleted": false,
+    "createdAt": "2022-09-07T02:25:10.789Z",
+    "updatedAt": "2022-09-07T02:25:10.789Z"
+  }
+}

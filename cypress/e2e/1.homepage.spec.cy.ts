@@ -47,8 +47,8 @@ describe('user can filter', () => {
   });
 });
 
-describe('pagination', () => {
-  it('sends a request with pagination', () => {
-    cy.get('.ant-pagination').children().eq(2).click();
-  });
-});
+// describe('pagination', () => {
+//   it('sends a request with pagination', () => {
+//     cy.get('.ant-pagination').children().eq(2).click();
+//   });
+// });

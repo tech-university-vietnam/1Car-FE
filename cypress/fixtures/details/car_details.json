@@ -1,0 +1,14 @@
+{
+  "id": "2c18e799-b079-414d-a330-e6c5704f4529",
+  "name": "Audi A1",
+  "description": null,
+  "status": "AVAILABLE",
+  "pricePerDate": 1000,
+  "numberOfTrips": 0,
+  "numberOfKilometer": 0,
+  "images": ["images/car1.jpeg", "images/car2.jpeg"],
+  "locationId": null,
+  "isDeleted": false,
+  "createdAt": "2022-09-07T23:15:39.225Z",
+  "updatedAt": "2022-09-07T23:15:39.225Z"
+}

@@ -51,6 +51,8 @@ const initialState: {
   filter: CarFilter;
   attributes: Attribute[];
   attributeTypes: Type[];
+  adminCars: Car[];
+  totalRecords: number;
 } = {
   cars: [],
   filter: {
@@ -59,6 +61,8 @@ const initialState: {
   },
   attributes: [],
   attributeTypes: [],
+  adminCars: [],
+  totalRecords: 0,
 };
 
 export const getCarAction = createAsyncThunk(
@@ -91,6 +95,30 @@ export const getCarAttributeTypeAction = createAsyncThunk(
   }
 );
 
+export const getCarForAdminAction = createAsyncThunk(
+  'car/getCarForAdmin',
+  async (payload: CarAdminFilter, thunkApi) => {
+    const cars = await api.getCarForAdmin(payload);
+    thunkApi.dispatch(getCarForAdmin(cars));
+  }
+);
+
+export const updateCarAction = createAsyncThunk(
+  'car/updateCar',
+  async (payload: any, thunkApi) => {
+    const updatedCar: Car = await api.updateCar(payload);
+    thunkApi.dispatch(updateCarListOfAdmin(updatedCar));
+  }
+);
+
+export const createCarAction = createAsyncThunk(
+  'car/createCar',
+  async (payload: any, thunkAPI) => {
+    const createdCar: Car = await api.createCar(payload);
+    thunkAPI.dispatch(addCarToListOfAdmin(createdCar));
+  }
+);
+
 const carSlice = createSlice({
   name: 'blogData',
   initialState,
@@ -107,9 +135,40 @@ const carSlice = createSlice({
     updateFilter: (state, action: PayloadAction<CarFilter>) => {
       state.filter = action.payload;
     },
+    getCarForAdmin: (
+      state,
+      action: PayloadAction<{
+        totalRecords: number;
+        totalPage: number;
+        cars: any[];
+      }>
+    ) => {
+      state.adminCars = action.payload.cars;
+      state.totalRecords = action.payload.totalRecords;
+    },
+    addCarToListOfAdmin: (state, action: PayloadAction<Car>) => {
+      state.adminCars = [...state.adminCars, action.payload];
+    },
+    updateCarListOfAdmin: (state, action: PayloadAction<Car>) => {
+      //  Find index of existing car in the list
+      const updatedCarIndex = state.adminCars.findIndex(
+        (car) => car.id === action.payload.id
+      );
+      // Copy and make change to the list
+      let copyList = [...state.adminCars];
+      copyList[updatedCarIndex] = action.payload;
+      state.adminCars = copyList;
+    },
   },
 });
 
-export const { getCar, getCarAttribute, updateFilter, getCarAttributeType } =
-  carSlice.actions;
+export const {
+  getCar,
+  getCarAttribute,
+  updateFilter,
+  getCarAttributeType,
+  getCarForAdmin,
+  addCarToListOfAdmin,
+  updateCarListOfAdmin,
+} = carSlice.actions;
 export default carSlice.reducer;

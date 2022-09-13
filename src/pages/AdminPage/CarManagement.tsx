@@ -11,25 +11,19 @@ import {
 import { ColumnsType } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import CreateCarForm from './CreateCarForm';
-import { getCarForAdmin } from '../../apis';
-import { Attribute, CarAdminFilter } from '../../redux/reducer/car';
+
+import {
+  Attribute,
+  Car,
+  CarAdminFilter,
+  getCarForAdminAction,
+} from '../../redux/reducer/car';
 import { Link } from 'react-router-dom';
 import UpdateCarForm from './UpdateCarForm';
-
-interface CarData {
-  id: string;
-  name: string;
-  description?: any;
-  status: string;
-  pricePerDate: number;
-  attributes: Attribute[];
-  age: number;
-  address: string;
-  tags: string[];
-}
+import { useAppDispatch, useAppSelector } from '../../redux';
 
 export default function CarManagement() {
-  const columns: ColumnsType<CarData> = [
+  const columns: ColumnsType<Car> = [
     {
       title: 'Car Name',
       dataIndex: 'name',
@@ -90,10 +84,11 @@ export default function CarManagement() {
       ),
     },
   ];
+  const dispatch = useAppDispatch();
   const [createVisible, setCreateVisible] = useState(false);
   const [page, setPage] = useState(1);
-  const [data, setCarData] = useState<any[]>([]);
-  const [total, setTotalRecords] = useState(0);
+  const data = useAppSelector((state) => state.car.adminCars);
+  const total = useAppSelector((state) => state.car.totalRecords);
   const [modalTitle, setModalTitle] = useState('Create new car');
   const [modalContent, setModalContent] = useState(
     <CreateCarForm onClose={() => setCreateVisible(false)} />
@@ -104,13 +99,9 @@ export default function CarManagement() {
   };
 
   const getCarToDisplay = async (page: number, pageSize: number) => {
-    const res = await getCarForAdmin({
-      page: page,
-      limit: pageSize,
-    });
-    setCarData(res.cars);
-    setTotalRecords(res.totalRecords);
+    dispatch(getCarForAdminAction({ page, limit: pageSize }));
   };
+
   useEffect(() => {
     getCarToDisplay(filter.page || 1, filter.limit || 10);
   }, []);
@@ -126,7 +117,13 @@ export default function CarManagement() {
         <Button
           style={{ display: 'flex !important' }}
           className='ml-auto flex items-center justify-center'
-          onClick={() => setCreateVisible(true)}
+          onClick={() => {
+            setModalTitle('Create new car');
+            setModalContent(
+              <CreateCarForm onClose={() => setCreateVisible(false)} />
+            );
+            setCreateVisible(true);
+          }}
         >
           <span>Add new</span> <PlusOutlined size={50} />
         </Button>

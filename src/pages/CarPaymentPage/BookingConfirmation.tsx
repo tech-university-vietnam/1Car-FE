@@ -53,13 +53,16 @@ export default function BookingConfirmation({
   });
 
   useEffect(() => {
-    if (location) {
-      console.log(location);
-      geocodeByPlaceId(location)
-        .then(async (results) => {
-          setLocationLongLat(results[0].geometry.location.toJSON());
-        })
-        .catch((error) => console.error(error));
+    try {
+      if (location) {
+        geocodeByPlaceId(location)
+          .then(async (results) => {
+            setLocationLongLat(results[0].geometry.location.toJSON());
+          })
+          .catch((error) => console.error(error));
+      }
+    } catch (err) {
+      console.log(err);
     }
   }, []);
 
@@ -75,19 +78,19 @@ export default function BookingConfirmation({
       </Typography.Title>
       <Divider />
       <Row gutter={8}>
-        <Col md={8}>
+        <Col xs={24} md={8}>
           {car.images ? (
             <img
               src={car.images[0]}
               alt='your car'
-              className='mb-4 h-auto w-5/6'
+              className='mb-4 h-auto w-full md:w-5/6 mx-auto'
             />
           ) : (
             <></>
           )}
-          <Typography.Title level={4}>{car.name}</Typography.Title>
+          <Typography.Title level={4} className="text-center">{car.name}</Typography.Title>
         </Col>
-        <Col span={16}>
+        <Col xs={24} md={16}>
           <Row gutter={24}>
             <Typography.Title level={5}>Duration:</Typography.Title>
           </Row>

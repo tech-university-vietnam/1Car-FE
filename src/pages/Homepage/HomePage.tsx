@@ -41,14 +41,10 @@ export default function HomePage() {
     dispatch(updateFilter({ ...filter, attribute: [] }));
   };
 
-  
-
   useEffect(() => {
     dispatch(getCarAttributeAction());
     dispatch(getCarAttributeTypeAction());
   }, []);
-
-
 
   useEffect(() => {
     dispatch(getCarAction(filter));
@@ -79,18 +75,11 @@ export default function HomePage() {
             </div>
           ) : (
             <>
-              <h1 className='text-2xl'>123 Cars Found</h1>
+              <h1 className='text-2xl'>{cars.length} Cars Found</h1>
               <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
                 {cars.map((value, index) => (
                   <CarCard key={value.id} car={value} />
                 ))}
-              </div>
-              <div className='mt-8 flex justify-end'>
-                <Pagination
-                  defaultCurrent={1}
-                  total={50}
-                  onChange={onPageChange}
-                />
               </div>
             </>
           )}

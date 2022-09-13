@@ -1,0 +1,14 @@
+[
+  {
+    "id": "5cc5f5bd-1bcb-4127-a2e0-d7ef3a1d0e7d",
+    "type": "owner",
+    "createdAt": "2022-09-07T01:30:20.447Z",
+    "updatedAt": "2022-09-07T01:30:20.447Z"
+  },
+  {
+    "id": "97caea3c-c0a8-4d35-a695-86032dad45e9",
+    "type": "brand",
+    "createdAt": "2022-09-07T01:37:27.388Z",
+    "updatedAt": "2022-09-07T01:37:27.388Z"
+  }
+]

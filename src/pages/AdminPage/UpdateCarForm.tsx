@@ -14,9 +14,12 @@ import {
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-import { updateCar } from '../../apis';
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { Car, getCarAttributeAction } from '../../redux/reducer/car';
+import {
+  Car,
+  getCarAttributeAction,
+  updateCarAction,
+} from '../../redux/reducer/car';
 import UpdateCarAttribute from './CreateCarAttribute';
 
 const UpdateCarForm = (props: any) => {
@@ -68,7 +71,8 @@ const UpdateCarForm = (props: any) => {
           formData.append('existedImages', carData.images);
       }
 
-      await updateCar({ id: carData.id, form: formData });
+      await dispatch(updateCarAction({ id: carData.id, form: formData }));
+
       message.success('Update car successfully!');
       form.resetFields();
       setSelectedImages([]);

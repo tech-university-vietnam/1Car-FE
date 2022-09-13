@@ -1,5 +1,5 @@
 {
-  "plugins": ["testing-library", "jest-dom"],
+  "plugins": ["testing-library", "jest-dom", "@typescript-eslint"],
   "extends": [
     "plugin:testing-library/react",
     "plugin:jest-dom/recommended",
@@ -10,6 +10,7 @@
     "semi": ["error", "always"],
     "no-warning-comments": "warn"
   },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2015

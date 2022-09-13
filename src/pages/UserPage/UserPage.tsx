@@ -148,7 +148,7 @@ function UserPage() {
 
       <Modal
         title='Booking detail'
-        open={visible}
+        visible={visible}
         onCancel={() => setVisible(false)}
         onOk={() => setVisible(false)}
         width='75%'

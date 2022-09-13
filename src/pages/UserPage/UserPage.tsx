@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header';
-import { Descriptions, Spin, Table } from 'antd';
+import { Avatar, Descriptions, Modal, Spin, Table, Typography } from 'antd';
 import EditButton from '../../components/EditButton';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ColumnsType } from 'antd/lib/table';
@@ -9,6 +9,9 @@ import { getUserInformationAction, UserRole } from '../../redux/reducer/user';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { BookingData, getBookingDataAction } from '../../redux/reducer/booking';
 import SecurityLayout from '../../components/Layout/SecurityLayout';
+import InfoCard from '../../components/InfoCard';
+import moment from 'moment';
+import BookingDetail from '../AdminPage/BookingDetail';
 
 function UserPage() {
   const dispatch = useAppDispatch();
@@ -18,6 +21,8 @@ function UserPage() {
   const userData = useAppSelector((state) => state.user.info);
   const { user } = useAuth0();
   const modalRef: React.RefObject<any> = React.createRef();
+  const [currentBooking, setCurrentBooking] = useState<any>(null);
+  const [visible, setVisible] = useState(false);
 
   // On click edit user info button
   const onEdit = () => {
@@ -38,26 +43,52 @@ function UserPage() {
       title: 'Booking ID',
       dataIndex: 'id',
       key: 'id',
+      ellipsis: true,
+      width: 150,
     },
     {
       title: 'Booking Date',
       dataIndex: 'createdAt',
       key: 'createdAt',
+      width: 200,
+      render: (value) => <span>{moment(value).toLocaleString()}</span>,
     },
     {
-      title: 'Booking Status',
+      title: 'Payment Status',
       dataIndex: 'bookingStatus',
       key: 'bookingStatus',
+      width: 200,
     },
     {
       title: 'Car Information',
-      dataIndex: 'carId',
-      key: 'carId',
+      dataIndex: 'car',
+      key: 'car',
+      width: 200,
+      render: (car) => <a href={`/details/${car?.id}`}>{car?.name}</a>,
     },
     {
       title: 'Pickup Status',
       dataIndex: 'pickUpStatus',
+      width: 200,
       key: 'pickUpStatus',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+      width: 100,
+      render: (_, record) => (
+        <div>
+          <a
+            onClick={() => {
+              setCurrentBooking(record);
+              setVisible(true);
+            }}
+          >
+            View
+          </a>
+        </div>
+      ),
     },
   ];
 
@@ -66,38 +97,64 @@ function UserPage() {
       {loading ? (
         <Spin />
       ) : (
-        <div>
+        <div className=''>
           <Header />
-          <div className='mx-5 h-screen bg-neutral-100 px-5 pt-5 sm:mx-5 sm:my-10 sm:h-1/2 sm:w-full sm:py-10 lg:w-3/4'>
-            <Descriptions title='Your information'>
-              <Descriptions.Item label='Name'>
-                {userData.name}
-              </Descriptions.Item>
-              <Descriptions.Item label='Email'>
-                {user?.email || userData.email}
-              </Descriptions.Item>
-              <Descriptions.Item label='Phone'>
-                {userData.phoneNumber}
-              </Descriptions.Item>
-              <Descriptions.Item label='Date Of Birth'>
-                {userData.dateOfBirth}
-              </Descriptions.Item>
-              <Descriptions.Item>
-                {
-                  <EditButton
-                    label='Edit your information'
-                    onClickFunction={onEdit}
-                  />
-                }
-              </Descriptions.Item>
-            </Descriptions>
-          </div>
-          <UpdateUserModal ref={modalRef} isEdit={true} user={userData} />
-          <div className='mx-5'>
-            <Table columns={bookingColumns} dataSource={bookingData} />
+          <div className='min-h-screen w-full py-4'>
+            <div className='mx-auto w-5/6 md:w-3/4'>
+              <InfoCard>
+                <Typography.Title level={5}>Your Information</Typography.Title>
+                <div className='block items-center py-8 md:flex'>
+                  <div className='my-2 mr-8 md:my-0'>
+                    <Avatar
+                      size={120}
+                      src='https://joeschmoe.io/api/v1/random'
+                    />
+                  </div>
+                  <Descriptions>
+                    <Descriptions.Item label='Name'>
+                      {userData.name}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Email'>
+                      {user?.email || userData.email}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Phone'>
+                      {userData.phoneNumber || 'N/A'}
+                    </Descriptions.Item>
+                    <Descriptions.Item label='Date Of Birth'>
+                      {userData.dateOfBirth || 'N/A'}
+                    </Descriptions.Item>
+                    <Descriptions.Item>
+                      {
+                        <EditButton
+                          label='Edit your information'
+                          onClickFunction={onEdit}
+                        />
+                      }
+                    </Descriptions.Item>
+                  </Descriptions>
+                </div>
+              </InfoCard>
+            </div>
+            <div className='mx-auto mt-8 w-5/6 overflow-auto bg-white p-6 md:w-3/4'>
+              <Typography.Title level={5}>
+                Your booking history
+              </Typography.Title>
+              <Table columns={bookingColumns} dataSource={bookingData} />
+            </div>
+            <UpdateUserModal ref={modalRef} isEdit={true} user={userData} />
           </div>
         </div>
       )}
+
+      <Modal
+        title='Booking detail'
+        open={visible}
+        onCancel={() => setVisible(false)}
+        onOk={() => setVisible(false)}
+        width='75%'
+      >
+        <BookingDetail booking={currentBooking} />
+      </Modal>
     </div>
   );
 }

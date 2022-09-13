@@ -21,7 +21,11 @@ export const LoginButton = () => {
     <Button
       onClick={() => loginWithRedirect()}
       value='large'
-      icon={<LoginOutlined />}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+      icon={<LoginOutlined className='' />}
     >
       {size.width > 1000 ? 'Login' : <></>}
     </Button>

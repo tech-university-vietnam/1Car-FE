@@ -9,5 +9,8 @@
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "no-warning-comments": "warn"
+  },
+  "parserOptions": {
+    "sourceType": "module"
   }
 }

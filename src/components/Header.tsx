@@ -1,18 +1,17 @@
-import { Button, Collapse, Drawer } from 'antd';
+import { Button, Collapse, Drawer, Spin } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MenuFoldOutlined, RightOutlined } from '@ant-design/icons';
-import {
-  LoginButton,
-  LogoutButton,
-  UserProfileButton,
-} from './auth/AuthButtons';
+import { AuthInfoComponent, LoginButton } from './auth/AuthButtons';
 import { useAuth0 } from '@auth0/auth0-react';
 import Cookies from 'universal-cookie';
+import { useAppSelector } from '../redux';
 
 export default function Header() {
   const [showDrawer, setShowDrawer] = useState(false);
-  const { isAuthenticated } = useAuth0();
+  const user = useAppSelector((state) => state.user.info);
+
+  const { isAuthenticated, isLoading } = useAuth0();
 
   const WideMenuItem = ({ text, path }: { text: string; path: string }) => (
     <li className='mr-4 w-24 text-xs md:text-base'>
@@ -50,6 +49,7 @@ export default function Header() {
       const cookies = new Cookies();
       cookies.remove('access_token', { path: '/' });
       localStorage.removeItem('userEmail');
+      localStorage.removeItem('user');
     };
     return (
       <li className='w-full border-b pb-3'>
@@ -96,11 +96,10 @@ export default function Header() {
         <WideMenuItem path='/more' text='More' />
       </ul>
       <div className='ml-auto hidden items-center md:flex'>
-        {isAuthenticated ? (
-          <div>
-            <UserProfileButton />
-            <LogoutButton />
-          </div>
+        {isLoading ? (
+          <Spin />
+        ) : isAuthenticated ? (
+          <AuthInfoComponent />
         ) : (
           <LoginButton />
         )}

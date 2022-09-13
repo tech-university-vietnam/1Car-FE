@@ -2,19 +2,11 @@ import {
   BookOutlined,
   CarOutlined,
   PieChartFilled,
-  UploadOutlined,
   UserOutlined,
-  VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu } from 'antd';
 import React from 'react';
-import {
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-  useRoutes,
-} from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import SecurityLayout from '../../components/Layout/SecurityLayout';
 import { UserRole } from '../../redux/reducer/user';
 import BookingManagement from './BookingManagement';

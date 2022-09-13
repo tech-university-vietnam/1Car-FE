@@ -2,7 +2,6 @@ import { Empty, Pagination } from 'antd';
 import * as _ from 'lodash';
 import { useEffect } from 'react';
 import Cookies from 'universal-cookie';
-import { getUserInfoUsingToken } from '../../apis';
 import CarCard from '../../components/CarCard';
 import PageFooter from '../../components/Footer';
 import Header from '../../components/Header';
@@ -17,6 +16,8 @@ import ClearFilter from './ClearFilter';
 import SearchBar from './SearchBar';
 import SelectFilter from './SelectFilter';
 import SelectSort from './SelectSort';
+import { getUserInformationAction } from '../../redux/reducer/user';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function HomePage() {
   const dispatch = useAppDispatch();
@@ -24,8 +25,10 @@ export default function HomePage() {
   const cars = useAppSelector((state) => state.car.cars);
   const carAttribute = useAppSelector((state) => state.car.attributes);
   const carAttributeType = useAppSelector((state) => state.car.attributeTypes);
-
+  const user = useAppSelector((state) => state.user.info);
   const attributeByType = _.groupBy(carAttribute, 'type.id');
+
+  const { isAuthenticated } = useAuth0();
 
   const onPageChange = (page: number, pageChange: number) => {};
 
@@ -37,21 +40,6 @@ export default function HomePage() {
   const onClearFilter = () => {
     dispatch(updateFilter({ ...filter, attribute: [] }));
   };
-
-  const getMe = async () => {
-    try {
-      const cookies = new Cookies();
-      const accessToken = cookies.get('access_token');
-      if (accessToken) {
-        const res = await getUserInfoUsingToken();
-        localStorage.setItem('user', JSON.stringify(res.data));
-      }
-    } catch (err) {}
-  };
-
-  useEffect(() => {
-    getMe();
-  }, []);
 
   useEffect(() => {
     dispatch(getCarAttributeAction());

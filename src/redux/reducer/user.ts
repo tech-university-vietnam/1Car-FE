@@ -24,24 +24,21 @@ export enum UserRole {
   ADMIN = 'ADMIN',
 }
 
+const initUser = JSON.parse(localStorage.getItem('user') || 'null');
+
 const initialState: {
   info: User;
+  allUsers: User[];
 } = {
-  info: {
-    id: 'string id',
-    name: 'string name',
-    email: 'string email',
-    userRole: UserRole.USER,
-    isDeleted: false,
-    createdAt: 'created date',
-    updatedAt: 'update date',
-  },
+  info: initUser,
+  allUsers: [],
 };
 
 export const getUserInformationAction = createAsyncThunk(
   'user/getInfo',
-  async (payload, thunkApi) => {
-    const res = await api.getUserInfoUsingToken();
+  async (payload: string | undefined, thunkApi) => {
+    const res = await api.getUserInfoUsingToken(payload);
+    localStorage.setItem('user', JSON.stringify(res?.data));
     thunkApi.dispatch(getUserInfoUsingToken(res.data));
     return res.data;
   }
@@ -53,6 +50,14 @@ export const updateUserInfoAction = createAsyncThunk(
     const res = await api.updateUserInfo(payload);
     thunkApi.dispatch(updateUserInfo(payload));
     return res.data;
+  }
+);
+
+export const getAllUsersForAdminAction = createAsyncThunk(
+  'user/getAllUser',
+  async (payload, thunkApi) => {
+    const res = await api.getAllUsersForAdmin();
+    thunkApi.dispatch(setAllUsers(res));
   }
 );
 
@@ -71,8 +76,12 @@ const userSlice = createSlice({
         ...dto,
       };
     },
+    setAllUsers: (state, action: PayloadAction<User[]>) => {
+      state.allUsers = action.payload;
+    },
   },
 });
 
-export const { getUserInfoUsingToken, updateUserInfo } = userSlice.actions;
+export const { getUserInfoUsingToken, updateUserInfo, setAllUsers } =
+  userSlice.actions;
 export default userSlice.reducer;

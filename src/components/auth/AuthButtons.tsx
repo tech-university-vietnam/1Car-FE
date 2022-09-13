@@ -77,7 +77,7 @@ export const AuthInfoComponentSubMenu = () => {
     key: string;
     icon?: ReactElement;
   }> => {
-    if (userData.userRole === UserRole.ADMIN) {
+    if (userData?.userRole === UserRole.ADMIN) {
       return [
         ...subMenuItems,
         {

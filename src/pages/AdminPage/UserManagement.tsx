@@ -22,7 +22,7 @@ const ViewUserContent = (props: any) => {
           {userData.phoneNumber}
         </DescriptionsItem>
         <DescriptionsItem label='DOB'>{userData.dateOfBirth}</DescriptionsItem>
-        <DescriptionsItem label='Role'>{userData.userRole}</DescriptionsItem>
+        <DescriptionsItem label='Role'>{userData?.userRole}</DescriptionsItem>
       </Descriptions>
     </div>
   );

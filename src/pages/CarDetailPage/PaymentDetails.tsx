@@ -144,7 +144,7 @@ export default function PaymentDetails({
             onClick={() => {
               navigate(
                 `${to}?start=${startDate}&end=${endDate}&location=${
-                  location?.value.place_id || ''
+                  location?.value?.place_id || ''
                 }`
               );
             }}

@@ -37,7 +37,7 @@ export default function CarPaymentPage() {
       carId,
       returnDateTime,
       receivedDateTime,
-      location: location,
+      pickUpLocationId: location,
     };
 
     try {
@@ -78,9 +78,9 @@ export default function CarPaymentPage() {
     <>
       <Header />
       {car ? (
-        <div className=' m-auto mt-8 w-3/4 p-8'>
-          <Row gutter={16}>
-            <Col span={8}>
+        <div className='mx-auto mt-8 w-full p-8 md:w-3/4'>
+          <Row gutter={{ md: 16, sm: 0 }}>
+            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
               <InfoCard>
                 {isLoading || !isAllowed ? (
                   <div>No user detected</div>
@@ -158,7 +158,7 @@ export default function CarPaymentPage() {
                 )}
               </InfoCard>
             </Col>
-            <Col span={16}>
+            <Col xs={24} sm={24} md={16} lg={16} xl={16}>
               <InfoCard loading={isLoading}>
                 {isLoading || !isAllowed ? (
                   <></>

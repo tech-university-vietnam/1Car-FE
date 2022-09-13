@@ -1,12 +1,21 @@
 /* eslint-disable jest/valid-expect */
 /// <reference types="Cypress" />
 
-import { interceptHomePage } from '../utils/intercepts';
+import {
+  getAllAttributes,
+  getAllCars,
+  getCarAttribute,
+  getCarImage,
+  interceptHomePage,
+} from '../utils/intercepts';
 
 describe('car booking flow', () => {
   before(() => {
     cy.visit('/');
-    interceptHomePage().as('getAllCars');
+    getAllAttributes();
+    getCarAttribute();
+    getCarImage();
+    getAllCars().as('getAllCars');
   });
   it('goes to car detail', () => {
     // cy.wait('@getAllCars');

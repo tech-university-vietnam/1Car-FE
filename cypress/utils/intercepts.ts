@@ -35,5 +35,5 @@ export function interceptHomePage() {
   getAllAttributes();
   getCarAttribute();
   getCarImage();
-  return getAllCars();
+  getAllCars();
 }

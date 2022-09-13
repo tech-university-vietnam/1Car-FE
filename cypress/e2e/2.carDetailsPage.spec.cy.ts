@@ -28,6 +28,7 @@ describe('car booking flow', () => {
   });
   it('enter start and end date', () => {
     cy.clock(new Date('2022-01-01').getTime());
+    cy.intercept('available*', { isAvailable: true });
     cy.get('input[placeholder*="From"]').click().type('2022-01-01{enter}');
     cy.get('input[placeholder*="To"]').click().type('2022-01-10{enter}');
   });

@@ -13,9 +13,11 @@ import {
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-import { createCar } from '../../apis';
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { getCarAttributeAction } from '../../redux/reducer/car';
+import {
+  createCarAction,
+  getCarAttributeAction,
+} from '../../redux/reducer/car';
 import CreateCarAttribute from './CreateCarAttribute';
 
 const CreateCarForm = ({ onClose }: { onClose: () => void }) => {
@@ -50,7 +52,8 @@ const CreateCarForm = ({ onClose }: { onClose: () => void }) => {
         formData.append('images', selecteImages[i]);
       }
 
-      await createCar(formData);
+      await dispatch(createCarAction(formData));
+
       message.success('Create car successfully!');
       form.resetFields();
       setSelectedImages([]);

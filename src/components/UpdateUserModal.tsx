@@ -12,14 +12,13 @@ import { updateUserInfoUsingAdminAccount } from '../apis';
 
 export default forwardRef((props: any, ref) => {
   const [visible, setVisible] = useState(props.visible ? props.visible : false);
-  const [callback, setCallback] = useState(null);
+  const [callback, setCallback] = useState<any>(null);
 
   const onClose = () => setVisible(false);
 
   useImperativeHandle(ref, () => ({
-    open: (cb: any) => {
+    open: (cb: Function) => {
       setVisible(true);
-      setCallback(cb);
     },
     close: () => {
       setVisible(false);
@@ -41,7 +40,7 @@ export default forwardRef((props: any, ref) => {
           : 'We need more information from you'}
       </h2>
       <UpdateUserInfoForm
-        onFinish={callback}
+        onFinish={props.onSuccess}
         onSubmit={onClose}
         isEdit={props.isEdit}
         isAdmin={props.isAdmin}

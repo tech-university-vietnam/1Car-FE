@@ -141,10 +141,8 @@ export default function UserManagement() {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <a onClick={() => openModal(record)}>
-            <EditOutlined />
-          </a>
-          <a
+          <Button onClick={() => openModal(record)} icon={<EditOutlined />} />
+          <Button
             onClick={() => {
               setActive(true);
               setContent(
@@ -154,10 +152,9 @@ export default function UserManagement() {
                 />
               );
             }}
-          >
-            <DeleteOutlined />
-          </a>
-          <a
+            icon={<DeleteOutlined />}
+          />
+          <Button
             onClick={() => {
               setActive(true);
               setContent(
@@ -169,7 +166,7 @@ export default function UserManagement() {
             }}
           >
             To admin
-          </a>
+          </Button>
         </Space>
       ),
     },

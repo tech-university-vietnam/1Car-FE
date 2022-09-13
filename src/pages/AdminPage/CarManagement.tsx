@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Row,
   Button,
@@ -13,6 +13,8 @@ import React, { useEffect, useState } from 'react';
 import CreateCarForm from './CreateCarForm';
 import { getCarForAdmin } from '../../apis';
 import { Attribute, CarAdminFilter } from '../../redux/reducer/car';
+import { Link } from 'react-router-dom';
+import UpdateCarForm from './UpdateCarForm';
 
 interface CarData {
   id: string;
@@ -26,58 +28,76 @@ interface CarData {
   tags: string[];
 }
 
-const columns: ColumnsType<CarData> = [
-  {
-    title: 'Car Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: 'Price/Date',
-    dataIndex: 'pricePerDate',
-    key: 'pricePerDate',
-  },
-  {
-    title: 'Attribute',
-    key: 'attributes',
-    dataIndex: 'attributes',
-    render: (_, { attributes }) => (
-      <>
-        {attributes.map((attribute: Attribute, index: number) => {
-          let colors = ['geekblue', 'green', 'volcano'];
-          let color = colors[index % 3];
-          return (
-            <Tag color={color} key={attribute.id}>
-              {attribute.value.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size='middle'>
-        <a>Update</a>
-        <a>View</a>
-      </Space>
-    ),
-  },
-];
-
 export default function CarManagement() {
+  const columns: ColumnsType<CarData> = [
+    {
+      title: 'Car Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, record) => (
+        <Link to={'/details/' + record.id}>
+          <a>{text}</a>
+        </Link>
+      ),
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: 'Price/Date',
+      dataIndex: 'pricePerDate',
+      key: 'pricePerDate',
+    },
+    {
+      title: 'Attribute',
+      key: 'attributes',
+      dataIndex: 'attributes',
+      render: (_, { attributes }) => (
+        <>
+          {attributes.map((attribute: Attribute, index: number) => {
+            let colors = ['geekblue', 'green', 'volcano'];
+            let color = colors[index % 3];
+            return (
+              <Tag color={color} key={attribute.id}>
+                {attribute.value.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size='middle'>
+          <Button
+            onClick={() => {
+              setModalTitle('Update a car');
+              setCreateVisible(true);
+              setModalContent(
+                <UpdateCarForm
+                  onClose={() => setCreateVisible(false)}
+                  car={record}
+                />
+              );
+            }}
+            icon={<EditOutlined />}
+          />
+        </Space>
+      ),
+    },
+  ];
   const [createVisible, setCreateVisible] = useState(false);
   const [page, setPage] = useState(1);
   const [data, setCarData] = useState<any[]>([]);
   const [total, setTotalRecords] = useState(0);
+  const [modalTitle, setModalTitle] = useState('Create new car');
+  const [modalContent, setModalContent] = useState(
+    <CreateCarForm onClose={() => setCreateVisible(false)} />
+  );
   const filter: CarAdminFilter = {
     page: page,
     limit: 10,
@@ -124,12 +144,12 @@ export default function CarManagement() {
       </div>
       <Modal
         visible={createVisible}
-        title={'Create new car'}
+        title={modalTitle}
         footer={null}
         width='60%'
         onCancel={() => setCreateVisible(false)}
       >
-        <CreateCarForm onClose={() => setCreateVisible(false)} />
+        {modalContent}
       </Modal>
     </div>
   );

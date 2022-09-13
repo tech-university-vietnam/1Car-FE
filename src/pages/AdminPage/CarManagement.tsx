@@ -73,7 +73,7 @@ export default function CarManagement() {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <a
+          <Button
             onClick={() => {
               setModalTitle('Update a car');
               setCreateVisible(true);
@@ -84,10 +84,8 @@ export default function CarManagement() {
                 />
               );
             }}
-          >
-            <EditOutlined />
-          </a>
-          <a>View</a>
+            icon={<EditOutlined />}
+          />
         </Space>
       ),
     },

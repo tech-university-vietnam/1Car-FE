@@ -107,6 +107,7 @@ const UpdateCarForm = (props: any) => {
           numberOfKilometer: carData.numberOfKilometer,
           status: carData.status === 'AVAILABLE',
           description: carData.description,
+          attributes: carData.attributes.map((attribute: any) => attribute.id),
         }}
       >
         <Form.Item label='Input' name='name' rules={[{ required: true }]}>

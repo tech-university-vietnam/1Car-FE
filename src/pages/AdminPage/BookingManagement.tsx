@@ -1,4 +1,13 @@
-import { Row, Table, Space, Modal, Select, message, DatePicker } from 'antd';
+import {
+  Row,
+  Table,
+  Space,
+  Modal,
+  Select,
+  message,
+  DatePicker,
+  Button,
+} from 'antd';
 import confirm from 'antd/lib/modal/confirm';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
@@ -121,14 +130,14 @@ export default function BookingManagement() {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <a
+          <Button
             onClick={() => {
               setVisibleInfo(true);
               setCurrentBooking(record);
             }}
           >
             View
-          </a>
+          </Button>
         </Space>
       ),
     },

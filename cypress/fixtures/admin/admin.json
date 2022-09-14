@@ -3,7 +3,7 @@
     "id": "77ab99c1-acb7-474d-a1b7-5c1413799ac9",
     "name": "John",
     "email": "John@gmail.com",
-    "userRole": "USER",
+    "userRole": "ADMIN",
     "phoneNumber": "31234123",
     "dateOfBirth": "January",
     "isDeleted": false,

@@ -6,13 +6,10 @@ import {
   getCarAttribute,
   getCarImage,
 } from '../utils/intercepts';
+import { preTestSetup } from '../utils/utils';
 
 beforeEach(() => {
-  cy.clock(new Date('2022-01-01').getTime());
-  getCarAttribute();
-  getAllAttributes();
-  getAllCars().as('getAllCars');
-  getCarImage();
+  preTestSetup();
   cy.visit('/');
 });
 describe('user can search for cars by start and end date', () => {
@@ -28,27 +25,10 @@ describe('user can search for cars by start and end date', () => {
   });
 });
 
-// describe('user can login', () => {
-//   it('clicks login', () => {
-//     // cy.get('button').contains('Sign in').click();
-//     expect(false).to.be.true;
-//   });
-// });
+describe('user can login', () => {});
 
-// describe('user can sort by price', () => {
-//   expect(false).to.be.true;
-// });
+describe('user can sort by price', () => {});
 
 describe('user can filter', () => {
-  it('filters by brand', () => {
-    // cy.wait('@getAllCars');
-    // cy.get('div').contains('brand').parent().click();
-    // cy.get('div').contains('Cheapo').parent().find('input').click();
-  });
+  it('filters by brand', () => {});
 });
-
-// describe('pagination', () => {
-//   it('sends a request with pagination', () => {
-//     cy.get('.ant-pagination').children().eq(2).click();
-//   });
-// });

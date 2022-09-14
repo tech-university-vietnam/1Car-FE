@@ -141,8 +141,13 @@ export default function UserManagement() {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <Button onClick={() => openModal(record)} icon={<EditOutlined />} />
           <Button
+            data-cy='edit'
+            onClick={() => openModal(record)}
+            icon={<EditOutlined />}
+          />
+          <Button
+            data-cy='delete'
             onClick={() => {
               setActive(true);
               setContent(

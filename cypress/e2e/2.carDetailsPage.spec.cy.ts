@@ -1,29 +1,17 @@
 /* eslint-disable testing-library/await-async-utils */
 /// <reference types="Cypress" />
 
-import {
-  getAllAttributes,
-  getAllCars,
-  getCarAttribute,
-  getCarImage,
-  interceptHomePage,
-} from '../utils/intercepts';
+import { getAllCars } from '../utils/intercepts';
+import { preTestSetup } from '../utils/utils';
 
 describe('car booking flow', () => {
   before(() => {
-    cy.clock(new Date('2022-01-01').getTime());
-    cy.intercept('/car/*', { fixture: 'details/car_details.json' });
-    cy.intercept('/car/*/attributes', {
-      fixture: 'details/car_attributes.json',
-    });
-    getCarAttribute();
-    getAllAttributes();
+    preTestSetup();
     getAllCars().as('getAllCars');
-    getCarImage();
     cy.visit('/');
   });
   it('goes to car detail', () => {
-    cy.wait('@getAllCars');
+    cy.wait('@getAllCars'); //waits for the car cards to be populated
     cy.get('button').contains('Rent now').click();
   });
   it('enter start and end date', () => {
@@ -42,8 +30,8 @@ describe('car booking flow', () => {
 
     cy.get('button').contains('Rent now').click();
   });
-  it('should have insurance options', () => {
-    cy.get('div').contains('Life').should('exist');
+  it('clicks on insurance options', () => {
+    cy.get('div').contains('Life').find('input').click();
   });
   it('should have disabled date pickers', () => {
     cy.get('.ant-picker')
@@ -57,7 +45,7 @@ describe('car booking flow', () => {
   it('agrees to T&C', () => {
     cy.get('div').contains('Agree to').find('input[type="checkbox"]').click();
   });
-  it('should send createBooking request', () => {
+  it('should send createBooking request and redirects to the response', () => {
     cy.intercept('POST', 'payment/checkout', (req) => {
       expect(req.body).to.deep.equal({
         carId: '2c18e799-b079-414d-a330-e6c5704f4529',

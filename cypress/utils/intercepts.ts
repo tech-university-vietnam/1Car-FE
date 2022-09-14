@@ -24,16 +24,3 @@ export function getCarImage() {
     req.reply({ fixture: `public/${imageName}` });
   });
 }
-
-export function login() {
-  return cy.intercept('POST', 'authorize/*', (req) => {
-    req.reply();
-  });
-}
-
-export function interceptHomePage() {
-  getAllAttributes();
-  getCarAttribute();
-  getCarImage();
-  getAllCars();
-}

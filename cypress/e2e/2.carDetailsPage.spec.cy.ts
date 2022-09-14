@@ -6,13 +6,14 @@ import { preTestSetup } from '../utils/utils';
 
 describe('car booking flow', () => {
   before(() => {
-    preTestSetup();
     getAllCars().as('getAllCars');
+    preTestSetup();
     cy.visit('/');
   });
   it('goes to car detail', () => {
-    cy.wait('@getAllCars'); //waits for the car cards to be populated
-    cy.get('button').contains('Rent now').click();
+    cy.wait(200).then(() => {
+      cy.get('button').contains('Rent now').click();
+    }); //waits for the car cards to be populated
   });
   it('enter start and end date', () => {
     cy.clock(new Date('2022-01-01').getTime());

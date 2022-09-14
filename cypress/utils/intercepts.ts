@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 export function getAllCars() {
-  return cy.intercept('GET', 'car?*', {
+  return cy.intercept('GET', '/car\\?*', {
     fixture: 'homepage/all_cars',
   });
 }
@@ -19,8 +19,10 @@ export function getCarAttribute() {
 }
 
 export function getCarImage() {
-  return cy.intercept('GET', 'images/*', (req) => {
-    const imageName = req.url.split('/').at(-1);
-    req.reply({ fixture: `public/${imageName}` });
-  });
+  return cy
+    .intercept('GET', '/images/*', (req) => {
+      const imageName = req.url.split('/').at(-1);
+      req.reply({ fixture: `public/${imageName}` });
+    })
+    .as('interceptImages');
 }

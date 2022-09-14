@@ -35,6 +35,8 @@ CSS Framework: [Tailwind CSS](https://tailwindcss.com/docs/installation).
 
 Auth0 configuration: More details can be found at [docs](./docs/Auth0/index.md)
 
+Stripe configuration: More details can be found at [docs](./docs/Stripe/index.md)
+
 # Testing
 
 This repo uses Jest for unit testing and Cypress for e2e testing.

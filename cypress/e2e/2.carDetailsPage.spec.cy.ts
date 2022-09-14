@@ -37,6 +37,9 @@ describe('car booking flow', () => {
   });
   it('clicks rent now', () => {
     cy.intercept('user/me', { fixture: 'user/me.json' });
+    cy.intercept('booking/me', (req) => req.reply([]));
+    cy.intercept('/car/*', { fixture: 'details/car_details.json' });
+
     cy.get('button').contains('Rent now').click();
   });
   it('should have insurance options', () => {

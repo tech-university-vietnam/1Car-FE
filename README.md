@@ -2,6 +2,14 @@
 
 ![npm](https://img.shields.io/npm/v/npm?style=for-the-badge)
 ![create-react-app](https://img.shields.io/static/v1?&label=&&message=CREATE-REACT-APP&style=for-the-badge&color=green)
+![create-react-app](https://img.shields.io/static/v1?&label=&&message=CAR-RENTAL-SITE&style=for-the-badge&color=red&link=https://deploy-1car.vercel.app)
+---
+
+<h2>Table of contents</h2>
+- [What is 1Car?](#what-is-1car-)
+- [Feature](#feature)
+- [1Car Frontend resources](#1car-frontend-resources)
+- [Testing](#testing)
 
 # What is 1Car?
 <img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/nina-hpn/deploy-1car?color=green&style=plastic">
@@ -34,6 +42,10 @@ Design system: [AntDesign design system](https://ant.design/docs/resources).
 CSS Framework: [Tailwind CSS](https://tailwindcss.com/docs/installation).
 
 Auth0 configuration: More details can be found at [docs](./docs/Auth0/index.md)
+
+# Getting started
+
+
 
 # Testing
 

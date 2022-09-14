@@ -21,4 +21,5 @@ export const logoutWithAuth0 = (logout: any) => {
   cookies.remove('access_token', { path: '/' });
   localStorage.removeItem('userEmail');
   localStorage.removeItem('user');
+  window.location.reload();
 };

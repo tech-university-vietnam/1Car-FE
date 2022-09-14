@@ -16,6 +16,7 @@
     "@types/node": "^16.11.49",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
     "antd": "^4.22.6",
     "axios": "^0.27.2",
     "eslint": "8.22.0",

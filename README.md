@@ -45,7 +45,7 @@ Auth0 configuration: More details can be found at [docs](./docs/Auth0/index.md)
 
 # Getting started
 
-
+Stripe configuration: More details can be found at [docs](./docs/Stripe/index.md)
 
 # Testing
 
@@ -53,4 +53,4 @@ This repo uses Jest for unit testing and Cypress for e2e testing.
 
 To run tests and produce coverage report, run `npm run test:cov`.
 
-If the cypress tests are timing out, try keeping the UI open `npx cypress open` and then run the tests again.
+If there's a problem generating the coverage report, try emptying the coverage folder.

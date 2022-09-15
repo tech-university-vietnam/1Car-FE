@@ -121,6 +121,13 @@ export const createCarAction = createAsyncThunk(
   }
 );
 
+export const deleteAnImageAction = createAsyncThunk(
+  'car/deleteCarImage',
+  async (payload: { id: string; imageLink: string }, thunkAPI) => {
+    thunkAPI.dispatch(deleteAnImage(payload));
+  }
+);
+
 const carSlice = createSlice({
   name: 'blogData',
   initialState,
@@ -161,6 +168,30 @@ const carSlice = createSlice({
       copyList[updatedCarIndex] = action.payload;
       state.adminCars = copyList;
     },
+    deleteAnImage: (
+      state,
+      action: PayloadAction<{ id: string; imageLink: string }>
+    ) => {
+      // Find image in array
+      const updatedCarIndex = state.adminCars.findIndex(
+        (car) => car.id === action.payload.id
+      );
+      state.carFormChangeIndex = updatedCarIndex;
+
+      // Copy the original list of cars and images
+      let copyList = [...state.adminCars];
+      let copyImageList = [...copyList[updatedCarIndex].images];
+
+      // Find and delete the image from the list
+      const deleteImageIndex = copyList[updatedCarIndex].images.findIndex(
+        (link) => link === action.payload.imageLink
+      );
+      copyImageList.splice(deleteImageIndex, 1);
+
+      // Update it back to the list of cars for admin
+      copyList[updatedCarIndex].images = copyImageList;
+      state.adminCars = copyList;
+    },
   },
 });
 
@@ -172,5 +203,6 @@ export const {
   getCarForAdmin,
   addCarToListOfAdmin,
   updateCarListOfAdmin,
+  deleteAnImage,
 } = carSlice.actions;
 export default carSlice.reducer;

@@ -45,9 +45,9 @@ Design system: [AntDesign design system](https://ant.design/docs/resources).
 
 CSS Framework: [Tailwind CSS](https://tailwindcss.com/docs/installation).
 
-Auth0 configuration: More details can be found at [docs](./docs/Auth0/index.md)
-
 # Getting started
+
+Auth0 configuration: More details can be found at [docs](./docs/Auth0/index.md)
 
 Stripe configuration: More details can be found at [docs](./docs/Stripe/index.md)
 

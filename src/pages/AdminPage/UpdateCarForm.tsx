@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, PlusOutlined } from '@ant-design/icons';
 import {
   Button,
   Divider,
@@ -11,12 +11,14 @@ import {
   Space,
   Switch,
   Image,
+  Spin,
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import {
   Car,
+  deleteAnImageAction,
   getCarAttributeAction,
   updateCarAction,
 } from '../../redux/reducer/car';
@@ -31,6 +33,8 @@ const UpdateCarForm = (props: any) => {
   const [selectedImages, setSelectedImages] = useState<any>([]);
   const [locationId, setLocationId] = useState(carData.locationId);
   const [loading, setLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeletingImage, setIsDeletingImage] = useState('');
 
   const [form] = Form.useForm();
 
@@ -101,6 +105,16 @@ const UpdateCarForm = (props: any) => {
       description: carData.description,
       attributes: carData.attributes.map((attribute: any) => attribute.id),
     };
+  };
+
+  const removeLinkFromExistedLink = async (id: string, imageLink: string) => {
+    setIsDeleting(true);
+    setIsDeletingImage(imageLink);
+    await dispatch(deleteAnImageAction({ id, imageLink }));
+    setTimeout(() => {
+      setIsDeleting(false);
+      setIsDeletingImage('');
+    }, 1000);
   };
 
   useEffect(() => {
@@ -204,16 +218,37 @@ const UpdateCarForm = (props: any) => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label='Description'>
+        <Form.Item label='Description' name='description'>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label='Image' name='images'>
-          {props.car.images.map((link: string) => (
-            <Image width={50} src={link} />
-          ))}
+        <Form.Item label='Images' name='images'>
+          <Image.PreviewGroup>
+            <Space size='middle'>
+              {props.car.images.map((link: string) => (
+                <div className='relative'>
+                  {isDeleting && link === isDeletingImage ? (
+                    <Spin />
+                  ) : (
+                    <>
+                      <Image key={link} width={80} src={link} preview={false} />
+                      <DeleteTwoTone
+                        className='absolute -top-2 right-0 text-red-500'
+                        twoToneColor='#eb2f96'
+                        style={{ fontSize: '20px' }}
+                        onClick={() => {
+                          removeLinkFromExistedLink(props.car.id, link);
+                        }}
+                      />
+                    </>
+                  )}
+                </div>
+              ))}
+            </Space>
+          </Image.PreviewGroup>
           <input
+            className='mt-3'
             type='file'
-            accept='png'
+            accept='image/*'
             multiple={true}
             onChange={(event) => setSelectedImages(event.target.files)}
           />

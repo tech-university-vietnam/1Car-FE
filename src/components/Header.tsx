@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom';
 import { MenuFoldOutlined, RightOutlined } from '@ant-design/icons';
 import { AuthInfoComponent, LoginButton } from './auth/AuthButtons';
 import { useAuth0 } from '@auth0/auth0-react';
-import Cookies from 'universal-cookie';
 import { useAppSelector } from '../redux';
+import { logoutWithAuth0 } from '../utils/utils';
+import { UserRole } from '../redux/reducer/user';
 
 export default function Header() {
   const [showDrawer, setShowDrawer] = useState(false);
-  const user = useAppSelector((state) => state.user.info);
-
   const { isAuthenticated, isLoading } = useAuth0();
 
   const WideMenuItem = ({ text, path }: { text: string; path: string }) => (
@@ -42,16 +41,11 @@ export default function Header() {
   );
 
   const CollapseMenuItem = () => {
+    const user = useAppSelector((state) => state.user.info);
     const { Panel } = Collapse;
     const { logout, loginWithRedirect } = useAuth0();
-    const logOutFunction = () => {
-      logout({ returnTo: window.location.origin });
-      const cookies = new Cookies();
-      cookies.remove('access_token', { path: '/' });
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('user');
-    };
-    return (
+    const logOutFunction = () => logoutWithAuth0(logout);
+    return isAuthenticated ? (
       <li className='w-full border-b pb-3'>
         <Collapse ghost>
           <Panel
@@ -61,26 +55,30 @@ export default function Header() {
             className='w-full'
           >
             <div>
-              {isAuthenticated ? (
-                <ul>
-                  <SubSmallMenuItem path='user' text='My profile' />
-                  <SubSmallMenuItem
-                    path='#'
-                    text='Logout'
-                    onClickFunction={logOutFunction}
-                  />
-                </ul>
-              ) : (
-                <div
-                  className='text-base text-black'
-                  onClick={() => loginWithRedirect()}
-                >
-                  Login
-                </div>
-              )}
+              <ul>
+                <SubSmallMenuItem path='user' text='My profile' />
+                {user?.userRole === UserRole.ADMIN && (
+                  <SubSmallMenuItem path='admin' text='Admin dashboard' />
+                )}
+                <SubSmallMenuItem
+                  path='#'
+                  text='Logout'
+                  onClickFunction={logOutFunction}
+                />
+              </ul>
             </div>
           </Panel>
         </Collapse>
+      </li>
+    ) : (
+      <li className='mr-4 mb-4 w-full border-b pb-4 pl-2 text-xs md:text-base'>
+        <a
+          href='#'
+          className='text-base text-black'
+          onClick={() => loginWithRedirect()}
+        >
+          Login
+        </a>
       </li>
     );
   };
@@ -88,7 +86,7 @@ export default function Header() {
   return (
     <header className='flex w-full items-center py-2 px-8 shadow-sm'>
       <Link to='/'>
-        <img src={'/car.png'} alt='Logo' className='h-16 w-16' />
+        <img src={'/car_2.png'} alt='Logo' className='h-12 w-28' />
       </Link>
       <ul className='ml-8 mb-0 hidden items-center p-0 md:flex'>
         <WideMenuItem path='/' text='Home' />

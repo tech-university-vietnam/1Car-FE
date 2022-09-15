@@ -38,11 +38,22 @@ export default function CarManagement() {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      render: (status) => (
+        <span>{status == 'AVAILABLE' ? 'AVAILABLE' : 'UN AVAILABLE'}</span>
+      ),
     },
     {
       title: 'Price/Date',
       dataIndex: 'pricePerDate',
       key: 'pricePerDate',
+      render: (price) => (
+        <span>
+          {Intl.NumberFormat('en-Us', {
+            currency: 'USD',
+            style: 'currency',
+          }).format(price)}
+        </span>
+      ),
     },
     {
       title: 'Attribute',
@@ -89,6 +100,9 @@ export default function CarManagement() {
   const [page, setPage] = useState(1);
   const data = useAppSelector((state) => state.car.adminCars);
   const total = useAppSelector((state) => state.car.totalRecords);
+  const carFormChangeIndex = useAppSelector(
+    (state) => state.car.carFormChangeIndex
+  );
   const [modalTitle, setModalTitle] = useState('Create new car');
   const [modalContent, setModalContent] = useState(
     <CreateCarForm onClose={() => setCreateVisible(false)} />
@@ -97,6 +111,17 @@ export default function CarManagement() {
     page: page,
     limit: 10,
   };
+
+  useEffect(() => {
+    if (carFormChangeIndex !== -1) {
+      setModalContent(
+        <UpdateCarForm
+          onClose={() => setCreateVisible(false)}
+          car={data[carFormChangeIndex]}
+        />
+      );
+    }
+  }, [carFormChangeIndex]);
 
   const getCarToDisplay = async (page: number, pageSize: number) => {
     dispatch(getCarForAdminAction({ page, limit: pageSize }));

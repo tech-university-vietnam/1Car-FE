@@ -1,8 +1,9 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, PlusOutlined } from '@ant-design/icons';
 import {
   Button,
   Divider,
   Form,
+  Image,
   Input,
   InputNumber,
   message,
@@ -10,15 +11,16 @@ import {
   Select,
   Space,
   Switch,
-  Image,
 } from 'antd';
+import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { updateCar } from '../../apis';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import {
   Car,
   getCarAttributeAction,
-  updateCarAction,
+  updateCarListOfAdmin,
 } from '../../redux/reducer/car';
 import UpdateCarAttribute from './CreateCarAttribute';
 
@@ -32,6 +34,16 @@ const UpdateCarForm = (props: any) => {
   const [locationId, setLocationId] = useState(carData.locationId);
   const [loading, setLoading] = useState(false);
 
+  const [currentImages, setCurrentImages] = useState<string[]>([
+    ...(carData.images || []),
+  ]);
+
+  useEffect(() => {
+    if (carData.images) {
+      setCurrentImages([...(carData.images || [])]);
+    }
+  }, [carData.images]);
+
   const [form] = Form.useForm();
 
   const handleSubmit = async () => {
@@ -43,7 +55,7 @@ const UpdateCarForm = (props: any) => {
 
       const { images, attributes, ...data } = value;
 
-      data['status'] = data['status'] === true ? 'AVAILABLE' : 'UNAVAILABLE';
+      data['status'] = data['status'] === true ? 'AVAILABLE' : 'UN_AVAILABLE';
 
       Object.keys(data).map((key) => {
         if (data[key]) formData.append(key, data[key]);
@@ -60,18 +72,16 @@ const UpdateCarForm = (props: any) => {
         formData.append('images', selectedImages[i]);
       }
 
-      // Add old images into form
-      if (carData.images) {
-        if (typeof carData.images === 'object') {
-          for (let image of carData.images) {
-            formData.append('existedImages', image);
-          }
-        }
-        if (typeof carData.images === 'string')
-          formData.append('existedImages', carData.images);
+      for (let image of currentImages) {
+        formData.append('existedImages', image);
       }
 
-      await dispatch(updateCarAction({ id: carData.id, form: formData }));
+      const updatedCar: Car = await updateCar({
+        id: carData.id,
+        form: formData,
+      });
+
+      dispatch(updateCarListOfAdmin(updatedCar));
 
       message.success('Update car successfully!');
       form.resetFields();
@@ -101,6 +111,13 @@ const UpdateCarForm = (props: any) => {
       description: carData.description,
       attributes: carData.attributes.map((attribute: any) => attribute.id),
     };
+  };
+
+  const removeLinkFromExistedLink = async (id: string, imageLink: string) => {
+    const index = _.findIndex(currentImages, (item) => item == imageLink);
+    const newData = [...currentImages];
+    newData.splice(index, 1);
+    setCurrentImages(newData);
   };
 
   useEffect(() => {
@@ -204,16 +221,33 @@ const UpdateCarForm = (props: any) => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label='Description'>
+        <Form.Item label='Description' name='description'>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label='Image' name='images'>
-          {props.car.images.map((link: string) => (
-            <Image width={50} src={link} />
-          ))}
+        <Form.Item label='Images' name='images'>
+          <Image.PreviewGroup>
+            <Space size='middle'>
+              {currentImages.map((link: string) => (
+                <div className='relative'>
+                  <>
+                    <Image key={link} width={80} src={link} preview={false} />
+                    <DeleteTwoTone
+                      className='absolute -top-2 right-0 text-red-500'
+                      twoToneColor='#eb2f96'
+                      style={{ fontSize: '20px' }}
+                      onClick={() => {
+                        removeLinkFromExistedLink(props.car.id, link);
+                      }}
+                    />
+                  </>
+                </div>
+              ))}
+            </Space>
+          </Image.PreviewGroup>
           <input
+            className='mt-3'
             type='file'
-            accept='png'
+            accept='image/*'
             multiple={true}
             onChange={(event) => setSelectedImages(event.target.files)}
           />

@@ -41,7 +41,7 @@ const CreateCarForm = ({ onClose }: { onClose: () => void }) => {
 
       const { images, attributes, ...data } = value;
 
-      data['status'] = data['status'] === true ? 'AVAILABLE' : 'UNAVAILABLE';
+      data['status'] = data['status'] === true ? 'AVAILABLE' : 'UN_AVAILABLE';
 
       Object.keys(data).map((key) => {
         if (data[key]) formData.append(key, data[key]);

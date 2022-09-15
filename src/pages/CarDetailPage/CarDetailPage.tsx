@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col, Row, Spin } from 'antd';
 import { Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -24,21 +24,29 @@ export default function CarDetailPage() {
     <div className='min-h-screen'>
       <Header />
       <>
-        {car ? (
-          <Row gutter={8} className='p-8'>
-            <Col md={18}>
-              <CarDetails isLoading={isLoading} car={car} />
-            </Col>
-            <Col md={6} style={{ width: '100%' }}>
-              <PaymentDetails
-                isLoading={isLoading}
-                to={`../payments/${id}`}
-                car={car}
-              />
-            </Col>
-          </Row>
+        {isLoading ? (
+          <div className='grid h-screen w-screen grid-cols-1 place-content-center'>
+            <Spin />
+          </div>
         ) : (
-          <Typography>Car not found</Typography>
+          <>
+            {car ? (
+              <Row gutter={8} className='p-8'>
+                <Col md={18}>
+                  <CarDetails isLoading={isLoading} car={car} />
+                </Col>
+                <Col md={6} style={{ width: '100%' }}>
+                  <PaymentDetails
+                    isLoading={isLoading}
+                    to={`../payments/${id}`}
+                    car={car}
+                  />
+                </Col>
+              </Row>
+            ) : (
+              <Typography>Car not found</Typography>
+            )}
+          </>
         )}
       </>
     </div>

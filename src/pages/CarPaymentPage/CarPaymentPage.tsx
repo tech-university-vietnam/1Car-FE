@@ -1,4 +1,4 @@
-import { Checkbox, DatePicker, Divider, Radio, Typography } from 'antd';
+import { Checkbox, Divider, Radio, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { getUserInformationAction } from '../../redux/reducer/user';
@@ -41,11 +41,9 @@ export default function CarPaymentPage() {
     };
 
     try {
-      if (isSkip == false && !userData.dateOfBirth) {
-        alert('vo day');
+      if (!isSkip && !userData.dateOfBirth) {
         ref?.current.open(() => {});
       } else {
-        alert('vo day ne');
         const response = await postBooking(requestData);
         window.location.href = response;
       }
@@ -127,7 +125,11 @@ export default function CarPaymentPage() {
                     <Divider />
                     <div className='flex flex-col'>
                       <div className='mb-3 flex w-full items-center rounded-lg border-2 border-gray-200 p-4'>
-                        <img src='/credit-card.png' className='mr-4 w-10' />
+                        <img
+                          alt='credit-card'
+                          src='/credit-card.png'
+                          className='mr-4 w-10'
+                        />
                         <span className='font-semibold text-gray-500'>
                           Credit Card
                         </span>
@@ -136,7 +138,11 @@ export default function CarPaymentPage() {
                         </div>
                       </div>
                       <div className='mb-3 flex w-full items-center rounded-lg border-2 border-gray-200 p-4 opacity-40'>
-                        <img src='/money.png' className='mr-4 w-10' />
+                        <img
+                          alt='money'
+                          src='/money.png'
+                          className='mr-4 w-10'
+                        />
                         <span className='font-semibold text-gray-500'>
                           Cash
                         </span>
@@ -145,7 +151,11 @@ export default function CarPaymentPage() {
                         </div>
                       </div>
                       <div className='mb-3 flex w-full items-center rounded-lg border-2 border-gray-200 p-4 opacity-40'>
-                        <img src='/wallet.png' className='mr-4 w-10' />
+                        <img
+                          alt='wallet'
+                          src='/wallet.png'
+                          className='mr-4 w-10'
+                        />
                         <span className='font-semibold text-gray-500'>
                           E-Wallet
                         </span>

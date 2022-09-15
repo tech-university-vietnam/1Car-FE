@@ -53,6 +53,7 @@ const initialState: {
   attributeTypes: Type[];
   adminCars: Car[];
   totalRecords: number;
+  carFormChangeIndex: number;
 } = {
   cars: [],
   filter: {
@@ -63,6 +64,7 @@ const initialState: {
   attributeTypes: [],
   adminCars: [],
   totalRecords: 0,
+  carFormChangeIndex: -1,
 };
 
 export const getCarAction = createAsyncThunk(

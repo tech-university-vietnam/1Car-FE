@@ -3,6 +3,7 @@ import {
   Button,
   Divider,
   Form,
+  Image,
   Input,
   InputNumber,
   message,
@@ -10,17 +11,16 @@ import {
   Select,
   Space,
   Switch,
-  Image,
-  Spin,
 } from 'antd';
+import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { updateCar } from '../../apis';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import {
   Car,
-  deleteAnImageAction,
   getCarAttributeAction,
-  updateCarAction,
+  updateCarListOfAdmin,
 } from '../../redux/reducer/car';
 import UpdateCarAttribute from './CreateCarAttribute';
 
@@ -33,8 +33,16 @@ const UpdateCarForm = (props: any) => {
   const [selectedImages, setSelectedImages] = useState<any>([]);
   const [locationId, setLocationId] = useState(carData.locationId);
   const [loading, setLoading] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isDeletingImage, setIsDeletingImage] = useState('');
+
+  const [currentImages, setCurrentImages] = useState<string[]>([
+    ...(carData.images || []),
+  ]);
+
+  useEffect(() => {
+    if (carData.images) {
+      setCurrentImages([...(carData.images || [])]);
+    }
+  }, [carData.images]);
 
   const [form] = Form.useForm();
 
@@ -47,7 +55,7 @@ const UpdateCarForm = (props: any) => {
 
       const { images, attributes, ...data } = value;
 
-      data['status'] = data['status'] === true ? 'AVAILABLE' : 'UNAVAILABLE';
+      data['status'] = data['status'] === true ? 'AVAILABLE' : 'UN_AVAILABLE';
 
       Object.keys(data).map((key) => {
         if (data[key]) formData.append(key, data[key]);
@@ -64,18 +72,16 @@ const UpdateCarForm = (props: any) => {
         formData.append('images', selectedImages[i]);
       }
 
-      // Add old images into form
-      if (carData.images) {
-        if (typeof carData.images === 'object') {
-          for (let image of carData.images) {
-            formData.append('existedImages', image);
-          }
-        }
-        if (typeof carData.images === 'string')
-          formData.append('existedImages', carData.images);
+      for (let image of currentImages) {
+        formData.append('existedImages', image);
       }
 
-      await dispatch(updateCarAction({ id: carData.id, form: formData }));
+      const updatedCar: Car = await updateCar({
+        id: carData.id,
+        form: formData,
+      });
+
+      dispatch(updateCarListOfAdmin(updatedCar));
 
       message.success('Update car successfully!');
       form.resetFields();
@@ -108,13 +114,10 @@ const UpdateCarForm = (props: any) => {
   };
 
   const removeLinkFromExistedLink = async (id: string, imageLink: string) => {
-    setIsDeleting(true);
-    setIsDeletingImage(imageLink);
-    await dispatch(deleteAnImageAction({ id, imageLink }));
-    setTimeout(() => {
-      setIsDeleting(false);
-      setIsDeletingImage('');
-    }, 1000);
+    const index = _.findIndex(currentImages, (item) => item == imageLink);
+    const newData = [...currentImages];
+    newData.splice(index, 1);
+    setCurrentImages(newData);
   };
 
   useEffect(() => {
@@ -224,23 +227,19 @@ const UpdateCarForm = (props: any) => {
         <Form.Item label='Images' name='images'>
           <Image.PreviewGroup>
             <Space size='middle'>
-              {props.car.images.map((link: string) => (
+              {currentImages.map((link: string) => (
                 <div className='relative'>
-                  {isDeleting && link === isDeletingImage ? (
-                    <Spin />
-                  ) : (
-                    <>
-                      <Image key={link} width={80} src={link} preview={false} />
-                      <DeleteTwoTone
-                        className='absolute -top-2 right-0 text-red-500'
-                        twoToneColor='#eb2f96'
-                        style={{ fontSize: '20px' }}
-                        onClick={() => {
-                          removeLinkFromExistedLink(props.car.id, link);
-                        }}
-                      />
-                    </>
-                  )}
+                  <>
+                    <Image key={link} width={80} src={link} preview={false} />
+                    <DeleteTwoTone
+                      className='absolute -top-2 right-0 text-red-500'
+                      twoToneColor='#eb2f96'
+                      style={{ fontSize: '20px' }}
+                      onClick={() => {
+                        removeLinkFromExistedLink(props.car.id, link);
+                      }}
+                    />
+                  </>
                 </div>
               ))}
             </Space>

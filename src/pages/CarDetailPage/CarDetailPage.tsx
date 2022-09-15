@@ -25,7 +25,9 @@ export default function CarDetailPage() {
       <Header />
       <>
         {isLoading ? (
-          <Spin />
+          <div className='grid h-screen w-screen grid-cols-1 place-content-center'>
+            <Spin />
+          </div>
         ) : (
           <>
             {car ? (

@@ -38,11 +38,22 @@ export default function CarManagement() {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      render: (status) => (
+        <span>{status == 'AVAILABLE' ? 'AVAILABLE' : 'UN AVAILABLE'}</span>
+      ),
     },
     {
       title: 'Price/Date',
       dataIndex: 'pricePerDate',
       key: 'pricePerDate',
+      render: (price) => (
+        <span>
+          {Intl.NumberFormat('en-Us', {
+            currency: 'USD',
+            style: 'currency',
+          }).format(price)}
+        </span>
+      ),
     },
     {
       title: 'Attribute',

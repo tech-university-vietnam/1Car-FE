@@ -30,9 +30,9 @@ const AdminPage = () => {
   return (
     <Layout className='' style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsedWidth={70} breakpoint='lg'>
-        <div className='logo flex items-center justify-center'>
+        <div className='logo flex items-center justify-center p-2'>
           <a href='/'>
-            <img src='/car.png' />
+            <img src='/car_2.png' className='w-50' />
           </a>
         </div>
         <Menu

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Dropdown, Menu, Space } from 'antd';
 import { useAppSelector } from '../../redux';
 import { UserRole } from '../../redux/reducer/user';
-import { logoutWithAuth0 } from '../../utils/utils';
+import { commonLogoutFunction } from '../../utils/utils';
 import {
   DashboardOutlined,
   LoginOutlined,
@@ -34,7 +34,10 @@ export const LoginButton = () => {
 
 export const AuthInfoComponentSubMenu = () => {
   const { logout } = useAuth0();
-  const logOutFunction = () => logoutWithAuth0(logout);
+  const logOutFunction = () => {
+    logout({ returnTo: window.location.origin });
+    commonLogoutFunction();
+  };
   const [menuItems, setMenuItems] = useState<
     Array<{
       label: string | ReactElement;

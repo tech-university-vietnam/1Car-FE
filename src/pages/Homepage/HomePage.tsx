@@ -1,7 +1,6 @@
 import { Empty, Pagination } from 'antd';
 import * as _ from 'lodash';
 import { useEffect } from 'react';
-import Cookies from 'universal-cookie';
 import CarCard from '../../components/CarCard';
 import PageFooter from '../../components/Footer';
 import Header from '../../components/Header';
@@ -15,8 +14,6 @@ import {
 import ClearFilter from './ClearFilter';
 import SearchBar from './SearchBar';
 import SelectFilter from './SelectFilter';
-import SelectSort from './SelectSort';
-import { getUserInformationAction } from '../../redux/reducer/user';
 import { useAuth0 } from '@auth0/auth0-react';
 
 export default function HomePage() {
@@ -66,7 +63,6 @@ export default function HomePage() {
             />
           ))}
           <ClearFilter onClear={onClearFilter} />
-          <SelectSort />
         </div>
         <div className='mt-3 px-4' style={{ minHeight: 500 }}>
           {cars.length == 0 ? (

@@ -247,7 +247,7 @@ const UpdateCarForm = (props: any) => {
           <input
             className='mt-3'
             type='file'
-            accept='image/*'
+            accept='image/png, image/jpeg, image/jpg'
             multiple={true}
             onChange={(event) => setSelectedImages(event.target.files)}
           />

@@ -164,13 +164,13 @@ const CreateCarForm = ({ onClose }: { onClose: () => void }) => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label='Description'>
+        <Form.Item label='Description' name='description'>
           <Input.TextArea />
         </Form.Item>
         <Form.Item label='Image' name='images'>
           <input
             type='file'
-            accept='png'
+            accept='image/png, image/jpeg, image/jpg'
             multiple={true}
             onChange={(event) => setSelectedImages(event.target.files)}
           />

@@ -15,8 +15,7 @@ export function formatCurrency(amount: number) {
   return nf.format(amount);
 }
 
-export const logoutWithAuth0 = (logout: any) => {
-  logout({ returnTo: window.location.origin });
+export const commonLogoutFunction = () => {
   const cookies = new Cookies();
   cookies.remove('access_token', { path: '/' });
   localStorage.removeItem('userEmail');

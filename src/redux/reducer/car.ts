@@ -156,7 +156,8 @@ const carSlice = createSlice({
       state.totalRecords = action.payload.totalRecords;
     },
     addCarToListOfAdmin: (state, action: PayloadAction<Car>) => {
-      state.adminCars = [...state.adminCars, action.payload];
+      // Update car to top of the list
+      state.adminCars = [action.payload, ...state.adminCars];
     },
     updateCarListOfAdmin: (state, action: PayloadAction<Car>) => {
       //  Find index of existing car in the list

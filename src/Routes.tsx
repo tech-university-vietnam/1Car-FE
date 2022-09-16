@@ -11,6 +11,8 @@ import PaymentSuccessPage from './pages/PaymentSuccessPage/PaymentSuccessPage';
 import UserPage from './pages/UserPage/UserPage';
 import { useAppDispatch } from './redux';
 import { getUserInformationAction } from './redux/reducer/user';
+import MorePage from './pages/AdditionalPage/MorePage';
+import AboutPage from './pages/AdditionalPage/AboutPage';
 
 export default function AppRouters() {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -50,6 +52,8 @@ export default function AppRouters() {
       <Route path='/booking/:id/success' element={<PaymentSuccessPage />} />
       <Route path='/booking/failed' element={<PaymentFailedPage />} />
       <Route path='/payments/:carId' element={<CarPaymentPage />} />
+      <Route path='/more' element={<MorePage />} />
+      <Route path='/about' element={<AboutPage />} />
       <Route path='*' element={<HomePage />} />
     </Routes>
   );

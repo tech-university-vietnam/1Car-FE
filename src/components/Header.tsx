@@ -5,7 +5,7 @@ import { MenuFoldOutlined, RightOutlined } from '@ant-design/icons';
 import { AuthInfoComponent, LoginButton } from './auth/AuthButtons';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useAppSelector } from '../redux';
-import { logoutWithAuth0 } from '../utils/utils';
+import { commonLogoutFunction } from '../utils/utils';
 import { UserRole } from '../redux/reducer/user';
 
 export default function Header() {
@@ -33,10 +33,17 @@ export default function Header() {
       onClick={() => props.onClickFunction}
       className='mr-4 mb-4 w-full border-b pb-4 pl-2 text-xs md:text-base'
     >
-      <Link to={props.path} className='text-base text-black'>
-        <RightOutlined className='pr-2 text-xs' />
-        <span className='mr-2'>{props.text}</span>
-      </Link>
+      {props.path !== '#' ? (
+        <Link to={props.path} className='text-base text-black'>
+          <RightOutlined className='pr-2 text-xs' />
+          <span className='mr-2'>{props.text}</span>
+        </Link>
+      ) : (
+        <div className='text-base text-black'>
+          <RightOutlined className='pr-2 text-xs' />
+          <span className='mr-2'>{props.text}</span>
+        </div>
+      )}
     </li>
   );
 
@@ -44,7 +51,10 @@ export default function Header() {
     const user = useAppSelector((state) => state.user.info);
     const { Panel } = Collapse;
     const { logout, loginWithRedirect } = useAuth0();
-    const logOutFunction = () => logoutWithAuth0(logout);
+    const logOutFunction = () => {
+      logout({ returnTo: window.location.origin });
+      commonLogoutFunction();
+    };
     return isAuthenticated ? (
       <li className='w-full border-b pb-3'>
         <Collapse ghost>

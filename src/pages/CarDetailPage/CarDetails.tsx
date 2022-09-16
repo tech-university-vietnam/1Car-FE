@@ -108,6 +108,7 @@ export default function CarDetails({ car, isLoading }: CarDetailsProps) {
                 <div className='h-[400px]'>
                   <Image
                     src={image}
+                    preview={false}
                     height='100%'
                     width='100%'
                     alt={`${car.name} ${index + 1}`}
@@ -135,7 +136,7 @@ export default function CarDetails({ car, isLoading }: CarDetailsProps) {
                 </Row>
                 <Row className='mb-4'>
                   <div className='flex items-center justify-center'>
-                    <Rate disabled value={4} />
+                    <Rate disabled value={5} />
                     <span className='ml-4 mt-2'>25 reviews</span>
                   </div>
                 </Row>

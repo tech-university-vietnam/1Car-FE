@@ -1,7 +1,7 @@
 import { Checkbox, Divider, Radio, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { getUserInformationAction } from '../../redux/reducer/user';
+import { getUserInformationAction, UserRole } from '../../redux/reducer/user';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { getBookingDataAction } from '../../redux/reducer/booking';
 import Header from '../../components/Header';
@@ -11,6 +11,7 @@ import { Car } from '../../redux/reducer/car';
 import { Row, Col } from 'antd';
 import BookingConfirmation from './BookingConfirmation';
 import UpdateUserModal from '../../components/UpdateUserModal';
+import SecurityLayout from '../../components/Layout/SecurityLayout';
 export default function CarPaymentPage() {
   const dispatch = useAppDispatch();
   const { carId } = useParams() ?? '';
@@ -73,7 +74,7 @@ export default function CarPaymentPage() {
   }, []);
 
   return (
-    <>
+    <SecurityLayout role={[UserRole.USER, UserRole.ADMIN]} fallback='/'>
       <Header />
       {car ? (
         <div className='mx-auto mt-8 w-full p-8 md:w-3/4'>
@@ -194,6 +195,6 @@ export default function CarPaymentPage() {
       ) : (
         <></>
       )}
-    </>
+    </SecurityLayout>
   );
 }

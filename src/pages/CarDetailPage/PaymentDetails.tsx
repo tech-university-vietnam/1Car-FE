@@ -1,4 +1,4 @@
-import { Divider, Skeleton, Typography, Button, DatePicker } from 'antd';
+import { Divider, Skeleton, Typography, Button, DatePicker, Modal } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import InfoCard from '../../components/InfoCard';
@@ -8,7 +8,7 @@ import { calculateDatesBetween, formatCurrency } from '../../utils/utils';
 import { Car } from '../../redux/reducer/car';
 import { checkCarAvailability } from '../../apis';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-import GoogleMapReact from 'google-map-react';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface PaymentDetailsProp {
   isLoading: boolean;
@@ -31,6 +31,7 @@ export default function PaymentDetails({
   ) => {
     return current && current < moment().startOf('day');
   };
+  const { isAuthenticated } = useAuth0();
 
   const disabledEndDate: RangePickerProps['disabledDate'] = (current: any) => {
     return current < moment(startDate || Date.now()).startOf('day');
@@ -142,11 +143,18 @@ export default function PaymentDetails({
             type='primary'
             disabled={!(startDate && endDate && carIsAvailable)}
             onClick={() => {
-              navigate(
-                `${to}?start=${startDate}&end=${endDate}&location=${
-                  location?.value?.place_id || ''
-                }`
-              );
+              if (isAuthenticated) {
+                navigate(
+                  `${to}?start=${startDate}&end=${endDate}&location=${
+                    location?.value?.place_id || ''
+                  }`
+                );
+              } else {
+                return Modal.warning({
+                  title: 'Login required',
+                  content: 'You have to login to do this action.',
+                });
+              }
             }}
           >
             Rent now

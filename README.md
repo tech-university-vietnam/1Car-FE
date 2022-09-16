@@ -47,6 +47,18 @@ CSS Framework: [Tailwind CSS](https://tailwindcss.com/docs/installation).
 
 # Getting started
 
+To use the app, first clone our project.
+
+Then, go into the folder and run this cmd ```npm install```. This will download all the dependencies needed to run the app.
+
+After that, just run ```npm start``` to open our app in local host and enjoy it.
+
+## From scratch
+
+If you want to recreate this app on your own, we use create-react-app template with typescript as a boiler plate and config settings with 2 different third-party services Auth0 and Stripe.
+
+To create react app boiler plate, you can use this script ```npx create-react-app my-app --template typescript```
+
 Auth0 configuration: More details can be found at [docs](./docs/Auth0/index.md)
 
 Stripe configuration: More details can be found at [docs](./docs/Stripe/index.md)
